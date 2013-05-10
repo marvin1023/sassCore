@@ -1,0 +1,129 @@
+@charset "UTF-8";
+/* -------------------------------------------------
+ * 需要引入的变量 和 placeholder selector
+ * 变量       ：$linkColor，$baseFontSize，$grayDark, $gray，$baseLineHeight
+ * placeholder：%ul-has-style，%inline-block，%clearfix
+ * -------------------------------------------------
+*/
+
+//links 
+a{
+  text-decoration:none;
+  color:$linkColor;
+  &:hover{
+    color:darken($linkColor,10%);
+  }
+}
+// hn
+h1,h2,h3{
+  line-height: 2;
+  font-weight: normal;
+}
+h1 {
+  font-size:$baseFontSize * 1.5;
+}
+h2 {
+  font-size:$baseFontSize * 1.3;
+}
+h3 {
+  font-size:$baseFontSize * 1.17;
+}
+h4 { 
+  font-size:$baseFontSize;
+}
+h5,h6 {
+  font-size:$baseFontSize * 0.85;
+  text-transform:uppercase;
+}
+/* ul/ol has list style*/
+ul.has-style,ul.disc,ul.circle,ul.square{
+  @extend %ul-has-style;
+}
+ul.circle{
+  list-style:circle;
+}
+ul.square{
+  list-style:square;
+}
+// li float
+ul.inline-float{
+  @extend %clearfix;
+  li{
+    float: left;
+    display: inline;
+  }
+}
+// li inline-block
+ul.inline-block{
+  li{
+    @extend %inline-block; 
+    margin-right: 8px;
+  }
+}
+// article style
+.article{
+  h1, h2, h3, h4, h5, h6 {
+    line-height:1.3;
+    margin-bottom:10px;
+  }
+  ul,ol{
+    margin-left: 25px;
+    list-style-type:disc;
+  }
+  ol{
+    list-style-type:decimal;
+  }
+  p, ul, ol, dl{
+    margin-bottom:10px;
+  }
+  ul ul, ul ol, ol ol, ol ul{
+    margin-bottom: 0;
+  }
+  dt{
+    font-weight: bold;
+  }
+  dd{
+    margin-left: 10px;
+  }
+}
+// Blockquotes
+blockquote {
+  padding: 0 0 0 15px;
+  margin: 0 0 10px;
+  border-left: 3px solid $gray;
+  small {
+    font-size: $baseFontSize * 0.85;
+    display: block;
+    line-height: $baseLineHeight;
+    color: $grayDark;
+    &:before {
+      content: '\2014 \00A0';
+    }
+  }
+}
+
+// Quotes
+q:before,
+q:after,
+blockquote:before,
+blockquote:after {
+  content: "";
+}
+
+// Addresses
+address {
+  display: block;
+  margin-bottom: 10px;
+  font-style: normal;
+  line-height: $baseLineHeight;
+}
+
+//hr
+hr {
+    display: block;
+    height: 1px;
+    border: 0;
+    border-top: 1px solid #ccc;
+    margin: 1em 0;
+    padding: 0;
+}

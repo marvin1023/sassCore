@@ -1,0 +1,377 @@
+@charset "UTF-8";
+/* -------------------------------------------------
+ * mixin
+ * 通过@include调用，样式通过拷贝的方式使用
+ * 尤其适用于传递参数  
+ * -------------------------------------------------
+*/
+
+//inline-block
+//ie6-7 *display: inline;*zoom:1;
+@mixin inline-block {
+  display: inline-block;
+  @if $lte7 {
+    *display: inline;*zoom:1;
+  }
+}
+
+// Center-align a block level element
+@mixin center-block() {
+  margin-left: auto;
+  margin-right: auto;
+}
+
+//float left & right
+@mixin float($float:left){
+  float: $float;
+  @if $lte7 {
+    display: inline;
+  }
+}
+
+//clearfix
+@mixin clearfix {
+  @if $lte7 {
+    *zoom: 1;
+  }
+  &:before,
+  &:after {
+    content: "";
+    display: table;
+    font: 0/0 a;
+  }
+  &:after {
+    clear: both;
+  }
+}
+
+//Hide from both screenreaders and browsers: h5bp.com/u
+@mixin hidden{
+  display: none !important;
+  visibility: hidden;
+}
+
+//Hide only visually, but have it available for screenreaders
+@mixin visuallyhidden{
+  position: absolute;
+  clip:rect(1px 1px 1px 1px);//ie6/7
+  clip:rect(1px, 1px, 1px, 1px);//standard
+}
+
+// Hide visually and from screenreaders, but maintain layout
+@mixin invisible{
+  visibility: hidden;
+ }
+
+//ul has list style
+@mixin ul-has-style{
+  margin-left:25px;
+  list-style:disc;
+}
+
+// CSS image replacement
+@mixin ir {
+  color: transparent;
+  text-shadow: none;
+  background-color: transparent;
+  border: 0;
+  @if $lte7 {
+    _line-height:999;
+    _overflow:hidden;
+  }
+}
+
+//placeholders
+@mixin placeholder($color: $grayDark) {
+  &:-moz-placeholder            { color: $color; } // Firefox 4-18
+  &::-moz-placeholder           { color: $color; } // Firefox 19+
+  &:-ms-input-placeholder       { color: $color; } // Internet Explorer 10+
+  &::-webkit-input-placeholder  { color: $color; } // Safari and Chrome
+}
+
+// Text overflow
+// Requires inline-block or block for proper styling
+@mixin ellipsis($substract:0) {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  width:100% - $substract;
+}
+
+//size:width,height 
+//https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_size.scss
+@mixin size($size) {
+  @if length($size) == 1 {
+    @if $size == auto {
+      width: $size;
+      height: $size;
+    }
+
+    @else if unitless($size) {
+      width: $size + px;
+      height: $size + px;
+    }
+
+    @else if not(unitless($size)) {
+      width: $size;
+      height: $size;
+    }
+  }
+
+  // Width x Height
+  @if length($size) == 2 {
+    $width: nth($size, 1);
+    $height: nth($size, 2);
+
+    @if $width == auto {
+      width: $width;
+    }
+    @else if not(unitless($width)) {
+      width: $width;
+    }
+    @else if unitless($width) {
+      width: $width + px;
+    }
+
+    @if $height == auto {
+      height: $height;
+    }
+    @else if not(unitless($height)) {
+      height: $height;
+    }
+    @else if unitless($height) {
+      height: $height + px;
+    }
+  }
+}
+
+// Retina images. 
+// Use with care - http://37signals.com/svn/posts/3271-easy-retina-ready-images-using-scss
+@mixin image-2x($image, $width, $height) {
+  @media (min--moz-device-pixel-ratio: 1.3),
+         (-o-min-device-pixel-ratio: 2.6/2),
+         (-webkit-min-device-pixel-ratio: 1.3),
+         (min-device-pixel-ratio: 1.3),
+         (min-resolution: 1.3dppx) {
+    /* on retina, use image that's scaled by 2 */
+    background-image: url($image);
+    background-size: $width $height;
+  }
+}
+
+
+// Opacity
+@mixin opacity($opacity) {
+  opacity: $opacity / 100;
+  filter: alpha(opacity=$opacity);
+}
+
+//embossed
+//-------------------------
+@mixin embossed-light($borderColor:rgba(0,0,0,0.05)) {
+  border: 1px solid $borderColor;
+  @include box-shadow(inset 0 1px 0 rgba(255,255,255,0.7));
+}
+@mixin embossed-dark($borderColor:rgba(0,0,0,0.05)) {
+  border: 1px solid $borderColor;
+  @include box-shadow(inset 0 2px 3px rgba(255,255,255,0.3), 
+   inset 0 -2px 3px rgba(0,0,0,0.3),
+   0 1px 1px rgba(255,255,255,0.9));
+}
+
+//selection
+//-------------------------
+@mixin selection($bgColor:#b3d4fc){
+  ::-moz-selection {
+      background: $bgColor;
+      text-shadow: none;
+  }
+  ::selection {
+      background: $bgColor;
+      text-shadow: none;
+  }
+}
+
+// triangle
+// https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_triangle.scss
+@mixin triangle ($size, $color, $direction) {
+  height: 0;
+  width: 0;
+
+  @if ($direction == up) or ($direction == down) or ($direction == right) or ($direction == left) {
+    border-color: transparent;
+    border-style: solid;
+    border-width: $size / 2;
+
+    @if $direction == up {
+      border-bottom-color: $color;
+
+    } @else if $direction == right {
+      border-left-color:   $color;
+
+    } @else if $direction == down {
+      border-top-color:    $color;
+
+    } @else if $direction == left {
+      border-right-color:  $color;
+    }
+  }
+
+  @else if ($direction == up-right) or ($direction == up-left) {
+    border-top: $size solid $color;
+
+    @if $direction == up-right {
+      border-left:  $size dashed transparent;
+
+    } @else if $direction == up-left {
+      border-right: $size dashed transparent;
+    }
+  }
+
+  @else if ($direction == down-right) or ($direction == down-left) {
+    border-bottom: $size solid $color;
+
+    @if $direction == down-right {
+      border-left:  $size dashed transparent;
+
+    } @else if $direction == down-left {
+      border-right: $size dashed transparent;
+    }
+  }
+}
+
+
+/* -------------------------------------------------
+ * %placeholder selector 
+ * 通过@extend调用，样式组合申明，适用于无参数
+ * -------------------------------------------------
+*/
+
+//inline-block
+%inline-block{
+  @include inline-block;
+}
+
+// Center-align a block level element
+%center-block{
+  @include center-block;
+}
+
+//float left & right
+//-------------------------
+%float-left{
+  @include float;
+}
+%float-right{
+  @include float(right);
+}
+
+//clearfix
+%clearfix {
+  @include clearfix;
+}
+
+//Hide from both screenreaders and browsers: h5bp.com/u
+%hidden{
+  @include hidden;
+}
+
+//Hide only visually, but have it available for screenreaders
+%visuallyhidden{
+  @include visuallyhidden;
+}
+
+// Hide visually and from screenreaders, but maintain layout
+%invisible{
+  @include invisible;
+}
+
+//ul has list style
+%ul-has-style{
+  @include ul-has-style;
+}
+
+// image replacement
+%ir{
+  @include ir;
+}
+
+// text overflow ellipsis
+%ellipsis{
+  @include ellipsis;
+}
+
+//浮雕高光（顶部）/ 阴影（底部），可用于美化图片样式
+//-------------------------
+//顶部高光
+%embossed-light {
+  @include embossed-light;
+}
+//底部阴影
+%embossed-dark {
+  @include embossed-dark;
+}
+
+//垂直渐变，渐变背景是半透明到全透明，这样就可以通过设置背景色来表现渐变
+//-------------------------
+//白色，由半透明到全透明
+%gradient-light-linear {
+  /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjUiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
+  background: -moz-linear-gradient(top,  rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.5)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%); /* W3C */
+  @if $filter{
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-8 */
+    :root &{
+       filter: none\9;
+    }
+  }
+}
+//黑色，由全透明到半透明
+%gradient-dark-linear {
+  /* IE9 SVG, needs conditional override of 'filter' to 'none' */
+  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwMDAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMC4yNSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
+  background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.25) 100%); /* FF3.6+ */
+  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.25))); /* Chrome,Safari4+ */
+  background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 100%); /* Chrome10+,Safari5.1+ */
+  background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 100%); /* Opera 11.10+ */
+  background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 100%); /* IE10+ */
+  background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 100%); /* W3C */
+  
+  @if $filter{
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#40000000',GradientType=0 ); /* IE6-8 */
+    :root &{
+       filter: none\9;
+    }
+  }
+}
+
+
+/* -------------------------------------------------
+ * function
+ * -------------------------------------------------
+*/
+
+// pixels to ems
+@function em($px, $base: 16) {
+  @return ($px / $base) * 1em;
+}
+
+// pixels to rems 
+@function rem($px) {
+  @return $px / $baseFontSize * 1rem;
+}
+
+// add percentage of white to a color
+@function tint($color, $percent){
+  @return mix(white, $color, $percent);
+}
+
+// add percentage of black to a color
+@function shade($color, $percent){
+  @return mix(black, $color, $percent);
+}

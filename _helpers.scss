@@ -1,0 +1,43 @@
+@charset "UTF-8";
+/* -------------------------------------------------
+ * some useful class
+ * -------------------------------------------------
+*/
+
+//浮动及闭合浮动
+.fl{
+  @extend %float-left;
+}
+.fr{
+  @extend %float-right;
+}
+.clearfix{
+  @extend %clearfix;
+}
+
+//不同形式的隐藏
+.hidden{
+  @extend %hidden;
+}
+.visuallyhidden {
+  @extend %visuallyhidden;
+}
+.invisible {
+  @extend %invisible;
+}
+
+//text-align:left/right/center
+.tal{
+	text-align: left;
+}
+.tar{
+	text-align: right;
+}
+.tac{
+	text-align: center;
+}
+
+//图片替换文字
+.ir{
+	@extend %ir;
+}

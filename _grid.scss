@@ -1,0 +1,132 @@
+@charset "UTF-8";
+/* -------------------------------------------------
+ * grid
+ * thanks 
+ * http://www.blankwork.net/
+ * http://semantic.gs/
+ * http://heygrady.com/blog/2011/02/17/using-sass-with-the-1kb-grid-system/   
+ * https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/functions/_flex-grid.scss
+ * http://bjorkoy.com/2010/05/css-grids-with-sass/
+ * -------------------------------------------------
+*/
+
+// Main Variables:
+$_columns:                     12 !default;      // Total number of columns
+$_column-width:                60px !default;   // Width of a single column
+$_gutter:                      20px !default;     // Width of the gutter
+$_gridsystem-width:            $_columns * ($_column-width + $_gutter); //grid system width
+
+
+// Set $_fixedLayout true for a fluid layout
+$_percentLayout:               ture !default;
+$_total_width:                 $_gridsystem-width !default;
+
+@if $_percentLayout{
+  $_total_width:               100%;
+  $_gutter:                    ($_gutter / $_gridsystem-width) * $_total_width;
+}
+
+// ie6/7 fluid layout bug: http://tylertate.com/blog/2012/01/05/subpixel-rounding.html
+// ie6/7  get_width($i, true, $correction)
+$_min-width:                   960 !default;
+$_correction:                  0.5 / $_min-width * 100 * 1%;
+
+
+// A Function to calculate width:
+// Example usage: (based on default values)
+// get_width(3, false) would return 240px
+// get_width(3) or get_width(3, true) would return 220px;
+// and plain get_width() or get_width would return 940px;
+@function get_width($i:$_columns, $onlyInnerWidth:true, $_subtract:0)
+{
+  // First set a default return value 
+  $return: (($_column-width + $_gutter) * $i / $_gridsystem-width) * $_total_width - $_subtract;
+
+  // If we want to get only the inner width (without gutter)
+  @if $onlyInnerWidth == true
+  {
+    // Return the total calculated width, without the margins
+    // If the second parameter of this function is not specified
+    // This is what is going to be returned
+    $return: ((($_column-width + $_gutter) * $i - $_gutter) / $_gridsystem-width) * $_total_width - $_subtract;
+  }
+
+  @return $return;
+}
+
+// A Function to calculate percent width:
+// Example usage:
+@function get-percent($i, $container-columns:$_columns,$onlyInnerWidth:true) {
+  $percentage: percentage($i / $container-columns);
+  
+  @if $onlyInnerWidth == true{
+    $width: $i * $_column-width + ($i - 1) * $_gutter;
+    $container-width: $container-columns * $_column-width + ($container-columns - 1) * $_gutter;
+    $percentage: percentage($width / $container-width);
+  }
+  
+  @return $percentage;
+}
+
+// Column Mixin:
+// We're defining the default values as follows:
+// Default Column Count: Max Column Count
+// Padding (explained below): 0
+// Margin is the gutter width, but can be overridden 
+@mixin column($i: $_columns, $_subtract:0, $gutter:$_gutter)
+{
+  // Default Properties for a column:
+  @extend %float-left;
+  $getWidth: get_width($i, true, $_subtract); // Use the width calculation function to get the width 
+
+  margin-left: ($_gutter / 2); 
+  margin-right: ($_gutter / 2);
+  width: $getWidth;
+
+  @if $_percentLayout and $lte7{
+    *margin-left: ($_gutter / 2) - $_correction; 
+    *margin-right: ($_gutter / 2) - $_correction;
+    *width:$getWidth - $_correction;
+  }
+}
+
+// wrapper
+// This typically is a main content wrapper, 
+// But just in case someone finds an alternative use of this, 
+// we shouldhave the flexibility
+// So wrapper( column count, center ?, subtract)
+@mixin wrapper($i: $_columns, $center:true, $_subtract:0)
+{
+  // Because this is a wrapper, we don't need the outer gutter - we need the full width
+  $getWrapperWidth: get_width($i, false);
+  // In case there is a need to subtract the wrapper
+  $wrapperWidth: $getWrapperWidth - $_subtract;
+  width:$wrapperWidth;
+
+  // If we want the wrapper to be centered (by default we do)
+  @if $center == true
+  {
+    margin-left:auto;
+    margin-right:auto;
+  }
+
+  @extend %clearfix;
+}
+
+
+//alpha & omega
+@mixin alpha {
+  margin-left:0;
+}
+@mixin omega {
+  margin-right:0;
+}
+
+
+//prepend & append
+@mixin prepend($i:1, $_subtract:0) { 
+  margin-left: get_width($i,false,$_subtract);
+} 
+@mixin append($i:1, $_subtract:0) { 
+  margin-right: get_width($i,false,$_subtract);
+}

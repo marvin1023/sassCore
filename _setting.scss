@@ -1,0 +1,50 @@
+@charset "UTF-8";
+//fallback variables
+// -------------------------
+$lte7: true !default; // Set to true if you want to add support for IE6 and IE7
+$filter:true !default;// gradient fallback ie6-8 
+
+
+//font相关
+// -------------------------
+$baseFontSize:14px !default;
+$baseLineHeight:1.5 !default;
+$baseFontFamily:"Helvetica Neue", Helvetica, arial, sans-serif !default;
+
+
+//basic color
+// -------------------------
+$black:                 #000 !default;
+$grayDarker:            #333 !default;
+$grayDark:              #999 !default;
+$gray:                  #ccc !default;
+$grayLight:             #eee !default;
+$white:                 #fff !default;
+
+$red:                   #9d261d !default;
+$blue:                  #00A3CF !default;
+$blueDark:              #0064cd !default;
+$orange:                #F47837 !default;
+$green:                 #51B148 !default;
+$yellow:                #ffc40d !default;
+$pink:                  #c3325f !default;
+$purple:                #7a43b6 !default;
+
+
+//link
+// -------------------------
+//color function : http://sass-lang.com/docs/yardoc/Sass/Script/Functions.html
+//     lighten($color, $amount)
+//     darken($color, $amount)
+//     opacify($color, $amount)
+//     mix($color1, $color2[, $amount])
+$linkColor:             #08c !default;
+$linkColorHover:        darken($linkColor, 15%) !default;
+
+
+
+// Scaffolding
+// -------------------------
+$bodyBgColor:        $white !default;
+$textColor:          $grayDarker !default;
+

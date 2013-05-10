@@ -1,0 +1,581 @@
+@charset "UTF-8";
+//thanks:
+//http://bourbon.io/
+//https://github.com/thomas-mcdonald/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_mixins.scss
+
+//************************************************************************//
+// Example: @include prefixer(border-radius, $radius, webkit spec);
+//************************************************************************//
+$prefix-for-webkit: true !default;
+$prefix-for-mozilla: true !default;
+$prefix-for-microsoft: true !default;
+$prefix-for-opera: true !default;
+$prefix-for-spec: true !default; // required for keyframe mixin
+
+
+//prefixer
+@mixin prefixer ($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+
+    @if $prefix == webkit and $prefix-for-webkit == true {
+      -webkit-#{$property}: $value;
+    }
+    @else if $prefix == moz and $prefix-for-mozilla == true {
+      -moz-#{$property}: $value;
+    }
+    @else if $prefix == ms and $prefix-for-microsoft == true {
+      -ms-#{$property}: $value;
+    }
+    @else if $prefix == o and $prefix-for-opera == true {
+      -o-#{$property}: $value;
+    }
+    @else if $prefix == spec and $prefix-for-spec == true {
+      #{$property}: $value;
+    }
+    @else {
+      @warn "Unrecognized prefix: #{$prefix}";
+    }
+  }
+}
+
+
+//disable prefix
+@mixin disable-prefix-for-all() {
+  $prefix-for-webkit: false;
+  $prefix-for-mozilla: false;
+  $prefix-for-microsoft: false;
+  $prefix-for-opera: false;
+  $prefix-for-spec: false;
+}
+
+// Return vendor-prefixed property names if appropriate
+// Example: transition-property-names((transform, color, background), moz) -> -moz-transform, color, background
+//************************************************************************//
+@function transition-property-names($props, $vendor: false) {
+  $new-props: ();
+  @each $prop in $props {
+    $new-props: append($new-props, transition-property-name($prop, $vendor), comma);
+  }
+  @return $new-props;
+}
+
+@function transition-property-name($prop, $vendor: false) {
+  // put other properties that need to be prefixed here aswell
+  @if $vendor and $prop == transform {
+    @return unquote('-'+$vendor+'-'+$prop);
+  }
+  @else {
+    @return $prop;
+  }
+}
+
+// Border Radius
+//--------------------
+@mixin border-radius($radius:$baseRadius) {
+  @include prefixer(border-radius, $radius, webkit spec);
+}
+
+// Single Corner Border Radius
+@mixin border-top-left-radius($radius:$baseRadius) {
+  @include prefixer(border-top-left-radius, $radius, webkit spec);
+}
+
+@mixin border-top-right-radius($radius:$baseRadius) {
+  @include prefixer(border-top-right-radius, $radius, webkit spec);
+}
+
+@mixin border-bottom-right-radius($radius:$baseRadius) {
+  @include prefixer(border-bottom-right-radius, $radius, webkit spec);
+}
+
+@mixin border-bottom-left-radius($radius:$baseRadius) {
+  @include prefixer(border-bottom-left-radius, $radius, webkit spec);
+}
+
+
+// box-sizing
+@mixin box-sizing($type:border-box) {
+  // border-box | padding-box | content-box
+  @include prefixer(box-sizing, $type, webkit moz spec);
+}
+
+
+// box-shadow
+@mixin box-shadow($shadow...) {
+  @include prefixer(box-shadow, $shadow, webkit spec);
+}
+
+
+//Transform, transform-origin, transform-style
+//--------------------
+@mixin transform($property...) {
+  @include prefixer(transform, $property, webkit moz o spec);
+}
+
+@mixin transform-origin($axes: 50%) {
+// x-axis - left | center | right  | length | %
+// y-axis - top  | center | bottom | length | %
+// z-axis -                          length
+  @include prefixer(transform-origin, $axes, webkit moz o spec);
+}
+
+@mixin transform-style ($style: preserve-3d) {
+  // flat | preserve-3d
+  @include prefixer(transform-style, $style, webkit moz o spec);
+}
+
+// Transformations
+@mixin rotate($degrees) {
+  @include prefixer(transform, rotate($degrees), webkit moz o spec);
+}
+@mixin rotate3d($degrees) {
+  @include prefixer(transform, rotate3d($degrees), webkit moz o spec);
+}
+@mixin rotateX($degrees) {
+  @include prefixer(transform, rotateX($degrees), webkit moz o spec);
+}
+@mixin rotateY($degrees) {
+  @include prefixer(transform, rotateY($degrees), webkit moz o spec);
+}
+@mixin rotateZ($degrees) {
+  @include prefixer(transform, rotateZ($degrees), webkit moz o spec);
+}
+
+@mixin scale($ratio) {
+  @include prefixer(transform, scale($ratio), webkit moz o spec);
+}
+@mixin scale3d($ratio) {
+  @include prefixer(transform, scale3d($ratio), webkit moz o spec);
+}
+@mixin scaleX($ratio) {
+  @include prefixer(transform, scaleX($ratio), webkit moz o spec);
+}
+@mixin scaleY($ratio) {
+  @include prefixer(transform, scaleY($ratio), webkit moz o spec);
+}
+@mixin scaleZ($ratio) {
+  @include prefixer(transform, scaleZ($ratio), webkit moz o spec);
+}
+
+@mixin translate($px) {
+  @include prefixer(transform, translate($px), webkit moz o spec);
+}
+@mixin translate3d($px) {
+  @include prefixer(transform, translate3d($px), webkit moz o spec);
+}
+@mixin translateX($px) {
+  @include prefixer(transform, translateX($px), webkit moz o spec);
+}
+@mixin translateY($px) {
+  @include prefixer(transform, translateY($px), webkit moz o spec);
+}
+@mixin translateZ($px) {
+  @include prefixer(transform, translateZ($px), webkit moz o spec);
+}
+
+@mixin skew($degrees) {
+  @include prefixer(transform, skew($degrees), webkit moz o spec);
+  -webkit-backface-visibility: hidden; // See https://github.com/twitter/bootstrap/issues/5319
+}
+@mixin skewX($degrees) {
+  @include prefixer(transform, skewX($degrees), webkit moz o spec);
+  -webkit-backface-visibility: hidden;
+}
+@mixin skewY($degrees) {
+  @include prefixer(transform, skewY($degrees), webkit moz o spec);
+  -webkit-backface-visibility: hidden;
+}
+
+// transition
+//--------------------
+@mixin transition ($properties...) {
+  @if length($properties) >= 1 {
+    @include prefixer(transition, $properties, webkit moz o spec);
+  }
+
+  @else {
+    $properties: all 0.15s ease-out 0;
+    @include prefixer(transition, $properties, webkit moz o spec);
+  }
+}
+
+@mixin transition-property ($properties...) {
+   -webkit-transition-property: transition-property-names($properties, 'webkit');
+      -moz-transition-property: transition-property-names($properties, 'moz');
+        -o-transition-property: transition-property-names($properties, 'o');
+           transition-property: transition-property-names($properties, false);
+}
+
+@mixin transition-duration ($times...) {
+  @include prefixer(transition-duration, $times, webkit moz o spec);
+}
+
+@mixin transition-timing-function ($motions...) {
+// ease | linear | ease-in | ease-out | ease-in-out | cubic-bezier()
+  @include prefixer(transition-timing-function, $motions, webkit moz o spec);
+}
+
+@mixin transition-delay ($times...) {
+  @include prefixer(transition-delay, $times, webkit moz o spec);
+}
+
+
+// perspective
+@mixin perspective($depth: none) {
+  // none | <length>
+  @include prefixer(perspective, $depth, webkit moz spec);
+}
+
+@mixin perspective-origin($value: 50% 50%) {
+  @include prefixer(perspective-origin, $value, webkit moz spec);
+}
+
+// Backface visibility
+@mixin backface-visibility($visibility:hidden){
+  // visible | hidden
+  @include prefixer(backface-visibility, $visibility, webkit moz spec);
+}
+
+// http://www.w3.org/TR/css3-animations/#the-animation-name-property-
+// Each of these mixins support comma separated lists of values, which allows different transitions for individual properties to be described in a single style rule. Each value in the list corresponds to the value at that same position in the other properties.
+// Official animation shorthand property.
+//--------------------
+@mixin animation ($animations...) {
+  @include prefixer(animation, $animations, webkit moz spec);
+}
+
+// Individual Animation Properties
+@mixin animation-name ($names...) {
+  @include prefixer(animation-name, $names, webkit moz spec);
+}
+
+@mixin animation-duration ($times...) {
+  @include prefixer(animation-duration, $times, webkit moz spec);
+}
+
+@mixin animation-timing-function ($motions...) {
+// ease | linear | ease-in | ease-out | ease-in-out
+  @include prefixer(animation-timing-function, $motions, webkit moz spec);
+}
+
+@mixin animation-iteration-count ($values...) {
+// infinite | <number>
+  @include prefixer(animation-iteration-count, $values, webkit moz spec);
+}
+
+@mixin animation-direction ($directions...) {
+// normal | alternate
+  @include prefixer(animation-direction, $directions, webkit moz spec);
+}
+
+@mixin animation-play-state ($states...) {
+// running | paused
+  @include prefixer(animation-play-state, $states, webkit moz spec);
+}
+
+@mixin animation-delay ($times...) {
+  @include prefixer(animation-delay, $times, webkit moz spec);
+}
+
+@mixin animation-fill-mode ($modes...) {
+// none | forwards | backwards | both
+  @include prefixer(animation-fill-mode, $modes, webkit moz spec);
+}
+
+
+// Adds keyframes blocks for supported prefixes, removing redundant prefixes in the block's content
+@mixin keyframes($name) {
+  $original-prefix-for-webkit: $prefix-for-webkit;
+  $original-prefix-for-mozilla: $prefix-for-mozilla;
+  $original-prefix-for-microsoft: $prefix-for-microsoft;
+  $original-prefix-for-opera: $prefix-for-opera;
+  $original-prefix-for-spec: $prefix-for-spec;
+
+  @if $original-prefix-for-webkit {
+    @include disable-prefix-for-all();
+    $prefix-for-webkit: true;
+    @-webkit-keyframes #{$name} {
+      @content;
+    }
+  }
+  @if $original-prefix-for-mozilla {
+    @include disable-prefix-for-all();
+    $prefix-for-mozilla: true;
+    @-moz-keyframes #{$name} {
+      @content;
+    }
+  }
+  @if $original-prefix-for-microsoft {
+    @include disable-prefix-for-all();
+    $prefix-for-microsoft: true;
+    @-ms-keyframes #{$name} {
+      @content;
+    }
+  }
+  @if $original-prefix-for-opera {
+    @include disable-prefix-for-all();
+    $prefix-for-opera: true;
+    @-o-keyframes #{$name} {
+      @content;
+    }
+  }
+  @if $original-prefix-for-spec {
+    $prefix-for-spec: true !default;
+    @include disable-prefix-for-all();
+    $prefix-for-spec: true;
+    @keyframes #{$name} {
+      @content;
+    }
+  }
+
+  $prefix-for-webkit: $original-prefix-for-webkit;
+  $prefix-for-mozilla: $original-prefix-for-mozilla;
+  $prefix-for-microsoft: $original-prefix-for-microsoft;
+  $prefix-for-opera: $original-prefix-for-opera;
+  $prefix-for-spec: $original-prefix-for-spec;
+}
+
+
+// Background clipping
+// Heads up: FF 3.6 and under need "padding" instead of "padding-box"
+@mixin background-clip($clip:padding-box) {
+  @include prefixer(background-clip, $clip, webkit moz spec);
+}
+
+
+// Gradients
+//--------------------
+@mixin gradient-horizontal($startColor: #555, $endColor: #333, $fallbackcolor:mix($startColor, $endColor, 60%)){
+  background-color: $fallbackcolor;
+  background-image: -moz-linear-gradient(left, $startColor, $endColor); // FF 3.6+
+  background-image: -webkit-gradient(linear, 0 0, 100% 0, from($startColor), to($endColor)); // Safari 4+, Chrome 2+
+  background-image: -webkit-linear-gradient(left, $startColor, $endColor); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient(left, $startColor, $endColor); // Opera 11.10
+  background-image: linear-gradient(to right, $startColor, $endColor); // Standard, IE10
+  background-repeat: repeat-x;
+  @if $filter {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($startColor)}', endColorstr='#{ie-hex-str($endColor)}', GradientType=1); // IE9 and down
+  }  
+}
+
+@mixin gradient-vertical($startColor: #555, $endColor: #333, $fallbackcolor:mix($startColor, $endColor, 60%)) {
+  background-color: $fallbackcolor;
+  background-image: -moz-linear-gradient(top, $startColor, $endColor); // FF 3.6+
+  background-image: -webkit-gradient(linear, 0 0, 0 100%, from($startColor), to($endColor)); // Safari 4+, Chrome 2+
+  background-image: -webkit-linear-gradient(top, $startColor, $endColor); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient(top, $startColor, $endColor); // Opera 11.10
+  background-image: linear-gradient(to bottom, $startColor, $endColor); // Standard, IE10
+  background-repeat: repeat-x;
+  @if $filter {
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($startColor)}', endColorstr='#{ie-hex-str($endColor)}', GradientType=0); // IE9 and down
+  }
+}
+
+@mixin gradient-directional($startColor: #555, $endColor: #333, $deg: 45deg, $fallbackcolor:mix($startColor, $endColor, 60%)) {
+  background-color: $fallbackcolor;
+  background-repeat: repeat-x;
+  background-image: -moz-linear-gradient($deg, $startColor, $endColor); // FF 3.6+
+  background-image: -webkit-linear-gradient($deg, $startColor, $endColor); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient($deg, $startColor, $endColor); // Opera 11.10
+  background-image: linear-gradient($deg, $startColor, $endColor); // Standard, IE10
+}
+
+@mixin gradient-radial($innerColor: #555, $outerColor: #333, $fallbackcolor:mix($startColor, $endColor, 60%)) {
+  background-color: $fallbackcolor;
+  background-image: -webkit-gradient(radial, center center, 0, center center, 460, from($innerColor), to($outerColor));
+  background-image: -webkit-radial-gradient(circle, $innerColor, $outerColor);
+  background-image: -moz-radial-gradient(circle, $innerColor, $outerColor);
+  background-image: -o-radial-gradient(circle, $innerColor, $outerColor);
+  background-repeat: no-repeat;
+}
+
+@mixin gradient-striped($color: #555, $angle: 45deg) {
+  background-color: $color;
+  background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.15)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.15)), color-stop(.75, rgba(255,255,255,.15)), color-stop(.75, transparent), to(transparent));
+  background-image: -webkit-linear-gradient($angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+  background-image: -moz-linear-gradient($angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+  background-image: -o-linear-gradient($angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+  background-image: linear-gradient($angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+}
+
+
+// Reset filters for IE
+@mixin reset-filter() {
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+}
+
+
+//appearance
+@mixin appearance($value) {
+  @include prefixer(appearance, $value, webkit moz o spec);
+}
+
+
+// User select
+// For selecting text on the page
+@mixin user-select($arg: none) {
+  @include prefixer(user-select, $arg, webkit moz o spec);
+}
+
+
+// Order of the includes matters, and it is: normal, bold, italic, bold+italic.
+@mixin font-face($font-family, $file-path, $weight: normal, $style: normal, $asset-pipeline: false ) {
+  @font-face {
+    font-family: $font-family;
+    font-weight: $weight;
+    font-style: $style;
+
+    @if $asset-pipeline == true {
+      src: font-url('#{$file-path}.eot');
+      src: font-url('#{$file-path}.eot?#iefix')          format('embedded-opentype'),
+           font-url('#{$file-path}.woff')                format('woff'),
+           font-url('#{$file-path}.ttf')                 format('truetype'),
+           font-url('#{$file-path}.svg##{$font-family}') format('svg');
+    } @else {
+      src: url('#{$file-path}.eot');
+      src: url('#{$file-path}.eot?#iefix')               format('embedded-opentype'),
+           url('#{$file-path}.woff')                     format('woff'),
+           url('#{$file-path}.ttf')                      format('truetype'),
+           url('#{$file-path}.svg##{$font-family}')      format('svg');
+    }
+  }
+}
+
+
+// Resize anything
+@mixin resizable($direction) {
+  resize: $direction; // Options: horizontal, vertical, both
+  overflow: auto; // Safari fix
+}
+
+
+//columns
+//--------------------
+@mixin columns($arg: auto) {
+// <column-count> || <column-width>
+  @include prefixer(columns, $arg, webkit moz spec);
+}
+
+@mixin column-count($int: auto) {
+// auto || integer
+  @include prefixer(column-count, $int, webkit moz spec);
+}
+
+@mixin column-gap($length: normal) {
+// normal || length
+  @include prefixer(column-gap, $length, webkit moz spec);
+}
+
+@mixin column-fill($arg: auto) {
+// auto || balance
+  @include prefixer(columns-fill, $arg, webkit moz spec);
+}
+
+@mixin column-rule($arg) {
+// <border-width> || <border-style> || <color>
+  @include prefixer(column-rule, $arg, webkit moz spec);
+}
+
+@mixin column-rule-color($color) {
+  @include prefixer(column-rule-color, $color, webkit moz spec);
+}
+
+@mixin column-rule-style($style: none) {
+// none | hidden | dashed | dotted | double | groove | inset | inset | outset | ridge | solid
+  @include prefixer(column-rule-style, $style, webkit moz spec);
+}
+
+@mixin column-rule-width ($width: none) {
+  @include prefixer(column-rule-width, $width, webkit moz spec);
+}
+
+@mixin column-span($arg: none) {
+// none || all
+  @include prefixer(column-span, $arg, webkit moz spec);
+}
+
+@mixin column-width($length: auto) {
+// auto || length
+  @include prefixer(column-width, $length, webkit moz spec);
+}
+
+
+//flex
+//--------------------
+@mixin display-flex {
+  display: -webkit-flex;
+  display: -moz-flex;
+  display: -o-flex;
+  display: -ms-flex;
+  display: flex;
+}
+
+@mixin flex-direction($direction:row){
+  //row | row-reverse | column | column-reverse
+  @include prefixer(flex-direction, $direction, webkit moz spec);
+}
+
+@mixin flex-wrap($wrap:no-wrap){
+  //nowrap | wrap | wrap-reverse
+  @include prefixer(flex-wrap, $wrap, webkit moz spec);
+}
+
+//flex-flow is a shorthand for flex-direction and flex-wrap
+@mixin flex-flow($flow:column nowrap){
+  //direction || wrap
+  @include prefixer(flex-flow, $flow, webkit moz spec);
+}
+
+@mixin order($num){
+  @include prefixer(order, $num, webkit moz spec);
+}
+
+@mixin justify-content($align:flex-start){
+  //flex-start | flex-end | center | space-between | space-around
+  @include prefixer(justify-content, $align, webkit moz spec);
+}
+
+@mixin align-items($align:flex-start){
+  //flex-start | flex-end | center | baseline | stretch
+  @include prefixer(align-items, $align, webkit moz spec);
+}
+
+@mixin align-content($align:stretch){
+  //stretch | flex-start | flex-end | center | space-between | space-around
+  @include prefixer(align-content, $align, webkit moz spec);
+}
+
+@mixin align-self($align:stretch){
+  //stretch | flex-start | flex-end | center | baseline
+  @include prefixer(align-items, $align, webkit moz spec);
+}
+
+@mixin flex($flex){
+  //initial | auto | none | number
+  @include prefixer(flex, $flex, webkit moz spec);
+}
+
+//webkit
+// -------------------------
+
+//text
+@mixin text-fill-color($color){
+  @include prefixer(text-fill-color, $color, webkit spec);
+}
+@mixin text-stroke-color($color){
+  @include prefixer(text-stroke-color, $color, webkit spec);
+}
+@mixin text-stroke-width($width){
+  @include prefixer(text-stroke-color, $width, webkit spec);
+}
+
+//filter
+@mixin grayscale($percent:100%){
+  @include prefixer(filter, grayscale($percent), webkit spec);
+}
+@mixin drop-shadow($shadow...){
+  @include prefixer(filter, drop-shadow($shadow), webkit spec);
+}
+@mixin blur($px){
+  @include prefixer(filter, blur($px), webkit spec);
+}
