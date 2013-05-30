@@ -1,16 +1,21 @@
 @charset "UTF-8";
-//fallback variables
+
+//开关设置
 // -------------------------
-$lte7: true !default; // Set to true if you want to add support for IE6 and IE7
-$filter:true !default;// gradient fallback ie6-8 
+$lte7:                  true !default; //是否兼容ie6-7
+$filter:                true !default; //是否为ie6-8开启css3滤镜兼容，常用于渐变背景 
+$articleStyle:          true !default; //是否为详细页文本开启不同文字排版
+$printStyle:            true !default; //是否开启打印样式
 
 
 //font相关
 // -------------------------
-$baseFontSize:14px !default;
-$baseLineHeight:1.5 !default;
-$baseFontFamily:"Helvetica Neue", Helvetica, arial, sans-serif !default;
-
+$baseFontSize:          14px !default;
+$baseLineHeight:        1.5 !default;
+$baseFontFamily:        "Helvetica Neue", Helvetica, Tahoma, sans-serif !default;
+$fontCn:                "SimSun"; //宋体
+$fontYaHei:             "Microsoft Yahei"; //微软雅黑
+$fontHeiTi:             "SimHei"; //黑体
 
 //basic color
 // -------------------------
@@ -45,6 +50,31 @@ $linkColorHover:        darken($linkColor, 15%) !default;
 
 // Scaffolding
 // -------------------------
-$bodyBgColor:        $white !default;
-$textColor:          $grayDarker !default;
+$bodyBgColor:           $white !default;
+$textColor:             $grayDarker !default;
 
+
+// status color
+// -------------------------
+$warningText:           #514721 !default;
+$warningBgColor:        #FFF6BF !default;
+$warningBorder:         #FFD324 !default;
+
+$errorText:             #8A1F11 !default;
+$errorBgColor:          #FBE3E4 !default;
+$errorBorder:           #FBC2C4 !default;
+
+$successText:           #264409 !default;
+$successBgColor:        #E6EFC2 !default;
+$successBorder:         #C6D880 !default;
+
+$infoText:              #205791 !default;
+$infoBgColor:           #D5EDF8 !default;
+$infoBorder:            #92CAE4 !default;
+
+
+//radius
+// -------------------------
+$baseRadius:            4px !default;
+$smallRadius:           3px !default;
+$largeRadius:           8px !default;
