@@ -16,13 +16,13 @@
 }
 
 // Center-align a block level element
-@mixin center-block() {
+@mixin center-block {
   margin-left: auto;
   margin-right: auto;
 }
 
 //float left & right
-@mixin float($float:left){
+@mixin float($float:left) {
   float: $float;
   @if $lte7 {
     display: inline;
@@ -46,25 +46,27 @@
 }
 
 //Hide from both screenreaders and browsers: h5bp.com/u
-@mixin hidden{
+@mixin hidden {
   display: none !important;
   visibility: hidden;
 }
 
 //Hide only visually, but have it available for screenreaders
-@mixin visuallyhidden{
+@mixin visuallyhidden {
   position: absolute;
-  clip:rect(1px 1px 1px 1px);//ie6/7
+  @if $lte7 {
+    clip:rect(1px 1px 1px 1px);//ie6/7
+  }
   clip:rect(1px, 1px, 1px, 1px);//standard
 }
 
 // Hide visually and from screenreaders, but maintain layout
-@mixin invisible{
+@mixin invisible {
   visibility: hidden;
  }
 
 //ul has list style
-@mixin ul-has-style{
+@mixin ul-has-style {
   margin-left:25px;
   list-style:disc;
 }
@@ -76,7 +78,7 @@
   background-color: transparent;
   border: 0;
   @if $lte7 {
-    _line-height:999;
+    _line-height:99;
     _overflow:hidden;
   }
 }
@@ -181,7 +183,7 @@
 
 //selection
 //-------------------------
-@mixin selection($bgColor:#b3d4fc){
+@mixin selection($bgColor:#b3d4fc) {
   ::-moz-selection {
       background: $bgColor;
       text-shadow: none;
@@ -194,7 +196,7 @@
 
 // triangle
 // https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_triangle.scss
-@mixin triangle ($size, $color, $direction) {
+@mixin triangle($size, $color, $direction) {
   height: 0;
   width: 0;
 
@@ -240,6 +242,16 @@
   }
 }
 
+//rem
+//thanks:http://drublic.de/blog/rem-fallback-sass-less/;
+@mixin rem($property, $px) {
+  #{$property}: $px * $baseFontSize;
+  #{$property}: #{$px}rem;
+}
+@mixin remFontSize($px) {
+  font-size: $px * $baseFontSize;
+  font-size: #{$px}rem;
+}
 
 /* -------------------------------------------------
  * %placeholder selector 
@@ -350,6 +362,12 @@
   }
 }
 
+//ie6/7 haslayout
+%zoom{
+  @if $lte7 {
+    *zoom:1;
+  }
+}
 
 /* -------------------------------------------------
  * function
@@ -357,12 +375,12 @@
 */
 
 // pixels to ems
-@function em($px, $base: 16) {
+@function pxToEm($px, $base: 16) {
   @return ($px / $base) * 1em;
 }
 
 // pixels to rems 
-@function rem($px) {
+@function pxToRem($px) {
   @return $px / $baseFontSize * 1rem;
 }
 
