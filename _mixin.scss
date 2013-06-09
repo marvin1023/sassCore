@@ -1,10 +1,14 @@
 @charset "UTF-8";
 /* -------------------------------------------------
- * mixin
- * 通过@include调用，样式通过拷贝的方式使用
- * 尤其适用于传递参数  
+ * mixin scss
  * -------------------------------------------------
 */
+
+
+//mixin
+//通过@include调用，样式通过拷贝的方式使用
+//尤其适用于传递参数  
+//----------------------------------------
 
 //inline-block
 //ie6-7 *display: inline;*zoom:1;
@@ -253,11 +257,17 @@
   font-size: #{$px}rem;
 }
 
-/* -------------------------------------------------
- * %placeholder selector 
- * 通过@extend调用，样式组合申明，适用于无参数
- * -------------------------------------------------
-*/
+//disabled
+@mixin disabled{
+  background-color: #e6e6e6;
+  color: #ababab;
+  cursor: not-allowed;
+}
+
+
+//%placeholder selector 
+//通过@extend调用，样式组合申明，适用于无参数
+//----------------------------------------
 
 //inline-block
 %inline-block{
@@ -339,7 +349,7 @@
   @if $filter{
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-8 */
     :root &{
-       filter: none\9;
+       filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     }
   }
 }
@@ -357,9 +367,38 @@
   @if $filter{
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#40000000',GradientType=0 ); /* IE6-8 */
     :root &{
-       filter: none\9;
+       filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
     }
   }
+}
+
+//背景色半透明
+%bgColorAlpha{
+  @if $filter{
+    filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#7F000000', endColorstr='#7F000000');
+  }@else{
+    background-color: #333;
+  }
+  background-color:rgba(0,0,0,.5); 
+}
+
+//disabled
+%disabled{
+  background-color: #e6e6e6;
+  color: #ababa;
+  cursor: not-allowed;
+}
+
+//水平间隔线，适用于行列表
+%horizontal-line{
+  border-bottom:1px dashed $gray;
+  padding-top:10px;
+  padding-bottom:10px;
+}
+
+//普通transition特效
+%allTransition{
+  @include transition;
 }
 
 //ie6/7 haslayout
@@ -369,10 +408,10 @@
   }
 }
 
-/* -------------------------------------------------
- * function
- * -------------------------------------------------
-*/
+
+
+//function
+//----------------------------------------
 
 // pixels to ems
 @function pxToEm($px, $base: 16) {

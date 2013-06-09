@@ -1,11 +1,17 @@
 @charset "UTF-8";
+/* -------------------------------------------------
+ * css3 scss
+ * -------------------------------------------------
+*/
+
 //thanks:
 //http://bourbon.io/
 //https://github.com/thomas-mcdonald/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_mixins.scss
 
-//************************************************************************//
-// Example: @include prefixer(border-radius, $radius, webkit spec);
-//************************************************************************//
+
+//Example: @include prefixer(border-radius, $radius, webkit spec);
+//----------------------------------------
+
 $prefix-for-webkit: true !default;
 $prefix-for-mozilla: true !default;
 $prefix-for-microsoft: true !default;
@@ -50,7 +56,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 // Return vendor-prefixed property names if appropriate
 // Example: transition-property-names((transform, color, background), moz) -> -moz-transform, color, background
-//************************************************************************//
+//----------------------------------------
 @function transition-property-names($props, $vendor: false) {
   $new-props: ();
   @each $prop in $props {
@@ -70,7 +76,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 }
 
 // Border Radius
-//--------------------
+//----------------------------------------
 @mixin border-radius($radius:$baseRadius) {
   @include prefixer(border-radius, $radius, webkit spec);
 }
@@ -107,7 +113,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 
 //Transform, transform-origin, transform-style
-//--------------------
+//----------------------------------------
 @mixin transform($property...) {
   @include prefixer(transform, $property, webkit moz o spec);
 }
@@ -187,7 +193,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 }
 
 // transition
-//--------------------
+//----------------------------------------
 @mixin transition ($properties...) {
   @if length($properties) >= 1 {
     @include prefixer(transition, $properties, webkit moz o spec);
@@ -239,7 +245,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 // http://www.w3.org/TR/css3-animations/#the-animation-name-property-
 // Each of these mixins support comma separated lists of values, which allows different transitions for individual properties to be described in a single style rule. Each value in the list corresponds to the value at that same position in the other properties.
 // Official animation shorthand property.
-//--------------------
+//----------------------------------------
 @mixin animation ($animations...) {
   @include prefixer(animation, $animations, webkit moz spec);
 }
@@ -344,7 +350,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 
 // Gradients
-//--------------------
+//----------------------------------------
 @mixin gradient-horizontal($startColor: #555, $endColor: #333, $fallbackcolor:mix($startColor, $endColor, 60%)){
   background-color: $fallbackcolor;
   background-image: -moz-linear-gradient(left, $startColor, $endColor); // FF 3.6+
@@ -391,11 +397,11 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 @mixin gradient-striped($color: #555, $angle: 45deg) {
   background-color: $color;
-  background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.15)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.15)), color-stop(.75, rgba(255,255,255,.15)), color-stop(.75, transparent), to(transparent));
-  background-image: -webkit-linear-gradient($angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
-  background-image: -moz-linear-gradient($angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
-  background-image: -o-linear-gradient($angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
-  background-image: linear-gradient($angle, rgba(255,255,255,.15) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.15) 50%, rgba(255,255,255,.15) 75%, transparent 75%, transparent);
+  background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.3)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.3)), color-stop(.75, rgba(255,255,255,.3)), color-stop(.75, transparent), to(transparent));
+  background-image: -webkit-linear-gradient($angle, rgba(255,255,255,.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.3) 75%, transparent 75%, transparent);
+  background-image: -moz-linear-gradient($angle, rgba(255,255,255,.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.3) 75%, transparent 75%, transparent);
+  background-image: -o-linear-gradient($angle, rgba(255,255,255,.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.3) 75%, transparent 75%, transparent);
+  background-image: linear-gradient($angle, rgba(255,255,255,.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.3) 75%, transparent 75%, transparent);
 }
 
 
@@ -450,7 +456,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 
 //columns
-//--------------------
+//----------------------------------------
 @mixin columns($arg: auto) {
 // <column-count> || <column-width>
   @include prefixer(columns, $arg, webkit moz spec);
@@ -501,7 +507,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 
 //flex
-//--------------------
+//----------------------------------------
 @mixin display-flex {
   display: -webkit-flex;
   display: -moz-flex;
@@ -556,7 +562,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 }
 
 //webkit
-// -------------------------
+//----------------------------------------
 
 //text
 @mixin text-fill-color($color){

@@ -1,14 +1,15 @@
 @charset "UTF-8";
 /* -------------------------------------------------
- * grid
- * thanks 
- * http://www.blankwork.net/
- * http://semantic.gs/
- * http://heygrady.com/blog/2011/02/17/using-sass-with-the-1kb-grid-system/   
- * https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/functions/_flex-grid.scss
- * http://bjorkoy.com/2010/05/css-grids-with-sass/
+ * grid scss
  * -------------------------------------------------
 */
+
+//thanks:
+//http://www.blankwork.net/
+//http://semantic.gs/
+//http://heygrady.com/blog/2011/02/17/using-sass-with-the-1kb-grid-system/   
+//https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/functions/_flex-grid.scss
+//http://bjorkoy.com/2010/05/css-grids-with-sass/
 
 // Main Variables:
 //----------------------------------------
@@ -44,7 +45,7 @@ $_marginValue:                 if($_percentLayout, $_gutterPercent, $_gutter) !d
 
 //true for grid class(.span1, .span2...)
 //----------------------------------------
-$_span:                        true !default;
+$_span:                        false !default;
 
 
 // A Function to calculate width:

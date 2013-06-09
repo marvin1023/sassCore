@@ -1,16 +1,24 @@
 @charset "UTF-8";
-/*
- * author:为之;
- * email:xuyc_brother[at]foxmail.com
- * copyright:http://tianya.cn
+/* -------------------------------------------------
+ * base scss
+ * -------------------------------------------------
 */
 
+// --------------------------------------------------
+// author:      简水
+// version:     1.0
+// time:        2013-06-09
+// url:         https://github.com/marvin1023/tobe
+// copyright:   http://tianya.cn, http://w3cplus.com
+// --------------------------------------------------
+
 @import "setting";
-@import "normalize";
 @import "css3";
 @import "mixin";
 @import "media-queries";
-@import "reset";
 @import "grid";
+@import "normalize";
+@import "reset";
+@import "layout";
 @import "helpers";
 @import "typography";

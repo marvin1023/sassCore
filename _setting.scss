@@ -1,4 +1,8 @@
 @charset "UTF-8";
+/* -------------------------------------------------
+ * setting scss
+ * -------------------------------------------------
+*/
 
 //开关设置
 // -------------------------
@@ -17,16 +21,27 @@ $fontCn:                "SimSun"; //宋体
 $fontYaHei:             "Microsoft Yahei"; //微软雅黑
 $fontHeiTi:             "SimHei"; //黑体
 
-//basic color
+
+//元素间距
+// -------------------------
+$baseGap:      $baseFontSize * $baseLineHeight !default;
+
+
+//基本颜色
+//color function : http://sass-lang.com/docs/yardoc/Sass/Script/Functions.html
+//     lighten($color, $amount)
+//     darken($color, $amount)
+//     opacify($color, $amount)
+//     mix($color1, $color2[, $amount])
 // -------------------------
 $black:                 #000 !default;
 $grayDarker:            #333 !default;
 $grayDark:              #999 !default;
 $gray:                  #ccc !default;
-$grayLight:             #eee !default;
+$grayLight:             #f5f5f5 !default;
 $white:                 #fff !default;
 
-$red:                   #9d261d !default;
+$red:                   #cc3300 !default;
 $blue:                  #00A3CF !default;
 $blueDark:              #0064cd !default;
 $orange:                #F47837 !default;
@@ -35,14 +50,11 @@ $yellow:                #ffc40d !default;
 $pink:                  #c3325f !default;
 $purple:                #7a43b6 !default;
 
+$primary:               #0078E7 !default;
+
 
 //link
 // -------------------------
-//color function : http://sass-lang.com/docs/yardoc/Sass/Script/Functions.html
-//     lighten($color, $amount)
-//     darken($color, $amount)
-//     opacify($color, $amount)
-//     mix($color1, $color2[, $amount])
 $linkColor:             #08c !default;
 $linkColorHover:        darken($linkColor, 15%) !default;
 
