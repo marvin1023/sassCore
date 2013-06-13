@@ -4,9 +4,9 @@
 
 ##sassCore特点：
 
-* sassCore涵盖范围广，目前涉及了setting，reset，mixin，css3，typography，media-queries，grids，helps八个基础部分及function和base这两个集成文件。
+* sassCore涵盖范围广，目前涉及了setting，reset，mixin，css3，typography，media-queries，grid，helps八个基础部分及function和base这两个集成文件。
 * sassCore采用开关机制，对是否支持ie6/7等众多条件可以通过设置为true或false来搞定。
-* sassCore实用了sass 3.2.0版本的重大更新技术。如sass默认变量机制（默认变量!default，在应用的时候只需在你引入sassCore文件之前，重新申明变量就ok，而不需要去修改sassCore文件），placeholder选择器（有调用才会解析出相应的组合申明样式，避免了先前的class申明不管是否调用都会有样式解析出来）。
+* sassCore采用了sass 3.2.0版本以后的重大更新技术。如sass默认变量机制（默认变量!default，在应用的时候只需在你引入sassCore文件之前，重新申明变量就ok，而不需要去修改sassCore文件），placeholder选择器（有调用才会解析出相应的组合申明样式，避免了先前的class申明不管是否调用都会有样式解析出来）等。
 * sassCore借鉴优秀的作品，根据实战创造新的方法，紧跟前沿，每一个文件都是经过深思熟虑，几经更改的结晶。
 
 ##sassCore文件简略说明
@@ -19,7 +19,7 @@
 ###mixin
 负责功能方面的文件。这里我们大概分成三个部分，一个是混合部分即mixin，一个是placeholder选择器部分即%，最后就是我们的function函数部分。我们常用的include及extend当然就是来自于这里了。
 
-###grids
+###grid
 负责网格系统的文件。默认为流体布局，可以通过设置$_percentLayout为false来改成固定宽度（960px）居中布局，也可以通过设置$_span为true或false来控制是否输出各个网格的class。
 
 ###css3
