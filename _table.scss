@@ -1,0 +1,255 @@
+@charset "utf-8";
+/* -------------------------------------------------
+ * table scss
+ * -------------------------------------------------
+*/
+
+// 变量
+// -------------------------
+$zebraLte8:                      false !default; //斑马线效果是否支持ie8，如果支持请在tr里面添加class odd
+$tableBgColor:                   transparent !default; // overall background-color
+$tableBgColorAccent:             #f9f9f9 !default; // for striping zebra
+$tableBgColorHover:              #f5f5f5 !default; // for hover
+$tableBorderColor:               $gray !default; // table and cell border
+$tableThBgColor:                 #f4f4f4 !default;
+
+
+//table mixin
+// -----------------
+@mixin table-radius($baseRadius){
+  border-collapse: separate; // Done so we can round those corners!
+  @if $lte7 {
+    *border-collapse: collapse; // IE7 can't round corners anyway
+  }
+  @include border-radius($baseRadius);
+    // For first th/td in the first row in the first thead or tbody
+  thead:first-child tr:first-child > th:first-child,
+  tbody:first-child tr:first-child > td:first-child,
+  tbody:first-child tr:first-child > th:first-child {
+    @include border-top-left-radius($baseRadius);
+  }
+  // For last th/td in the first row in the first thead or tbody
+  thead:first-child tr:first-child > th:last-child,
+  tbody:first-child tr:first-child > td:last-child,
+  tbody:first-child tr:first-child > th:last-child {
+    @include border-top-right-radius($baseRadius);
+  }
+  // For first th/td (can be either) in the last row in the last thead, tbody, and tfoot
+  thead:last-child tr:last-child > th:first-child,
+  tbody:last-child tr:last-child > td:first-child,
+  tbody:last-child tr:last-child > th:first-child,
+  tfoot:last-child tr:last-child > td:first-child,
+  tfoot:last-child tr:last-child > th:first-child {
+    @include border-bottom-left-radius($baseRadius);
+  }
+  // For last th/td (can be either) in the last row in the last thead, tbody, and tfoot
+  thead:last-child tr:last-child > th:last-child,
+  tbody:last-child tr:last-child > td:last-child,
+  tbody:last-child tr:last-child > th:last-child,
+  tfoot:last-child tr:last-child > td:last-child,
+  tfoot:last-child tr:last-child > th:last-child {
+    @include border-bottom-right-radius($baseRadius);
+  }
+
+  // Clear border-radius for first and last td in the last row in the last tbody for table with tfoot
+  tfoot + tbody:last-child tr:last-child td:first-child {
+    @include border-bottom-left-radius(0);
+  }
+  tfoot + tbody:last-child tr:last-child td:last-child {
+    @include border-bottom-right-radius(0);
+  }
+
+  // Special fixes to round the left border on the first td/th
+  caption + thead tr:first-child th:first-child,
+  caption + tbody tr:first-child td:first-child,
+  colgroup + thead tr:first-child th:first-child,
+  colgroup + tbody tr:first-child td:first-child {
+    @include border-top-left-radius($baseRadius);
+  }
+  caption + thead tr:first-child th:last-child,
+  caption + tbody tr:first-child td:last-child,
+  colgroup + thead tr:first-child th:last-child,
+  colgroup + tbody tr:first-child td:last-child {
+    @include border-top-right-radius($baseRadius);
+  }
+}
+
+@mixin table-border($tableBorderColor){
+  border: 1px solid $tableBorderColor;
+  border-left: 0;
+  th,
+  td {
+    border-left: 1px solid $tableBorderColor;
+  }
+  // Prevent a double border
+  caption + thead tr:first-child th,
+  caption + tbody tr:first-child th,
+  caption + tbody tr:first-child td,
+  colgroup + thead tr:first-child th,
+  colgroup + tbody tr:first-child th,
+  colgroup + tbody tr:first-child td,
+  thead:first-child tr:first-child th,
+  tbody:first-child tr:first-child th,
+  tbody:first-child tr:first-child td {
+    border-top: 0;
+  } 
+}
+
+@mixin zebra-stripe($tableBgColorAccent){
+  tbody {
+    > tr:nth-child(odd) > td,
+    > tr:nth-child(odd) > th{
+      background-color: $tableBgColorAccent;
+    } 
+  }
+  @if $zebraLte8 {
+    tr.odd td,
+    tr.odd th {
+      background-color: $tableBgColorAccent;
+    }
+  }
+}
+
+@mixin tr-hover($tableBgColorHover){
+  tbody {
+    tr:hover > td,
+    tr:hover > th {
+      background-color: $tableBgColorHover;
+    }
+  }
+}
+
+@mixin table-thead($thBackgroundColor:$blue,$thTextColor:$white){
+  th{
+    background-color: $thBackgroundColor;
+    color:$thTextColor;
+  }
+}
+
+
+// BASE TABLES
+// -----------------
+table {
+  max-width: 100%;
+  background-color: $tableBgColor;
+  border-collapse: collapse;
+  border-spacing: 0;
+}
+
+
+// BASELINE STYLES
+// ---------------
+.table {
+  width: 100%;
+  margin-bottom: $baseMarginBottom;
+  border:1px solid $tableBorderColor;
+  border-width:0 1px 1px 0;
+  // Cells
+  th,
+  td {
+    padding: 8px;
+    text-align: left;
+    vertical-align: top;
+    border: 1px solid $tableBorderColor;
+    border-width:1px 0 0 1px;
+  }
+  th {
+    font-weight: bold;
+  }
+  // Bottom align for column headings
+  thead th {
+    vertical-align: bottom;
+  }
+
+  // Nesting
+  .table {
+    background-color: $bodyBgColor;
+  } 
+}
+
+
+// CONDENSED TABLE W/ HALF PADDING
+// -------------------------------
+.table-condensed {
+  th,
+  td {
+    padding: 4px 5px;
+  }
+}
+
+.table-line{
+  border:none;
+  th,td{
+    border-left:none;
+  }
+  // Remove top border from thead by default
+  thead:first-child tr:first-child th,
+  thead:first-child tr:first-child td {
+    border-top: 0;
+  }
+  @if $lte7 {
+    _border-bottom:1px solid $tableBorderColor;
+  }
+}
+
+// BORDERED VERSION
+// ----------------
+.table-radius {
+  // @include table-border($tableBorderColor);
+  @include table-radius($baseRadius);
+}
+
+
+
+// ZEBRA-STRIPING
+// --------------
+
+// Default zebra-stripe styles (alternating gray and transparent backgrounds)
+.table-striped {
+  @include table-thead;
+  @include zebra-stripe($tableBgColorAccent);
+}
+
+
+// HOVER EFFECT
+// ------------
+// Placed here since it has to come after the potential zebra striping
+.table-hover {
+  @include tr-hover($tableBgColorHover);
+}
+
+
+// TABLE BACKGROUNDS
+// -----------------
+// Exact selectors below required to override .table-striped
+
+.table tr {
+  &.success td {
+    background-color: $successBgColor;
+  }
+  &.error td {
+    background-color: $errorBgColor;
+  }
+  &.warning td {
+    background-color: $warningBgColor;
+  }
+  &.info td {
+    background-color: $infoBgColor;
+  }
+}
+
+// Hover states for .table-hover
+.table-hover tr {
+  &.success:hover td {
+    background-color: darken($successBgColor, 5%);
+  }
+  &.error:hover td {
+    background-color: darken($errorBgColor, 5%);
+  }
+  &.warning:hover td {
+    background-color: darken($warningBgColor, 5%);
+  }
+  &.info:hover td {
+    background-color: darken($infoBgColor, 5%);
+  }
+}
