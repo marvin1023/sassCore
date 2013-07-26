@@ -1,15 +1,22 @@
 @charset "UTF-8";
-/* -------------------------------------------------
- * typography scss
- * -------------------------------------------------
-*/
+//----------------------------------------------------- 
+// typography scss
+//----------------------------------------------------- 
 
-//links 
+
+// links 
 a{
   text-decoration:none;
-  color:$linkColor;
-  &:hover{
-    color:darken($linkColor,10%);
+  @if length($linkColor) > 1{
+      color:nth($linkColor,1);
+      &:hover{
+        color:nth($linkColor,2);
+      }
+  } @else {
+    color:$linkColor;
+    &:hover{
+      color:darken($linkColor,10%);
+    }
   }
 }
 
@@ -63,36 +70,6 @@ ul.inline-block{
 }
 
 
-// article style  
-@if $articleStyle{
-  .article{
-    h1, h2, h3, h4, h5, h6 {
-      line-height:1.3;
-      margin-bottom:10px;
-    }
-    ul,ol{
-      margin-left: 25px;
-      list-style-type:disc;
-    }
-    ol{
-      list-style-type:decimal;
-    }
-    p, ul, ol, dl{
-      margin-bottom:10px;
-    }
-    ul ul, ul ol, ol ol, ol ul{
-      margin-bottom: 0;
-    }
-    dt{
-      font-weight: bold;
-    }
-    dd{
-      margin-left: 10px;
-    }
-  }
-}
-
-
 // Blockquotes
 blockquote {
   padding: 0 0 0 15px;
@@ -128,7 +105,7 @@ address {
 }
 
 
-//hr
+// hr
 hr {
     display: block;
     height: 1px;
@@ -136,4 +113,50 @@ hr {
     border-top: 1px solid #ccc;
     margin: 1em 0;
     padding: 0;
+}
+
+
+// article style
+// 详细页文章内容样式，通过变量$articleStyleSwitch来控制输出
+// 详细页内容的默认的class为.article，可通过变量$articleClass来设置
+//-----------------------------------------------------    
+@if nth($article,1){
+  .#{nth($article,2)}{
+    line-height: 1.6;
+    h1, h2, h3, h4, h5, h6 {
+      line-height:1.3;
+      margin-bottom:10px;
+    }
+    ul,ol{
+      margin-left: 25px;
+      list-style-type:disc;
+    }
+    ol{
+      list-style-type:decimal;
+    }
+    p, ul, ol, dl{
+      margin-bottom:10px;
+    }
+    ul ul, ul ol, ol ol, ol ul{
+      margin-bottom: 0;
+    }
+    dt{
+      font-weight: bold;
+      line-height: 1.8;
+    }
+    dd{
+      margin-left: 2em;
+    }
+    img{
+      margin-bottom: 10px;
+      border:1px solid $gray;
+      padding: 2px;
+    }
+    .fr img{
+      margin-left: 10px;
+    }
+    .fl img{
+      margin-right: 10px;
+    }
+  }
 }

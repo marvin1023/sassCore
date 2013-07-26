@@ -1,19 +1,23 @@
 @charset "UTF-8";
-/* -------------------------------------------------
- * function scss
- * -------------------------------------------------
-*/
+//-----------------------------------------------------	
+// function scss
+//-----------------------------------------------------
 
-// --------------------------------------------------
-// author:      简水
-// version:     1.0
-// time:        2013-06-09
+//-----------------------------------------------------
+// author:      结一 (http://weibo.com/marvin1023)
+// version:     2.0
+// time:        2013-07-16
 // url:         https://github.com/marvin1023/sassCore
 // copyright:   http://tianya.cn, http://w3cplus.com
-// --------------------------------------------------
+//-----------------------------------------------------
 
+// 为了不产生额外的css，强行设置不启用grid的spanclass
+$gridSpanSwitch: false;
+
+// 导入所有功能相关文件
 @import "setting";
 @import "css3";
-@import "mixin";
 @import "media-queries";
+@import "mixin";
 @import "grid";
+@import "simple";

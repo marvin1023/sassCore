@@ -1,17 +1,15 @@
 @charset "UTF-8";
-/* -------------------------------------------------
- * mixin scss
- * -------------------------------------------------
-*/
+//-----------------------------------------------------  
+// mixin scss
+//-----------------------------------------------------
 
 
-//mixin
-//通过@include调用，样式通过拷贝的方式使用
-//尤其适用于传递参数  
+// mixin
+// 通过@include调用，样式通过拷贝的方式使用，尤其适用于传递参数  
 //----------------------------------------
 
-//inline-block
-//ie6-7 *display: inline;*zoom:1;
+// inline-block
+// ie6-7 *display: inline;*zoom:1;
 @mixin inline-block {
   display: inline-block;
   @if $lte7 {
@@ -20,12 +18,13 @@
 }
 
 // Center-align a block level element
+// block得有宽度margin左右为auto才能居中
 @mixin center-block {
   margin-left: auto;
   margin-right: auto;
 }
 
-//float left & right
+// float left & right
 @mixin float($float:left) {
   float: $float;
   @if $lte7 {
@@ -33,7 +32,7 @@
   }
 }
 
-//clearfix
+// clearfix
 @mixin clearfix {
   @if $lte7 {
     *zoom: 1;
@@ -49,14 +48,14 @@
   }
 }
 
-//Hide from both screenreaders and browsers: h5bp.com/u
+// Hide from both screenreaders and browsers: h5bp.com/u
 @mixin hidden {
   display: none !important;
   visibility: hidden;
 }
 
-//Hide only visually, but have it available for screenreaders
-@mixin visuallyhidden {
+// Hide only visually, but have it available for screenreaders
+@mixin visually-hidden {
   position: absolute;
   @if $lte7 {
     clip:rect(1px 1px 1px 1px);//ie6/7
@@ -67,15 +66,16 @@
 // Hide visually and from screenreaders, but maintain layout
 @mixin invisible {
   visibility: hidden;
- }
+}
 
-//ul has list style
+// ul has list style
 @mixin ul-has-style {
   margin-left:25px;
   list-style:disc;
 }
 
 // CSS image replacement
+// 高度不能超过字体大小乘以99（line-height）
 @mixin ir {
   color: transparent;
   text-shadow: none;
@@ -87,16 +87,9 @@
   }
 }
 
-//placeholders
-@mixin placeholder($color: $grayDark) {
-  &:-moz-placeholder            { color: $color; } // Firefox 4-18
-  &::-moz-placeholder           { color: $color; } // Firefox 19+
-  &:-ms-input-placeholder       { color: $color; } // Internet Explorer 10+
-  &::-webkit-input-placeholder  { color: $color; } // Safari and Chrome
-}
-
 // Text overflow
-// Requires inline-block or block for proper styling
+// 元素可以设置宽度才可应用省略号
+// $substract单位为%
 @mixin ellipsis($substract:0) {
   overflow: hidden;
   text-overflow: ellipsis;
@@ -104,8 +97,98 @@
   width:100% - $substract;
 }
 
-//size:width,height 
-//https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_size.scss
+// 斑马线渐变
+// 传入的$bgColor即为实现的斑马线背景色
+@mixin gradient-striped($bgColor: #555, $angle: 45deg) {
+  background-color: $bgColor;
+  @include gradient-directional($angle, rgba(255,255,255,.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.3) 75%, transparent 75%, transparent);
+}
+
+// Opacity
+// lte8使用filter兼容
+@mixin opacity($opacity:50) {
+  opacity: $opacity / 100;
+  @if $filter{
+    filter: alpha(opacity=$opacity);
+  }
+}
+
+// triangle
+@mixin triangle($direction, $size, $borderColor ) {
+  content:"";
+  height: 0;
+  width: 0;
+
+  @if $direction == top {
+    border-bottom:$size solid $borderColor;
+    border-left:$size dashed transparent;
+    border-right:$size dashed transparent;
+  } 
+  @else if $direction == right {
+    border-left:$size solid $borderColor;
+    border-top:$size dashed transparent;
+    border-bottom:$size dashed transparent;
+  } 
+  @else if $direction == bottom {
+    border-top:$size solid $borderColor;
+    border-left:$size dashed transparent;
+    border-right:$size dashed transparent;
+  } 
+  @else if $direction == left {
+    border-right:$size solid $borderColor;
+    border-top:$size dashed transparent;
+    border-bottom:$size dashed transparent;
+  }
+}
+
+// rem
+// thanks:http://drublic.de/blog/rem-fallback-sass-less/;
+@mixin rem($property, $px) {
+  #{$property}: $px * $baseFontSize;
+  #{$property}: #{$px}rem;
+}
+@mixin rem-font-size($px) {
+  font-size: $px * $baseFontSize;
+  font-size: #{$px}rem;
+}
+
+//背景色半透明
+@mixin bgcolor-alpha($bgcolor: rgba(0,0,0,.5)){
+  color:#fff;
+  @if $filter{
+    filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#{ie-hex-str($bgcolor)}', endColorstr='#{ie-hex-str($bgcolor)}');
+  }@else{
+    background-color: #333;
+  }
+  background-color:$bgcolor; 
+}
+
+// disabled
+// 禁用样式，加!important
+@mixin disabled($bgColor:#e6e6e6,$textColor:#ababab){
+  background-color: $bgColor !important;
+  color: $textColor !important;
+  cursor: not-allowed !important;
+}
+
+//最小高度
+@mixin min-height($height){
+  min-height: $height;
+  height: auto !important;
+  @if $lte7{
+    _height: $height;
+  }
+}
+
+// 水平间隔线，适用于行列表
+@mixin horizontal-line($border:1px dashed $gray,$padding:10px){
+  border-bottom:$border;
+  padding-top:$padding;
+  padding-bottom:$padding;  
+}
+
+// size:width,height 
+// https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_size.scss
 @mixin size($size) {
   @if length($size) == 1 {
     @if $size == auto {
@@ -166,110 +249,11 @@
 }
 
 
-// Opacity
-@mixin opacity($opacity) {
-  opacity: $opacity / 100;
-  filter: alpha(opacity=$opacity);
-}
+// %placeholder selector 
+// 通过@extend调用，样式组合申明，适用于无参数
+//-----------------------------------------------------  
 
-//embossed
-//-------------------------
-@mixin embossed-light($borderColor:rgba(0,0,0,0.05)) {
-  border: 1px solid $borderColor;
-  @include box-shadow(inset 0 1px 0 rgba(255,255,255,0.7));
-}
-@mixin embossed-dark($borderColor:rgba(0,0,0,0.05)) {
-  border: 1px solid $borderColor;
-  @include box-shadow(inset 0 2px 3px rgba(255,255,255,0.3), 
-   inset 0 -2px 3px rgba(0,0,0,0.3),
-   0 1px 1px rgba(255,255,255,0.9));
-}
-
-//selection
-//-------------------------
-@mixin selection($bgColor:#b3d4fc) {
-  ::-moz-selection {
-      background: $bgColor;
-      text-shadow: none;
-  }
-  ::selection {
-      background: $bgColor;
-      text-shadow: none;
-  }
-}
-
-// triangle
-// https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/addons/_triangle.scss
-@mixin triangle($size, $color, $direction) {
-  height: 0;
-  width: 0;
-
-  @if ($direction == up) or ($direction == down) or ($direction == right) or ($direction == left) {
-    border-color: transparent;
-    border-style: solid;
-    border-width: $size / 2;
-
-    @if $direction == up {
-      border-bottom-color: $color;
-
-    } @else if $direction == right {
-      border-left-color:   $color;
-
-    } @else if $direction == down {
-      border-top-color:    $color;
-
-    } @else if $direction == left {
-      border-right-color:  $color;
-    }
-  }
-
-  @else if ($direction == up-right) or ($direction == up-left) {
-    border-top: $size solid $color;
-
-    @if $direction == up-right {
-      border-left:  $size dashed transparent;
-
-    } @else if $direction == up-left {
-      border-right: $size dashed transparent;
-    }
-  }
-
-  @else if ($direction == down-right) or ($direction == down-left) {
-    border-bottom: $size solid $color;
-
-    @if $direction == down-right {
-      border-left:  $size dashed transparent;
-
-    } @else if $direction == down-left {
-      border-right: $size dashed transparent;
-    }
-  }
-}
-
-//rem
-//thanks:http://drublic.de/blog/rem-fallback-sass-less/;
-@mixin rem($property, $px) {
-  #{$property}: $px * $baseFontSize;
-  #{$property}: #{$px}rem;
-}
-@mixin remFontSize($px) {
-  font-size: $px * $baseFontSize;
-  font-size: #{$px}rem;
-}
-
-//disabled
-@mixin disabled{
-  background-color: #e6e6e6;
-  color: #ababab;
-  cursor: not-allowed;
-}
-
-
-//%placeholder selector 
-//通过@extend调用，样式组合申明，适用于无参数
-//----------------------------------------
-
-//inline-block
+// inline-block
 %inline-block{
   @include inline-block;
 }
@@ -279,8 +263,7 @@
   @include center-block;
 }
 
-//float left & right
-//-------------------------
+// float left & right
 %float-left{
   @include float;
 }
@@ -288,19 +271,19 @@
   @include float(right);
 }
 
-//clearfix
+// clearfix
 %clearfix {
   @include clearfix;
 }
 
-//Hide from both screenreaders and browsers: h5bp.com/u
+// Hide from both screenreaders and browsers: h5bp.com/u
 %hidden{
   @include hidden;
 }
 
-//Hide only visually, but have it available for screenreaders
-%visuallyhidden{
-  @include visuallyhidden;
+// Hide only visually, but have it available for screenreaders
+%visually-hidden{
+  @include visually-hidden;
 }
 
 // Hide visually and from screenreaders, but maintain layout
@@ -308,7 +291,7 @@
   @include invisible;
 }
 
-//ul has list style
+// ul has list style
 %ul-has-style{
   @include ul-has-style;
 }
@@ -323,47 +306,25 @@
   @include ellipsis;
 }
 
-//浮雕高光（顶部）/ 阴影（底部），可用于美化图片样式
+// 垂直渐变，渐变背景是半透明到全透明，这样就可以通过设置背景色来表现渐变
 //-------------------------
-//顶部高光
-%embossed-light {
-  @include embossed-light;
-}
-//底部阴影
-%embossed-dark {
-  @include embossed-dark;
-}
-
-//垂直渐变，渐变背景是半透明到全透明，这样就可以通过设置背景色来表现渐变
-//-------------------------
-//白色，由半透明到全透明
-%gradient-light-linear {
+// 白色，由半透明到全透明
+%gradient-linear-light {
   /* IE9 SVG, needs conditional override of 'filter' to 'none' */
-  background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjUiLz4KICAgIDxzdG9wIG9mZnNldD0iMTAwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgPC9saW5lYXJHcmFkaWVudD4KICA8cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMSIgaGVpZ2h0PSIxIiBmaWxsPSJ1cmwoI2dyYWQtdWNnZy1nZW5lcmF0ZWQpIiAvPgo8L3N2Zz4=);
-  background: -moz-linear-gradient(top,  rgba(255,255,255,0.5) 0%, rgba(255,255,255,0) 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(255,255,255,0.5)), color-stop(100%,rgba(255,255,255,0))); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  rgba(255,255,255,0.5) 0%,rgba(255,255,255,0) 100%); /* W3C */
+  background-image: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iI2ZmZmZmZiIgc3RvcC1vcGFjaXR5PSIwLjMiLz4KICAgIDxzdG9wIG9mZnNldD0iNDYlIiBzdG9wLWNvbG9yPSIjZmZmZmZmIiBzdG9wLW9wYWNpdHk9IjAiLz4KICA8L2xpbmVhckdyYWRpZW50PgogIDxyZWN0IHg9IjAiIHk9IjAiIHdpZHRoPSIxIiBoZWlnaHQ9IjEiIGZpbGw9InVybCgjZ3JhZC11Y2dnLWdlbmVyYXRlZCkiIC8+Cjwvc3ZnPg==);
+  @include gradient-vertical(rgba(255,255,255,0.3),rgba(255,255,255,0) 46%);
   @if $filter{
-    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#80ffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-8 */
+    filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#4dffffff', endColorstr='#00ffffff',GradientType=0 ); /* IE6-8 */
     :root &{
-       filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
+      @extend %reset-filter;
     }
   }
 }
-//黑色，由全透明到半透明
-%gradient-dark-linear {
+// 黑色，由全透明到半透明
+%gradient-linear-dark {
   /* IE9 SVG, needs conditional override of 'filter' to 'none' */
   background: url(data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiA/Pgo8c3ZnIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyIgd2lkdGg9IjEwMCUiIGhlaWdodD0iMTAwJSIgdmlld0JveD0iMCAwIDEgMSIgcHJlc2VydmVBc3BlY3RSYXRpbz0ibm9uZSI+CiAgPGxpbmVhckdyYWRpZW50IGlkPSJncmFkLXVjZ2ctZ2VuZXJhdGVkIiBncmFkaWVudFVuaXRzPSJ1c2VyU3BhY2VPblVzZSIgeDE9IjAlIiB5MT0iMCUiIHgyPSIwJSIgeTI9IjEwMCUiPgogICAgPHN0b3Agb2Zmc2V0PSIwJSIgc3RvcC1jb2xvcj0iIzAwMDAwMCIgc3RvcC1vcGFjaXR5PSIwIi8+CiAgICA8c3RvcCBvZmZzZXQ9IjEwMCUiIHN0b3AtY29sb3I9IiMwMDAwMDAiIHN0b3Atb3BhY2l0eT0iMC4yNSIvPgogIDwvbGluZWFyR3JhZGllbnQ+CiAgPHJlY3QgeD0iMCIgeT0iMCIgd2lkdGg9IjEiIGhlaWdodD0iMSIgZmlsbD0idXJsKCNncmFkLXVjZ2ctZ2VuZXJhdGVkKSIgLz4KPC9zdmc+);
-  background: -moz-linear-gradient(top,  rgba(0,0,0,0) 0%, rgba(0,0,0,0.25) 100%); /* FF3.6+ */
-  background: -webkit-gradient(linear, left top, left bottom, color-stop(0%,rgba(0,0,0,0)), color-stop(100%,rgba(0,0,0,0.25))); /* Chrome,Safari4+ */
-  background: -webkit-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 100%); /* Chrome10+,Safari5.1+ */
-  background: -o-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 100%); /* Opera 11.10+ */
-  background: -ms-linear-gradient(top,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 100%); /* IE10+ */
-  background: linear-gradient(to bottom,  rgba(0,0,0,0) 0%,rgba(0,0,0,0.25) 100%); /* W3C */
-  
+  @include gradient-vertical(rgba(0,0,0,0), rgba(0,0,0,0.25));
   @if $filter{
     filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#00000000', endColorstr='#40000000',GradientType=0 ); /* IE6-8 */
     :root &{
@@ -372,36 +333,27 @@
   }
 }
 
-//背景色半透明
-%bgColorAlpha{
-  @if $filter{
-    filter:progid:DXImageTransform.Microsoft.gradient(enabled='true',startColorstr='#7F000000', endColorstr='#7F000000');
-  }@else{
-    background-color: #333;
-  }
-  background-color:rgba(0,0,0,.5); 
+// 背景色半透明
+%bgcolor-alpha{
+  @include bgcolor-alpha; 
 }
 
-//disabled
+// disabled
 %disabled{
-  background-color: #e6e6e6;
-  color: #ababa;
-  cursor: not-allowed;
+  @include disabled;
 }
 
-//水平间隔线，适用于行列表
+// 水平间隔线，适用于行列表
 %horizontal-line{
-  border-bottom:1px dashed $gray;
-  padding-top:10px;
-  padding-bottom:10px;
+  @include horizontal-line;
 }
 
-//普通transition特效
-%allTransition{
+// 普通transition特效
+%all-transition{
   @include transition;
 }
 
-//ie6/7 haslayout
+// ie6/7 haslayout
 %zoom{
   @if $lte7 {
     *zoom:1;
@@ -409,26 +361,20 @@
 }
 
 
-
 //function
-//----------------------------------------
+//-----------------------------------------------------  
 
-// pixels to ems
+// px转em
 @function pxToEm($px, $base: 16) {
   @return ($px / $base) * 1em;
 }
 
-// pixels to rems 
-@function pxToRem($px) {
-  @return $px / $baseFontSize * 1rem;
-}
-
-// add percentage of white to a color
+// 为颜色添加白色，以百分比形式
 @function tint($color, $percent){
   @return mix(white, $color, $percent);
 }
 
-// add percentage of black to a color
+// 为颜色添加黑色，以百分比形式
 @function shade($color, $percent){
   @return mix(black, $color, $percent);
 }

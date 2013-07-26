@@ -1,16 +1,14 @@
 @charset "UTF-8";
-/* -------------------------------------------------
- * css3 scss
- * -------------------------------------------------
-*/
+//-----------------------------------------------------
+// css3 scss
+//-----------------------------------------------------
 
-//thanks:
-//http://bourbon.io/
-//https://github.com/thomas-mcdonald/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_mixins.scss
+// thanks:
+// http://bourbon.io/
+// https://github.com/thomas-mcdonald/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_mixins.scss
 
-
-//Example: @include prefixer(border-radius, $radius, webkit spec);
-//----------------------------------------
+// Example: @include prefixer(border-radius, $radius, webkit spec);
+//-----------------------------------------------------
 
 $prefix-for-webkit: true !default;
 $prefix-for-mozilla: true !default;
@@ -19,7 +17,8 @@ $prefix-for-opera: true !default;
 $prefix-for-spec: true !default; // required for keyframe mixin
 
 
-//prefixer
+// prefixer
+//-----------------------------------------------------
 @mixin prefixer ($property, $value, $prefixes) {
   @each $prefix in $prefixes {
 
@@ -44,8 +43,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
   }
 }
 
-
-//disable prefix
+// disable prefix
 @mixin disable-prefix-for-all() {
   $prefix-for-webkit: false;
   $prefix-for-mozilla: false;
@@ -55,17 +53,9 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 }
 
 // Return vendor-prefixed property names if appropriate
-// Example: transition-property-names((transform, color, background), moz) -> -moz-transform, color, background
-//----------------------------------------
-@function transition-property-names($props, $vendor: false) {
-  $new-props: ();
-  @each $prop in $props {
-    $new-props: append($new-props, transition-property-name($prop, $vendor), comma);
-  }
-  @return $new-props;
-}
-
-@function transition-property-name($prop, $vendor: false) {
+// Example: transitionPropertyNames((transform, color, background), moz) -> -moz-transform, color, background
+//-----------------------------------------------------
+@function transitionPropertyName($prop, $vendor: false) {
   // put other properties that need to be prefixed here aswell
   @if $vendor and $prop == transform {
     @return unquote('-'+$vendor+'-'+$prop);
@@ -75,8 +65,16 @@ $prefix-for-spec: true !default; // required for keyframe mixin
   }
 }
 
+@function transitionPropertyNames($props, $vendor: false) {
+  $new-props: ();
+  @each $prop in $props {
+    $new-props: append($new-props, transitionPropertyName($prop, $vendor), comma);
+  }
+  @return $new-props;
+}
+
 // Border Radius
-//----------------------------------------
+//-----------------------------------------------------
 @mixin border-radius($radius:$baseRadius) {
   @include prefixer(border-radius, $radius, webkit spec);
 }
@@ -108,12 +106,18 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 // box-shadow
 @mixin box-shadow($shadow...) {
-  @include prefixer(box-shadow, $shadow, webkit spec);
+  @if length($shadow) >= 1 {
+    @include prefixer(box-shadow, $shadow, webkit spec);
+  } @else{
+    $shadow:0 0 4px rgba(0,0,0,.3);
+    @include prefixer(box-shadow, $shadow, webkit spec);
+  }
+  
 }
 
 
 //Transform, transform-origin, transform-style
-//----------------------------------------
+//-----------------------------------------------------
 @mixin transform($property...) {
   @include prefixer(transform, $property, webkit moz o spec);
 }
@@ -193,7 +197,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 }
 
 // transition
-//----------------------------------------
+//-----------------------------------------------------
 @mixin transition ($properties...) {
   @if length($properties) >= 1 {
     @include prefixer(transition, $properties, webkit moz o spec);
@@ -206,10 +210,10 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 }
 
 @mixin transition-property ($properties...) {
-   -webkit-transition-property: transition-property-names($properties, 'webkit');
-      -moz-transition-property: transition-property-names($properties, 'moz');
-        -o-transition-property: transition-property-names($properties, 'o');
-           transition-property: transition-property-names($properties, false);
+   -webkit-transition-property: transitionPropertyNames($properties, 'webkit');
+      -moz-transition-property: transitionPropertyNames($properties, 'moz');
+        -o-transition-property: transitionPropertyNames($properties, 'o');
+           transition-property: transitionPropertyNames($properties, false);
 }
 
 @mixin transition-duration ($times...) {
@@ -227,6 +231,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 
 // perspective
+//-----------------------------------------------------
 @mixin perspective($depth: none) {
   // none | <length>
   @include prefixer(perspective, $depth, webkit moz spec);
@@ -242,10 +247,11 @@ $prefix-for-spec: true !default; // required for keyframe mixin
   @include prefixer(backface-visibility, $visibility, webkit moz spec);
 }
 
+
 // http://www.w3.org/TR/css3-animations/#the-animation-name-property-
 // Each of these mixins support comma separated lists of values, which allows different transitions for individual properties to be described in a single style rule. Each value in the list corresponds to the value at that same position in the other properties.
 // Official animation shorthand property.
-//----------------------------------------
+//-----------------------------------------------------
 @mixin animation ($animations...) {
   @include prefixer(animation, $animations, webkit moz spec);
 }
@@ -287,7 +293,6 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 // none | forwards | backwards | both
   @include prefixer(animation-fill-mode, $modes, webkit moz spec);
 }
-
 
 // Adds keyframes blocks for supported prefixes, removing redundant prefixes in the block's content
 @mixin keyframes($name) {
@@ -350,63 +355,43 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 
 // Gradients
-//----------------------------------------
-@mixin gradient-horizontal($startColor: #555, $endColor: #333, $fallbackcolor:mix($startColor, $endColor, 60%)){
-  background-color: $fallbackcolor;
-  background-image: -moz-linear-gradient(left, $startColor, $endColor); // FF 3.6+
-  background-image: -webkit-gradient(linear, 0 0, 100% 0, from($startColor), to($endColor)); // Safari 4+, Chrome 2+
-  background-image: -webkit-linear-gradient(left, $startColor, $endColor); // Safari 5.1+, Chrome 10+
-  background-image: -o-linear-gradient(left, $startColor, $endColor); // Opera 11.10
-  background-image: linear-gradient(to right, $startColor, $endColor); // Standard, IE10
-  background-repeat: repeat-x;
-  @if $filter {
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($startColor)}', endColorstr='#{ie-hex-str($endColor)}', GradientType=1); // IE9 and down
-  }  
+//-----------------------------------------------------
+// 水平渐变，从左往右
+// @include gradient-horizontal(#333, #ccc);
+@mixin gradient-horizontal($gradient...){
+  background-image: -moz-linear-gradient(left, $gradient); // FF 3.6+
+  background-image: -webkit-linear-gradient(left, $gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient(left, $gradient); // Opera 11.10
+  background-image: linear-gradient(to right, $gradient); // Standard, IE10
 }
-
-@mixin gradient-vertical($startColor: #555, $endColor: #333, $fallbackcolor:mix($startColor, $endColor, 60%)) {
-  background-color: $fallbackcolor;
-  background-image: -moz-linear-gradient(top, $startColor, $endColor); // FF 3.6+
-  background-image: -webkit-gradient(linear, 0 0, 0 100%, from($startColor), to($endColor)); // Safari 4+, Chrome 2+
-  background-image: -webkit-linear-gradient(top, $startColor, $endColor); // Safari 5.1+, Chrome 10+
-  background-image: -o-linear-gradient(top, $startColor, $endColor); // Opera 11.10
-  background-image: linear-gradient(to bottom, $startColor, $endColor); // Standard, IE10
-  background-repeat: repeat-x;
-  @if $filter {
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#{ie-hex-str($startColor)}', endColorstr='#{ie-hex-str($endColor)}', GradientType=0); // IE9 and down
-  }
+// 垂直渐变，从上往下
+// @include gradient-vertical(#333 30%, #ccc);
+@mixin gradient-vertical($gradient...) {
+  background-image: -moz-linear-gradient(top, $gradient); // FF 3.6+
+  background-image: -webkit-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient(top, $gradient); // Opera 11.10
+  background-image: linear-gradient(to bottom, $gradient); // Standard, IE10
 }
-
-@mixin gradient-directional($startColor: #555, $endColor: #333, $deg: 45deg, $fallbackcolor:mix($startColor, $endColor, 60%)) {
-  background-color: $fallbackcolor;
-  background-repeat: repeat-x;
-  background-image: -moz-linear-gradient($deg, $startColor, $endColor); // FF 3.6+
-  background-image: -webkit-linear-gradient($deg, $startColor, $endColor); // Safari 5.1+, Chrome 10+
-  background-image: -o-linear-gradient($deg, $startColor, $endColor); // Opera 11.10
-  background-image: linear-gradient($deg, $startColor, $endColor); // Standard, IE10
+// 角度渐变
+// @include gradient-directional(45deg, #333 30%, #ccc);
+@mixin gradient-directional($gradient...) {
+  background-image: -moz-linear-gradient($gradient); // FF 3.6+
+  background-image: -webkit-linear-gradient($gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient($gradient); // Opera 11.10
+  background-image: linear-gradient($gradient); // Standard, IE1
 }
-
-@mixin gradient-radial($innerColor: #555, $outerColor: #333, $fallbackcolor:mix($startColor, $endColor, 60%)) {
-  background-color: $fallbackcolor;
-  background-image: -webkit-gradient(radial, center center, 0, center center, 460, from($innerColor), to($outerColor));
-  background-image: -webkit-radial-gradient(circle, $innerColor, $outerColor);
-  background-image: -moz-radial-gradient(circle, $innerColor, $outerColor);
-  background-image: -o-radial-gradient(circle, $innerColor, $outerColor);
+// 径向渐变
+@mixin gradient-radial($gradient...){
+  background-image: -moz-radial-gradient($gradient); // FF 3.6+
+  background-image: -webkit-radial-gradient($gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-radial-gradient($gradient); // Opera 11.10
+  background-image: radial-gradient($gradient); // Standard, IE1
   background-repeat: no-repeat;
-}
-
-@mixin gradient-striped($color: #555, $angle: 45deg) {
-  background-color: $color;
-  background-image: -webkit-gradient(linear, 0 100%, 100% 0, color-stop(.25, rgba(255,255,255,.3)), color-stop(.25, transparent), color-stop(.5, transparent), color-stop(.5, rgba(255,255,255,.3)), color-stop(.75, rgba(255,255,255,.3)), color-stop(.75, transparent), to(transparent));
-  background-image: -webkit-linear-gradient($angle, rgba(255,255,255,.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.3) 75%, transparent 75%, transparent);
-  background-image: -moz-linear-gradient($angle, rgba(255,255,255,.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.3) 75%, transparent 75%, transparent);
-  background-image: -o-linear-gradient($angle, rgba(255,255,255,.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.3) 75%, transparent 75%, transparent);
-  background-image: linear-gradient($angle, rgba(255,255,255,.3) 25%, transparent 25%, transparent 50%, rgba(255,255,255,.3) 50%, rgba(255,255,255,.3) 75%, transparent 75%, transparent);
 }
 
 
 // Reset filters for IE
-@mixin reset-filter() {
+%reset-filter{
   filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
@@ -456,7 +441,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 
 //columns
-//----------------------------------------
+//-----------------------------------------------------
 @mixin columns($arg: auto) {
 // <column-count> || <column-width>
   @include prefixer(columns, $arg, webkit moz spec);
@@ -507,8 +492,9 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 
 //flex
-//----------------------------------------
+//-----------------------------------------------------
 @mixin display-flex {
+  
   display: -webkit-flex;
   display: -moz-flex;
   display: -o-flex;
@@ -561,8 +547,9 @@ $prefix-for-spec: true !default; // required for keyframe mixin
   @include prefixer(flex, $flex, webkit moz spec);
 }
 
+
 //webkit
-//----------------------------------------
+//-----------------------------------------------------
 
 //text
 @mixin text-fill-color($color){
@@ -585,3 +572,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 @mixin blur($px){
   @include prefixer(filter, blur($px), webkit spec);
 }
+
+
+// @media
+//-----------------------------------------------------

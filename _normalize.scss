@@ -1,9 +1,10 @@
 @charset "UTF-8";
-/* -------------------------------------------------
- * mixin scss
- * -------------------------------------------------
-*/
+//----------------------------------------------------- 
+// normalize scss
+//----------------------------------------------------- 
 
+
+// 根据下面的_normalize.scss文件砍掉了标题部分，然后改变了对ie6-7支持的变量为$lte7
 // thanks:https://github.com/kristerkari/normalize.scss/blob/master/_normalize.scss
 // Normalize.scss based on Nicolas Gallagher and Jonathan Neal's
 // normalize.css v2.1.1 | MIT License | git.io/normalize

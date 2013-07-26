@@ -1,23 +1,24 @@
 @charset "UTF-8";
-/* -------------------------------------------------
- * base scss
- * -------------------------------------------------
-*/
+//-----------------------------------------------------	
+// base scss
+//-----------------------------------------------------
 
-// --------------------------------------------------
-// author:      简水
-// version:     1.0
-// time:        2013-06-09
+//-----------------------------------------------------
+// author:      结一 (http://weibo.com/marvin1023)
+// version:     2.0
+// time:        2013-07-16
 // url:         https://github.com/marvin1023/sassCore
 // copyright:   http://tianya.cn, http://w3cplus.com
-// --------------------------------------------------
+//-----------------------------------------------------
 
 @import "setting";
 @import "css3";
-@import "mixin";
 @import "media-queries";
+@import "mixin";
 @import "grid";
+@import "simple";
 @import "normalize";
 @import "reset";
 @import "helpers";
 @import "typography";
+@import "message";

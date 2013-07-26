@@ -1,10 +1,10 @@
 @charset "UTF-8";
-/* -------------------------------------------------
- * helpers scss
- * -------------------------------------------------
-*/
+//-----------------------------------------------------  
+// helpers scss
+//-----------------------------------------------------
 
-//浮动及闭合浮动
+
+// 浮动及闭合浮动
 .fl{
   @extend %float-left;
 }
@@ -15,18 +15,18 @@
   @extend %clearfix;
 }
 
-//不同形式的隐藏
+// 不同形式的隐藏
 .hidden{
   @extend %hidden;
 }
-.visuallyhidden {
-  @extend %visuallyhidden;
+.visually-hidden {
+  @extend %visually-hidden;
 }
 .invisible {
   @extend %invisible;
 }
 
-//text-align:left/right/center
+// text-align:left/right/center
 .tal{
 	text-align: left;
 }
@@ -37,12 +37,12 @@
 	text-align: center;
 }
 
-//图片替换文字
+// 图片替换文字
 .ir{
 	@extend %ir;
 }
 
-//灰色
+// 灰色
 .gray{
   color:$gray;
 }

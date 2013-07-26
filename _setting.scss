@@ -1,19 +1,18 @@
 @charset "UTF-8";
-/* -------------------------------------------------
- * setting scss
- * -------------------------------------------------
-*/
+//-----------------------------------------------------	
+// setting scss
+//-----------------------------------------------------	
 
-//开关设置
-// -------------------------
+
+// 开关设置
+//-----------------------------------------------------	
 $lte7:                  true !default; //是否兼容ie6-7
 $filter:                true !default; //是否为ie6-8开启css3滤镜兼容，常用于渐变背景 
-$articleStyle:          true !default; //是否为详细页文本开启不同文字排版
-$printStyle:            true !default; //是否开启打印样式
+$printStyleSwitch:      true !default; //是否开启打印样式
 
 
-//font相关
-// -------------------------
+// font相关
+//-----------------------------------------------------	
 $baseFontSize:          14px !default;
 $baseLineHeight:        1.5 !default;
 $baseFontFamily:        "Helvetica Neue", Helvetica, Tahoma, sans-serif !default;
@@ -22,18 +21,18 @@ $fontYaHei:             "Microsoft Yahei"; //微软雅黑
 $fontHeiTi:             "SimHei"; //黑体
 
 
-//元素间距
-// -------------------------
-$baseGap:      $baseFontSize * $baseLineHeight !default;
+// 元素上下间距
+//-----------------------------------------------------	
+$baseGap:               $baseFontSize * $baseLineHeight !default;
 
 
-//基本颜色
-//color function : http://sass-lang.com/docs/yardoc/Sass/Script/Functions.html
-//     lighten($color, $amount)
-//     darken($color, $amount)
-//     opacify($color, $amount)
-//     mix($color1, $color2[, $amount])
-// -------------------------
+// 基本颜色
+// color function : http://sass-lang.com/docs/yardoc/Sass/Script/Functions.html
+// lighten($color, $amount)
+// darken($color, $amount)
+// opacify($color, $amount)
+// mix($color1, $color2[, $amount])
+//-----------------------------------------------------	
 $black:                 #000 !default;
 $grayDarker:            #333 !default;
 $grayDark:              #999 !default;
@@ -50,43 +49,65 @@ $yellow:                #ffc40d !default;
 $pink:                  #c3325f !default;
 $purple:                #7a43b6 !default;
 
-$primary:               #0078E7 !default;
+$primary:               #0078E7 !default;//主色
 
 
-//link
-// -------------------------
+// link
+//-----------------------------------------------------	
+// 如果只有一个值则滑过的值为这个值的darken 5%，如果
+// 有两个值则第二个值为滑过的值
 $linkColor:             #08c !default;
-$linkColorHover:        darken($linkColor, 15%) !default;
 
 
 
 // Scaffolding
-// -------------------------
+//-----------------------------------------------------	
 $bodyBgColor:           $white !default;
 $textColor:             $grayDarker !default;
 
 
-// status color
-// -------------------------
-$warningText:           #514721 !default;
-$warningBgColor:        #FFF6BF !default;
-$warningBorder:         #FFD324 !default;
-
-$errorText:             #8A1F11 !default;
-$errorBgColor:          #FBE3E4 !default;
-$errorBorder:           #FBC2C4 !default;
-
-$successText:           #264409 !default;
-$successBgColor:        #E6EFC2 !default;
-$successBorder:         #C6D880 !default;
-
-$infoText:              #205791 !default;
-$infoBgColor:           #D5EDF8 !default;
-$infoBorder:            #92CAE4 !default;
+// placeholder
+//-----------------------------------------------------	
+// 变量分别为：是否输出表单的占位符placeholder样式，文本色
+$placeholder:           true $gray !default;
 
 
-//radius
-// -------------------------
+// selection
+//-----------------------------------------------------	
+// 变量分别为：是否输出选中样式，选中的背景色，选中文字色
+$selection:             false #39f #fff !default;
+
+
+// article
+//-----------------------------------------------------
+// 变量分别为：是否开启文章详细页样式，默认的class	
+$article:               true article !default;
+
+
+// message
+//-----------------------------------------------------	
+// 第一个值表示是否开启信息样式，包括警告，错误，成功，提示
+// 第二个值表示样式是否有icon背景，背景图片使用base64，ie8+支持
+$msgSwitch:        true true !default; 
+
+// 每个变量都有三个颜色值，分别为：文本色，背景色，边框色
+$warningColor:          #514721 #FFF6BF #FFD324 !default;
+$errorColor:            #8A1F11 #FBE3E4 #FBC2C4 !default;
+$successColor:          #264409 #E6EFC2 #C6D880 !default;
+$infoColor:             #205791 #D5EDF8 #92CAE4 !default;
+
+
+// radius
+//-----------------------------------------------------	
 $baseRadius:            4px !default;
 $smallRadius:           3px !default;
 $largeRadius:           8px !default;
+
+
+// z-index
+//-----------------------------------------------------	
+$zindexDropdown:        1000 !default;
+$zindexFixedTopbar:     1010 !default;
+$zindexTooltip:         1020 !default;
+$zindexAlert:           1030 !default;
+$zindexModal:           1100 !default;

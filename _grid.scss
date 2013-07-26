@@ -1,68 +1,73 @@
 @charset "UTF-8";
-/* -------------------------------------------------
- * grid scss
- * -------------------------------------------------
-*/
+//-----------------------------------------------------  
+// grid scss
+// 网格系统，根据blankwork的思想，进行扩展，既支持固定
+// 宽度也支持百分比宽度，还可以控制是否输出span的class
+//----------------------------------------------------- 
 
-//thanks:
-//http://www.blankwork.net/
-//http://semantic.gs/
-//http://heygrady.com/blog/2011/02/17/using-sass-with-the-1kb-grid-system/   
-//https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/functions/_flex-grid.scss
-//http://bjorkoy.com/2010/05/css-grids-with-sass/
+// thanks:
+// http://www.blankwork.net/
+// http://semantic.gs/
+// http://heygrady.com/blog/2011/02/17/using-sass-with-the-1kb-grid-system/   
+// https://github.com/thoughtbot/bourbon/blob/master/app/assets/stylesheets/functions/_flex-grid.scss
+// http://bjorkoy.com/2010/05/css-grids-with-sass/
 
-// Main Variables:
-//----------------------------------------
-$_columns:                     12 !default;      // Total number of columns
-$_column-width:                60px !default;   // Width of a single column
-$_gutter:                      20px !default;     // Width of the gutter
-$_gridsystem-width:            $_columns * ($_column-width + $_gutter); //grid system width
+// variables
+// 这里设计的是100px的布局，(65+20)*12-20 = 1000
+// 将gridColumnWidth设置为60px，就是盛名的960网格系统
+//----------------------------------------------------- 
+$gridColumns:                     12 !default;      // Total number of columns
+$gridColumnWidth:                 65px !default;   // Width of a single column
+$gridGutter:                      20px !default;     // Width of the gutter
+$gridSystemWidth:                 $gridColumns * ($gridColumnWidth + $gridGutter); //grid system width
 
 
-// fluid layout
-//----------------------------------------
-// Set $_fixedLayout true for a fluid layout
-$_percentLayout:               true !default;
-$_total_width:                 $_gridsystem-width !default;
-$_gutterPercent:               percentage($_gutter / $_gridsystem-width) !default;
+// percent layout setting
+// 百分比布局的变量设置
+//----------------------------------------------------- 
+// Set $gridPercentSwitch true for a fluid layout
+$gridPercentSwitch:               false !default;
+$gridRealWidth:                   $gridSystemWidth !default;
+$gridGutterPercent:               percentage($gridGutter / $gridSystemWidth) !default;
 
-@if $_percentLayout{
-  $_total_width:               100%;
+@if $gridPercentSwitch{
+  $gridRealWidth:                 100%;
 }
 
 // ie6/7 fluid layout bug: http://tylertate.com/blog/2012/01/05/subpixel-rounding.html
-// ie6/7  get_width($i, true, $correction)
-$_min-width:                   960 !default;
-$_correction:                  0.5 / $_min-width * 100 * 1%;
+// ie6/7  getWidth($i, true, $correction)
+$gridMinWidth:                    960 !default;
+$gridCorrection:                  0.5 / $gridMinWidth * 100 * 1%;
 
 
-//margin value
-//----------------------------------------
-//if fluid layout the value is $_gutterPercent
-//if fixed layout the value is $_gutter
-$_marginValue:                 if($_percentLayout, $_gutterPercent, $_gutter) !default;
+// margin value
+//----------------------------------------------------- 
+// if fluid layout the value is $gridGutterPercent
+// if fixed layout the value is $gridGutter
+$gridMarginValue:                 if($gridPercentSwitch, $gridGutterPercent, $gridGutter) !default;
 
 
-//true for grid class(.span1, .span2...)
-//----------------------------------------
-$_span:                        false !default;
+// true for grid class(.span1, .span2...)
+// ----------------------------------------
+$gridSpanSwitch:                  false !default;
 
 
 // A Function to calculate width:
+// 这个函数几乎是blankwork的灵魂，用来计算宽度的
 // Example usage: (based on default values)
-// get_width(3, false) would return 240px
-// get_width(3) or get_width(3, true) would return 220px;
-// and plain get_width() or get_width would return 940px;
-@function get_width($i:$_columns, $onlyInnerWidth:true, $_subtract:0){
+// getWidth(3, false) would return 240px
+// getWidth(3) or getWidth(3, true) would return 220px;
+// and plain getWidth() or getWidth would return 940px;
+@function getWidth($i:$gridColumns, $onlyInnerWidth:true, $subtract:0){
   // First set a default return value
-  $return: (($_column-width + $_gutter) * $i / $_gridsystem-width) * $_total_width - $_subtract !default;
+  $return: (($gridColumnWidth + $gridGutter) * $i / $gridSystemWidth) * $gridRealWidth - $subtract !default;
 
   // If we want to get only the inner width (without gutter)
   @if $onlyInnerWidth == true {
     // Return the total calculated width, without the margins
     // If the second parameter of this function is not specified
     // This is what is going to be returned
-    $return: ((($_column-width + $_gutter) * $i - $_gutter) / $_gridsystem-width) * $_total_width - $_subtract;
+    $return: ((($gridColumnWidth + $gridGutter) * $i - $gridGutter) / $gridSystemWidth) * $gridRealWidth - $subtract;
   }
 
   @return $return;
@@ -70,28 +75,28 @@ $_span:                        false !default;
 
 
 // A Function to calculate percent width:
-// Example usage:get-percent(3,6)
-@function get-percent($i, $container-columns:$_columns,$onlyInnerWidth:true, $_subtract:0) {
+// Example usage:getPercent(3,6)
+@function getPercent($i, $container-columns:$gridColumns,$onlyInnerWidth:true, $subtract:0) {
   $percentage: percentage($i / $container-columns);
   
   @if $onlyInnerWidth == true {
-    $width: $i * $_column-width + ($i - 1) * $_gutter;
-    $container-width: $container-columns * $_column-width + ($container-columns - 1) * $_gutter;
+    $width: $i * $gridColumnWidth + ($i - 1) * $gridGutter;
+    $container-width: $container-columns * $gridColumnWidth + ($container-columns - 1) * $gridGutter;
     $percentage: percentage($width / $container-width);
   }
   
-  @return $percentage - $_subtract;
+  @return $percentage - $subtract;
 }
 
 
-//span or column's gutter
-%marginLeftRight{
-  margin-left: ($_marginValue / 2); 
-  margin-right: ($_marginValue / 2);
+// span or column's gutter
+%margin-left-right{
+  margin-left: ($gridMarginValue / 2); 
+  margin-right: ($gridMarginValue / 2);
 
-  @if $_percentLayout and $lte7{
-    *margin-left: ($_marginValue / 2) - $_correction; 
-    *margin-right: ($_marginValue / 2) - $_correction;
+  @if $gridPercentSwitch and $lte7{
+    *margin-left: ($gridMarginValue / 2) - $gridCorrection; 
+    *margin-right: ($gridMarginValue / 2) - $gridCorrection;
   }
 }
 
@@ -99,15 +104,15 @@ $_span:                        false !default;
 // We're defining the default values as follows:
 // Default Column Count: Max Column Count
 // Padding (explained below): 0
-@mixin column($i: $_columns, $_subtract:0){
+@mixin column($i: $gridColumns, $subtract:0){
   @extend %float-left;
-  @extend %marginLeftRight;
+  @extend %margin-left-right;
 
-  $getWidth: get_width($i, true, $_subtract); // Use the width calculation function to get the width 
+  $getWidth: getWidth($i, true, $subtract); // Use the width calculation function to get the width 
   width: $getWidth;
 
-  @if $_percentLayout and $lte7{
-    *width:$getWidth - $_correction;
+  @if $gridPercentSwitch and $lte7{
+    *width:$getWidth - $gridCorrection;
   } 
 }
 
@@ -116,13 +121,13 @@ $_span:                        false !default;
 // But just in case someone finds an alternative use of this, 
 // we shouldhave the flexibility
 // So wrapper( column count, center ?, subtract)
-@mixin wrapper($i: $_columns, $center:true, $_subtract:0){
+@mixin wrapper($i: $gridColumns, $center:true, $subtract:0){
   @extend %clearfix;
   
   // Because this is a wrapper, we don't need the outer gutter - we need the full width
-  $getWrapperWidth: get_width($i, false);
+  $getWrapperWidth: getWidth($i, false);
   // In case there is a need to subtract the wrapper
-  $wrapperWidth: $getWrapperWidth - $_subtract;
+  $wrapperWidth: $getWrapperWidth - $subtract;
   width:$wrapperWidth;
 
   // If we want the wrapper to be centered (by default we do)
@@ -133,7 +138,8 @@ $_span:                        false !default;
 }
 
 
-//alpha & omega
+// alpha & omega
+//----------------------------------------------------- 
 @mixin alpha{
   margin-left:0;
 }
@@ -142,26 +148,29 @@ $_span:                        false !default;
 }
 
 
-//prepend & append
-@mixin prepend($i:1, $_subtract:0){ 
-  margin-left: get_width($i,false,$_subtract);
+// prepend & append
+//----------------------------------------------------- 
+@mixin prepend($i:1, $subtract:0){ 
+  margin-left: getWidth($i,false,$subtract);
 } 
-@mixin append($i:1, $_subtract:0){ 
-  margin-right: get_width($i,false,$_subtract);
+@mixin append($i:1, $subtract:0){ 
+  margin-right: getWidth($i,false,$subtract);
 }
 
 
-//class span1-$_columns
-@if $_span {
-  @for $i from 1 through $_columns {
+// class span1-$gridColumns
+// span的class循环输出，通过变量$gridSpanSwitch来控制是否输出
+//-----------------------------------------------------  
+@if $gridSpanSwitch {
+  @for $i from 1 through $gridColumns {
     .span#{$i} { 
       @extend %float-left;
-      @extend %marginLeftRight;
+      @extend %margin-left-right;
       
-      width:get_width($i);
+      width:getWidth($i);
       
-      @if $_percentLayout and $lte7{
-        *width:get_width($i) - $_correction;
+      @if $gridPercentSwitch and $lte7{
+        *width:getWidth($i) - $gridCorrection;
       } 
     }
   } 

@@ -1,0 +1,75 @@
+@charset "UTF-8";
+//-----------------------------------------------------	
+// message scss
+// 交互提示信息：包括警告，错误，成功，提示四种状态
+//-----------------------------------------------------
+
+// mixin
+//-------------------------
+
+// 基本样式
+@mixin tips-message-basic{
+    padding:8px;
+    @include border-radius;
+    
+    a{
+      text-decoration:underline;
+    }
+
+    @if nth($msgSwitch,2) {
+      padding-left:25px;
+      background-position: 5px center;
+      background-repeat: no-repeat;
+    }
+} 
+
+// 配色方案，包括文本色，背景色，边框颜色
+@mixin tips-message-skin($textColor, $bgColor, $borderColor ){
+    background-color:$bgColor;
+    border:2px solid $borderColor;
+    color: $textColor;
+
+    a{
+      color: $textColor;
+    }
+}
+
+
+// placeholder
+//-------------------------
+%tips-message-basic{
+  @include tips-message-basic;
+}
+
+
+// 样式
+//-------------------------
+@if nth($msgSwitch,1){
+  .error, .success, .warning, .info {
+      @extend %tips-message-basic;
+  }
+  .error{
+    @include tips-message-skin(nth($errorColor,1), nth($errorColor,2), nth($errorColor,3));
+    @if nth($msgSwitch,2) {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAKlBMVEX////XY1Hma1rsfGbzhm3vloXwqZz3uanxwLX4z8f76+j//v7////KWkTZGHxrAAAAAXRSTlMAQObYZgAAAAFiS0dEDIGzUWMAAAAJcEhZcwAACxMAAAsTAQCanBgAAACSSURBVHheTc4xC4JAAEDhBwaZUy5tQYgYrl0QBW3aUNvh5WqEBI2WzbU2FbS5SESEa/QT2htb/C/R5pve+FHpEXhHgIa32okTcAkDP3XB8FNPhDJHH0xvw2cSUYv7RSZVB20rZm/L+aBtRFb0/qPc1+iqmtS7jrQOiwjDTiyzNc7hPJH28gvo5jwu9wD3drmuGH4w6SDkKQ/JcAAAAABJRU5ErkJggg==);
+      }
+  }
+  .success{
+    @include tips-message-skin(nth($successColor,1), nth($successColor,2), nth($successColor,3));
+    @if nth($msgSwitch,2) {
+        background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQBAMAAADt3eJSAAAAMFBMVEX///88kTZIoTZnuktxwGB+xG2Vyoag1pSr2J2y26e64LPT4c7j8OD9/vz///80fTAtdG2AAAAAAXRSTlMAQObYZgAAAAFiS0dEDm+9ME8AAAAJcEhZcwAACxMAAAsTAQCanBgAAACcSURBVHheTY6vCsJQHIUPLih6g/gCJotFmEMw+1PwRrmiQ8SBfxhilctewGRSh1XDjBZ9gCXBF1j0Ce5A65J3baecD074DjJ5d5r7tEuWdzYvAB7r7ehWB1grEEN7EKLABVFwdGBIQVytysj5/HmPxl8NUxUvNBiy+4ksPeXbNJnTwQGrnYj6sxC42suenwAoVtxdI1XgVf1tMh/++cUnmPeAc0MAAAAASUVORK5CYII=);
+      }
+  }
+  .warning{
+    @include tips-message-skin(nth($warningColor,1), nth($warningColor,2), nth($warningColor,3));
+    @if nth($msgSwitch,2) {
+      background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAM1BMVEX////4ol3+lDf8nEP7hTH3sHb8uHr9x5HvgjTccCbxdCv0ey365M/98ur////UZyH41bQKCY76AAAAAXRSTlMAQObYZgAAAAFiS0dEDm+9ME8AAAAJcEhZcwAACxMAAAsTAQCanBgAAAB/SURBVHhebc83FoRQDENR5Phj2P9qR3CYDnfvqvL1efNAFTn/PaCRGaLnbY6hNNgjE0jVtUQSZRJS2TdQShIQoSIEM6AQJNkE48Um2A02lvXeH1AHN8/eGlAJWdKsr9Vai+qEWcAVYJc9CNepGkywD/ORCndU9nvD697bx+fnP09wBLDgAeJUAAAAAElFTkSuQmCC);
+    }
+  }
+  .info{
+    @include tips-message-skin(nth($infoColor,1), nth($infoColor,2), nth($infoColor,3));
+    @if nth($msgSwitch,2){
+      background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAM1BMVEX///9YjONeju9qlex7ou2Fqe+UsvCkvffc5PXw9f67y/FNe9FDb8rE0/H///+wxPK4ye8p1NT7AAAAAXRSTlMAQObYZgAAAAlwSFlzAAALEwAACxMBAJqcGAAAAIVJREFUeF5tj8kOg0AMQ2tnnQ36/1/bDNAbPkR6T0rkfF7Tuoro2f6cKh7hIuthsTCpobhMUwvm0Zxl9tYpQXZfjQxECXVjxQ/SDCUYsrmtPeclWDk6gVvItZIGQG3sowgSXQHE8BINGkBqsczcRdbQMECLv3fVPoa52yh+kj7mnJ6vn/8A/N4D4ObQweQAAAAASUVORK5CYII=);
+    }
+  }
+}
