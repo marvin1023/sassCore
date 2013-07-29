@@ -49,22 +49,22 @@ ul,ol{
   // Firefox 4-18
   input:-moz-placeholder,
   textarea:-moz-placeholder { 
-    color: $placeholder; 
+    color: nth($placeholder,2); 
   } 
   // Firefox 19+
   input::-moz-placeholder,
   textarea::-moz-placeholder{
-    color: $placeholder; 
+    color: nth($placeholder,2); 
   } 
   // Internet Explorer 10+
   input:-ms-input-placeholder,
   textarea:-ms-input-placeholder{
-    color: $placeholder; 
+    color: nth($placeholder,2); 
   } 
   // Safari and Chrome
   input::-webkit-input-placeholder,
   textarea::-webkit-input-placeholder{ 
-    color: $placeholder; 
+    color: nth($placeholder,2); 
   } 
 }
 
