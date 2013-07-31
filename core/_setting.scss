@@ -88,7 +88,7 @@ $article:               true article !default;
 //-----------------------------------------------------	
 // 第一个值表示是否开启信息样式，包括警告，错误，成功，提示
 // 第二个值表示样式是否有icon背景，背景图片使用base64，ie8+支持
-$msgSwitch:        true true !default; 
+$msgSwitch:             true true !default; 
 
 // 每个变量都有三个颜色值，分别为：文本色，背景色，边框色
 $warningColor:          #514721 #FFF6BF #FFD324 !default;
