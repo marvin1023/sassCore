@@ -15,9 +15,9 @@
 $gridSpanSwitch: false;
 
 // 导入所有功能相关文件
-@import "setting";
-@import "css3";
-@import "media-queries";
-@import "mixin";
-@import "grid";
-@import "simple";
+@import "core/setting";
+@import "core/css3";
+@import "core/media-queries";
+@import "core/mixin";
+@import "core/grid";
+@import "core/simple";
