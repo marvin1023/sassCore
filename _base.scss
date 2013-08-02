@@ -11,14 +11,14 @@
 // copyright:   http://tianya.cn, http://w3cplus.com
 //-----------------------------------------------------
 
-@import "setting";
-@import "css3";
-@import "media-queries";
-@import "mixin";
-@import "grid";
-@import "simple";
-@import "normalize";
-@import "reset";
-@import "helpers";
-@import "typography";
-@import "message";
+@import "core/setting";
+@import "core/css3";
+@import "core/media-queries";
+@import "core/mixin";
+@import "core/grid";
+@import "core/simple";
+@import "core/normalize";
+@import "core/reset";
+@import "core/helpers";
+@import "core/typography";
+@import "core/message";
