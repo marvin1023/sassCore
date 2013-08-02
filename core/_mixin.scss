@@ -187,24 +187,6 @@
   padding-bottom:$padding;  
 }
 
-// Sizing shortcuts
-// https://github.com/jsw0528/base.sass/blob/master/_mixins.scss#L35
-@mixin size($size...) {
-  $size: if(length($size) > 0, $size, auto);
-  $width: nth($size, 1);
-  $height: nth($size, length($size));
-
-  @if $width != auto {
-    $width: if(unitless($width), $width + px, $width);
-  }
-  @if $height != auto {
-    $height: if(unitless($height), $height + px, $height);
-  }
-
-  width: $width;
-  height: $height;
-}
-
 // Retina images. 
 // Use with care - http://37signals.com/svn/posts/3271-easy-retina-ready-images-using-scss
 @mixin image-2x($image, $width, $height) {
