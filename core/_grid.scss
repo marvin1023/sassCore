@@ -14,12 +14,12 @@
 
 // variables
 // 这里设计的是100px的布局，(65+20)*12-20 = 1000
-// 将gridColumnWidth设置为60px，就是盛名的960网格系统
+// 将gridColumn设置为60px，就是盛名的960网格系统
 //----------------------------------------------------- 
-$gridColumns:                     12 !default;      // Total number of columns
-$gridColumnWidth:                 65px !default;   // Width of a single column
+$gridColumnNumber:                12 !default;      // Total number of columns
+$gridColumn:                      65px !default;   // Width of a single column
 $gridGutter:                      20px !default;     // Width of the gutter
-$gridSystemWidth:                 $gridColumns * ($gridColumnWidth + $gridGutter); //grid system width
+$gridSystem:                      $gridColumnNumber * ($gridColumn + $gridGutter); //grid system width
 
 
 // percent layout setting
@@ -27,8 +27,8 @@ $gridSystemWidth:                 $gridColumns * ($gridColumnWidth + $gridGutter
 //----------------------------------------------------- 
 // Set $gridPercentSwitch true for a fluid layout
 $gridPercentSwitch:               false !default;
-$gridRealWidth:                   $gridSystemWidth !default;
-$gridGutterPercent:               percentage($gridGutter / $gridSystemWidth) !default;
+$gridRealWidth:                   $gridSystem !default;
+$gridGutterPercent:               percentage($gridGutter / $gridSystem) !default;
 
 @if $gridPercentSwitch{
   $gridRealWidth:                 100%;
@@ -58,16 +58,16 @@ $gridSpanSwitch:                  false !default;
 // getWidth(3, false) would return 240px
 // getWidth(3) or getWidth(3, true) would return 220px;
 // and plain getWidth() or getWidth would return 940px;
-@function getWidth($i:$gridColumns, $onlyInnerWidth:true, $subtract:0){
+@function getWidth($i:$gridColumnNumber, $onlyInnerWidth:true, $subtract:0){
   // First set a default return value
-  $return: (($gridColumnWidth + $gridGutter) * $i / $gridSystemWidth) * $gridRealWidth - $subtract !default;
+  $return: (($gridColumn + $gridGutter) * $i / $gridSystem) * $gridRealWidth - $subtract !default;
 
   // If we want to get only the inner width (without gutter)
   @if $onlyInnerWidth == true {
     // Return the total calculated width, without the margins
     // If the second parameter of this function is not specified
     // This is what is going to be returned
-    $return: ((($gridColumnWidth + $gridGutter) * $i - $gridGutter) / $gridSystemWidth) * $gridRealWidth - $subtract;
+    $return: ((($gridColumn + $gridGutter) * $i - $gridGutter) / $gridSystem) * $gridRealWidth - $subtract;
   }
 
   @return $return;
@@ -76,12 +76,12 @@ $gridSpanSwitch:                  false !default;
 
 // A Function to calculate percent width:
 // Example usage:getPercent(3,6)
-@function getPercent($i, $container-columns:$gridColumns,$onlyInnerWidth:true, $subtract:0) {
-  $percentage: percentage($i / $container-columns);
+@function getPercent($i, $container-columnNumber:$gridColumnNumber,$onlyInnerWidth:true, $subtract:0) {
+  $percentage: percentage($i / $container-columnNumber);
   
   @if $onlyInnerWidth == true {
-    $width: $i * $gridColumnWidth + ($i - 1) * $gridGutter;
-    $container-width: $container-columns * $gridColumnWidth + ($container-columns - 1) * $gridGutter;
+    $width: $i * $gridColumn + ($i - 1) * $gridGutter;
+    $container-width: $container-columnNumber * $gridColumn + ($container-columnNumber - 1) * $gridGutter;
     $percentage: percentage($width / $container-width);
   }
   
@@ -104,7 +104,7 @@ $gridSpanSwitch:                  false !default;
 // We're defining the default values as follows:
 // Default Column Count: Max Column Count
 // Padding (explained below): 0
-@mixin column($i: $gridColumns, $subtract:0){
+@mixin column($i: $gridColumnNumber, $subtract:0){
   @extend %float-left;
   @extend %margin-left-right;
 
@@ -121,7 +121,7 @@ $gridSpanSwitch:                  false !default;
 // But just in case someone finds an alternative use of this, 
 // we shouldhave the flexibility
 // So wrapper( column count, center ?, subtract)
-@mixin wrapper($i: $gridColumns, $center:true, $subtract:0){
+@mixin wrapper($i: $gridColumnNumber, $center:true, $subtract:0){
   @extend %clearfix;
   
   // Because this is a wrapper, we don't need the outer gutter - we need the full width
@@ -158,11 +158,11 @@ $gridSpanSwitch:                  false !default;
 }
 
 
-// class span1-$gridColumns
+// class span1-$gridColumnNumber
 // span的class循环输出，通过变量$gridSpanSwitch来控制是否输出
 //-----------------------------------------------------  
 @if $gridSpanSwitch {
-  @for $i from 1 through $gridColumns {
+  @for $i from 1 through $gridColumnNumber {
     .span#{$i} { 
       @extend %float-left;
       @extend %margin-left-right;
