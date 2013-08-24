@@ -9,29 +9,28 @@
 
 // 按钮
 //-----------------------------------------------------
-
-//按钮的参数依次为字体大小，左右padding，高度或行高，问本色，背景色，圆角大小
-$simpleBtn:         $baseFontSize 16px 28px $textColor #e6e6e6 0 !default;
-
+$simpleBtnSize:     $baseFontSize 16px 28px !default;//字体大小，左右padding，高度或行高
+$simpleBtnColor:    $textColor #e6e6e6 !default;//文本色，背景色
+$simpleBtnRadius:   $baseRadius !default;//圆角大小，设置为false则不产生圆角
 //普通按钮
 %simple-btn{
   @include inline-block;
   cursor: pointer;
   text-align: center;
 
-  font-size: nth($simpleBtn,1);
-  padding:0  nth($simpleBtn,2);
-  line-height: nth($simpleBtn,3);
-  color: nth($simpleBtn,4);
-  background-color: nth($simpleBtn,5);
+  font-size: nth($simpleBtnSize,1);
+  padding:0  nth($simpleBtnSize,2);
+  line-height: nth($simpleBtnSize,3);
+  color: nth($simpleBtnColor,1);
+  background-color: nth($simpleBtnColor,2);
 
-  @if not(unitless(nth($simpleBtn,6))){
-    @include border-radius(nth($simpleBtn,6));
+  @if $simpleBtnRadius{
+    @include border-radius($simpleBtnRadius);
   }
 
   &:hover{
-    background-color: darken(nth($simpleBtn,5),5%);
-    color: nth($simpleBtn,4);
+    color: nth($simpleBtnColor,1);
+    background-color: darken(nth($simpleBtnColor,2),5%);
   }
 }
 
@@ -42,19 +41,19 @@ $simpleBtn:         $baseFontSize 16px 28px $textColor #e6e6e6 0 !default;
   text-align: center;
   border: 0 none;
 
-  font-size: nth($simpleBtn,1);
-  padding:0  nth($simpleBtn,2);
-  height: nth($simpleBtn,3);
-  color: nth($simpleBtn,4);
-  background-color: nth($simpleBtn,5);  
+  font-size: nth($simpleBtnSize,1);
+  padding:0  nth($simpleBtnSize,2);
+  height: nth($simpleBtnSize,3);
+  color: nth($simpleBtnColor,1);
+  background-color: nth($simpleBtnColor,2);  
 
-  @if not(unitless(nth($simpleBtn,6))){
-    @include border-radius(nth($simpleBtn,6));
+  @if $simpleBtnRadius{
+    @include border-radius($simpleBtnRadius);
   }
 
   &:hover{
-    background-color: darken(nth($simpleBtn,5),5%);
-    color: nth($simpleBtn,4);
+    color: nth($simpleBtnColor,1);
+    background-color: darken(nth($simpleBtnColor,2),5%);
   }
 
   @if $lte7 {
@@ -136,7 +135,7 @@ $simpleFormShadow:       inset 0 1px 3px rgba(0, 0, 0, 0.1) !default;//默认内
   border: 1px solid nth($simpleForm,2);
   padding: 4px;
 
-  @if not(unitless(nth($simpleForm,4))){
+  @if nth($simpleForm,4){
     @include border-radius(nth($simpleForm,4));
   }
   &:focus{

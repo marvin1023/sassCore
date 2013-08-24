@@ -10,8 +10,6 @@
 // 基本样式
 @mixin tips-message-basic{
     padding:8px;
-    @include border-radius;
-    
     a{
       text-decoration:underline;
     }
@@ -20,6 +18,9 @@
       padding-left:25px;
       background-position: 5px center;
       background-repeat: no-repeat;
+    }
+    @if $msgRadius{
+      @include border-radius($msgRadius);
     }
 } 
 

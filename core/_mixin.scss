@@ -90,10 +90,13 @@
 // Text overflow
 // 元素可以设置宽度才可应用省略号
 // $substract单位为%
-@mixin ellipsis($substract:0) {
+%ellipsis-basic{
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
+  white-space: nowrap; 
+}
+@mixin ellipsis($substract:0) {
+  @extend %ellipsis-basic;
   width:100% - $substract;
 }
 
@@ -114,11 +117,13 @@
 }
 
 // triangle
-@mixin triangle($direction, $size, $borderColor ) {
+%triangle-basic{
   content:"";
   height: 0;
   width: 0;
-
+}
+@mixin triangle($direction, $size, $borderColor ) {
+  @extend %triangle-basic;
   @if $direction == top {
     border-bottom:$size solid $borderColor;
     border-left:$size dashed transparent;
@@ -201,6 +206,12 @@
   }
 }
 
+//针对火狐的bug
+@mixin firefox(){
+  @-moz-document url-prefix(){
+    @content;
+  }
+}
 
 // %placeholder selector 
 // 通过@extend调用，样式组合申明，适用于无参数
@@ -257,6 +268,11 @@
 // text overflow ellipsis
 %ellipsis{
   @include ellipsis;
+}
+
+//为高级浏览器准备的box-sizing盒子模型，ie8+
+%box-sizing-border{
+  @include box-sizing;
 }
 
 // 垂直渐变，渐变背景是半透明到全透明，这样就可以通过设置背景色来表现渐变
