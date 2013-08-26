@@ -5,11 +5,15 @@
 //----------------------------------------------------- 
 
 
-html { 
-  overflow-y: scroll; 
-  -webkit-overflow-scrolling: touch; 
-  -webkit-text-size-adjust: 100%; 
-  -ms-text-size-adjust: 100%; 
+html {
+  overflow-y: scroll;
+  @if $prefix-for-webkit {
+    -webkit-overflow-scrolling: touch;
+    -webkit-text-size-adjust: 100%;
+  }
+  @if $prefix-for-microsoft{
+    -ms-text-size-adjust: 100%;
+  }
 }
 body { 
   font-size: $baseFontSize;
