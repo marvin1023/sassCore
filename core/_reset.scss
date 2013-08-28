@@ -4,12 +4,22 @@
 // normalize之后，设置一些其他的样式及一些归零
 //----------------------------------------------------- 
 
-
-html { 
-  overflow-y: scroll; 
-  -webkit-overflow-scrolling: touch; 
-  -webkit-text-size-adjust: 100%; 
-  -ms-text-size-adjust: 100%; 
+* {
+  margin: 0;
+  padding: 0;
+  @if $prefix-for-webkit {
+    -webkit-tap-highlight-color: rgba(#000, 0);
+  }
+}
+html {
+  overflow-y: scroll;
+  @if $prefix-for-webkit {
+    -webkit-overflow-scrolling: touch;
+    -webkit-text-size-adjust: 100%;
+  }
+  @if $prefix-for-microsoft{
+    -ms-text-size-adjust: 100%;
+  }
 }
 body { 
   font-size: $baseFontSize;
@@ -41,6 +51,13 @@ ul,ol,li,dl,dd{
 }
 ul,ol{
   list-style: none outside none;
+}
+em {
+  font-style: normal;
+}
+table{
+  border-collapse: collapse;
+  border-spacing: 0;
 }
 
 // 表单placeholder样式

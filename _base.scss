@@ -1,24 +1,55 @@
 @charset "UTF-8";
-//-----------------------------------------------------	
-// base scss
-//-----------------------------------------------------
-
-//-----------------------------------------------------
-// author:      结一 (http://weibo.com/marvin1023)
-// version:     2.0
-// time:        2013-07-16
-// url:         https://github.com/marvin1023/sassCore
-// copyright:   http://tianya.cn, http://w3cplus.com
-//-----------------------------------------------------
-
+// @三水清订制
+// 
 @import "core/setting";
+
+$lte7:                  false; //是否兼容ie6-7
+$filter:                false; //是否为ie6-8开启css3滤镜兼容，常用于渐变背景 
+// 不支持打印
+$printStyleSwitch: false;
+//前缀只支持webkit
+$prefix-for-webkit: true;
+$prefix-for-mozilla: false;
+$prefix-for-microsoft: false;
+$prefix-for-opera: false;
+// font相关
+$baseFontSize:          14px;
+$baseLineHeight:        1.5;
+$baseFontFamily:        $fontCn, Helvetica, Tahoma, sans-serif;
+// 变量分别为：是否输出表单的占位符placeholder样式，文本色
+$placeholder:           false $gray;
+// 变量分别为：是否输出选中样式，选中的背景色，选中文字色
+$selection:             false #39f #fff;
+
+
+
 @import "core/css3";
-@import "core/media-queries";
+// @import "core/media-queries";
 @import "core/mixin";
-@import "core/grid";
-@import "core/simple";
-@import "core/normalize";
+// @import "core/grid";
+// @import "core/simple";
+// @import "core/normalize";
 @import "core/reset";
-@import "core/helpers";
-@import "core/typography";
-@import "core/message";
+// @import "core/helpers";
+// @import "core/typography";
+// @import "core/message";
+// 
+.clearfix{
+  @extend %clearfix;
+}
+
+//选中
+body{
+    @if $prefix-for-webkit{
+        -webkit-touch-callout: none;
+        -webkit-user-select: none;
+        -khtml-user-select: none;
+    }
+    @if $prefix-for-mozilla{
+        -moz-user-select: moz-none;
+    }
+    @if $prefix-for-microsoft{
+        -ms-user-select: none;
+    }
+    user-select: none; 
+}

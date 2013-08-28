@@ -84,27 +84,20 @@ $selection:             false #39f #fff !default;
 $article:               true article !default;
 
 
-// radius
-//-----------------------------------------------------	
-$baseRadius:            4px !default;
-$smallRadius:           3px !default;
-$largeRadius:           8px !default;
 
-
-// message
-//-----------------------------------------------------	
-// 第一个值表示是否开启信息样式，包括警告，错误，成功，提示
-// 第二个值表示样式是否有icon背景，背景图片使用base64，ie8+支持
-$msgSwitch:             true true !default;
- 
-// 样式圆角大小，设置为false将不产生圆角。
-$msgRadius:             $baseRadius !default;
 
 // 每个变量都有三个颜色值，分别为：文本色，背景色，边框色
 $warningColor:          #514721 #FFF6BF #FFD324 !default;
 $errorColor:            #8A1F11 #FBE3E4 #FBC2C4 !default;
 $successColor:          #264409 #E6EFC2 #C6D880 !default;
 $infoColor:             #205791 #D5EDF8 #92CAE4 !default;
+
+
+// radius
+//-----------------------------------------------------	
+$baseRadius:            4px !default;
+$smallRadius:           3px !default;
+$largeRadius:           8px !default;
 
 
 // z-index
@@ -114,3 +107,12 @@ $zindexFixedTopbar:     1010 !default;
 $zindexTooltip:         1020 !default;
 $zindexAlert:           1030 !default;
 $zindexModal:           1100 !default;
+
+// message
+//----------------------------------------------------- 
+// 第一个值表示是否开启信息样式，包括警告，错误，成功，提示
+// 第二个值表示样式是否有icon背景，背景图片使用base64，ie8+支持
+$msgSwitch:             true true !default;
+ 
+// 样式圆角大小，设置为false将不产生圆角。
+$msgRadius:             $baseRadius !default;
