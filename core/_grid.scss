@@ -14,12 +14,12 @@
 
 // variables
 // 这里设计的是100px的布局，(65+20)*12-20 = 1000
-// 将gridColumnWidth设置为60px，就是盛名的960网格系统
+// 将gridColumn设置为60px，就是盛名的960网格系统
 //----------------------------------------------------- 
 $gridColumns:                     12 !default;      // Total number of columns
-$gridColumnWidth:                 65px !default;   // Width of a single column
+$gridColumn:                      65px !default;   // Width of a single column
 $gridGutter:                      20px !default;     // Width of the gutter
-$gridSystemWidth:                 $gridColumns * ($gridColumnWidth + $gridGutter); //grid system width
+$gridSystem:                      $gridColumns * ($gridColumn + $gridGutter); //grid system width
 
 
 // percent layout setting
@@ -27,24 +27,24 @@ $gridSystemWidth:                 $gridColumns * ($gridColumnWidth + $gridGutter
 //----------------------------------------------------- 
 // Set $gridPercentSwitch true for a fluid layout
 $gridPercentSwitch:               false !default;
-$gridRealWidth:                   $gridSystemWidth !default;
-$gridGutterPercent:               percentage($gridGutter / $gridSystemWidth) !default;
+$gridReal:                        $gridSystem !default;
+$gridGutterPercent:               percentage($gridGutter / $gridSystem) !default;
 
 @if $gridPercentSwitch{
-  $gridRealWidth:                 100%;
+  $gridReal:                      100%;
 }
 
 // ie6/7 fluid layout bug: http://tylertate.com/blog/2012/01/05/subpixel-rounding.html
 // ie6/7  getWidth($i, true, $correction)
-$gridMinWidth:                    960 !default;
-$gridCorrection:                  0.5 / $gridMinWidth * 100 * 1%;
+$gridMin:                         960 !default;
+$gridCorrection:                  0.5 / $gridMin * 100 * 1%;
 
 
 // margin value
 //----------------------------------------------------- 
 // if fluid layout the value is $gridGutterPercent
 // if fixed layout the value is $gridGutter
-$gridMarginValue:                 if($gridPercentSwitch, $gridGutterPercent, $gridGutter) !default;
+$gridMargin:                      if($gridPercentSwitch, $gridGutterPercent, $gridGutter) !default;
 
 
 // true for grid class(.span1, .span2...)
@@ -60,14 +60,14 @@ $gridSpanSwitch:                  false !default;
 // and plain getWidth() or getWidth would return 940px;
 @function getWidth($i:$gridColumns, $onlyInnerWidth:true, $subtract:0){
   // First set a default return value
-  $return: (($gridColumnWidth + $gridGutter) * $i / $gridSystemWidth) * $gridRealWidth - $subtract !default;
+  $return: (($gridColumn + $gridGutter) * $i / $gridSystem) * $gridReal - $subtract !default;
 
   // If we want to get only the inner width (without gutter)
   @if $onlyInnerWidth == true {
     // Return the total calculated width, without the margins
     // If the second parameter of this function is not specified
     // This is what is going to be returned
-    $return: ((($gridColumnWidth + $gridGutter) * $i - $gridGutter) / $gridSystemWidth) * $gridRealWidth - $subtract;
+    $return: ((($gridColumn + $gridGutter) * $i - $gridGutter) / $gridSystem) * $gridReal - $subtract;
   }
 
   @return $return;
@@ -76,12 +76,12 @@ $gridSpanSwitch:                  false !default;
 
 // A Function to calculate percent width:
 // Example usage:getPercent(3,6)
-@function getPercent($i, $container-columns:$gridColumns,$onlyInnerWidth:true, $subtract:0) {
-  $percentage: percentage($i / $container-columns);
+@function getPercent($i, $containerColumns:$gridColumns,$onlyInnerWidth:true, $subtract:0) {
+  $percentage: percentage($i / $containerColumns);
   
   @if $onlyInnerWidth == true {
-    $width: $i * $gridColumnWidth + ($i - 1) * $gridGutter;
-    $container-width: $container-columns * $gridColumnWidth + ($container-columns - 1) * $gridGutter;
+    $width: $i * $gridColumn + ($i - 1) * $gridGutter;
+    $container-width: $containerColumns * $gridColumn + ($containerColumns - 1) * $gridGutter;
     $percentage: percentage($width / $container-width);
   }
   
@@ -91,12 +91,12 @@ $gridSpanSwitch:                  false !default;
 
 // span or column's gutter
 %margin-left-right{
-  margin-left: ($gridMarginValue / 2); 
-  margin-right: ($gridMarginValue / 2);
+  margin-left: ($gridMargin / 2); 
+  margin-right: ($gridMargin / 2);
 
   @if $gridPercentSwitch and $lte7{
-    *margin-left: ($gridMarginValue / 2) - $gridCorrection; 
-    *margin-right: ($gridMarginValue / 2) - $gridCorrection;
+    *margin-left: ($gridMargin / 2) - $gridCorrection; 
+    *margin-right: ($gridMargin / 2) - $gridCorrection;
   }
 }
 
