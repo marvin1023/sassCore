@@ -75,16 +75,16 @@
 }
 
 // CSS image replacement
+// 原生7,8不支持color的transparent
 // 高度不能超过字体大小乘以99（line-height）
-@mixin ir {
+// 使用的时候请确定元素可以设置宽度或高度，即非inline元素
+@mixin ir($lh:99) {
   color: transparent;
   text-shadow: none;
   background-color: transparent;
   border: 0;
-  @if $lte7 {
-    _line-height:99;
-    _overflow:hidden;
-  }
+  line-height:99;
+  overflow:hidden;
 }
 
 // Text overflow
