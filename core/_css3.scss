@@ -203,7 +203,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
   }
 
   @else {
-    $properties: all 0.15s ease-out 0;
+    $properties: all 0.15s ease-out;
     @include prefixer(transition, $properties, webkit moz o spec);
   }
 }
@@ -536,7 +536,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 @mixin align-self($align:stretch){
   //stretch | flex-start | flex-end | center | baseline
-  @include prefixer(align-items, $align, webkit moz spec);
+  @include prefixer(align-self, $align, webkit moz spec);
 }
 
 @mixin flex($flex){
