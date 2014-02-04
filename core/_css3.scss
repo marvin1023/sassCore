@@ -209,10 +209,16 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 }
 
 @mixin transition-property ($properties...) {
-   -webkit-transition-property: transitionPropertyNames($properties, 'webkit');
-      -moz-transition-property: transitionPropertyNames($properties, 'moz');
-        -o-transition-property: transitionPropertyNames($properties, 'o');
-           transition-property: transitionPropertyNames($properties, false);
+  @if $prefix-for-webkit{
+    -webkit-transition-property: transitionPropertyNames($properties, 'webkit');
+  }
+  @if $prefix-for-mozilla{
+    -moz-transition-property: transitionPropertyNames($properties, 'moz');
+  }
+  @if $prefix-for-opera{
+    -o-transition-property: transitionPropertyNames($properties, 'o');
+  }
+  transition-property: transitionPropertyNames($properties, false);
 }
 
 @mixin transition-duration ($times...) {
@@ -356,32 +362,57 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 // 水平渐变，从左往右
 // @include gradient-horizontal(#333, #ccc);
 @mixin gradient-horizontal($gradient...){
-  background-image: -moz-linear-gradient(left, $gradient); // FF 3.6+
-  background-image: -webkit-linear-gradient(left, $gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-linear-gradient(left, $gradient); // Opera 11.10
+  @if $prefix-for-webkit{
+    background-image: -webkit-linear-gradient(left, $gradient); // Safari 5.1+, Chrome 10+
+  }
+  @if $prefix-for-mozilla{
+    background-image: -moz-linear-gradient(left, $gradient); // FF 3.6+
+  }
+  @if $prefix-for-opera{
+    background-image: -o-linear-gradient(left, $gradient); // Opera 11.10
+  }
   background-image: linear-gradient(to right, $gradient); // Standard, IE10
 }
 // 垂直渐变，从上往下
 // @include gradient-vertical(#333 30%, #ccc);
 @mixin gradient-vertical($gradient...) {
-  background-image: -moz-linear-gradient(top, $gradient); // FF 3.6+
-  background-image: -webkit-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-linear-gradient(top, $gradient); // Opera 11.10
+  @if $prefix-for-webkit{
+    background-image: -webkit-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
+  }
+  @if $prefix-for-mozilla{
+    background-image: -moz-linear-gradient(top, $gradient); // FF 3.6+
+  }
+  @if $prefix-for-opera{
+    background-image: -o-linear-gradient(top, $gradient); // Opera 11.10
+  }
   background-image: linear-gradient(to bottom, $gradient); // Standard, IE10
 }
 // 角度渐变
 // @include gradient-directional(45deg, #333 30%, #ccc);
 @mixin gradient-directional($gradient...) {
-  background-image: -moz-linear-gradient($gradient); // FF 3.6+
-  background-image: -webkit-linear-gradient($gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-linear-gradient($gradient); // Opera 11.10
+  @if $prefix-for-webkit{
+    background-image: -webkit-linear-gradient($gradient); // Safari 5.1+, Chrome 10+
+  }
+  @if $prefix-for-mozilla{
+    background-image: -moz-linear-gradient($gradient); // FF 3.6+
+  }
+  @if $prefix-for-opera{
+    background-image: -o-linear-gradient($gradient); // Opera 11.10
+  }
+  
   background-image: linear-gradient($gradient); // Standard, IE1
 }
 // 径向渐变
 @mixin gradient-radial($gradient...){
-  background-image: -moz-radial-gradient($gradient); // FF 3.6+
-  background-image: -webkit-radial-gradient($gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-radial-gradient($gradient); // Opera 11.10
+  @if $prefix-for-webkit{
+    background-image: -webkit-radial-gradient($gradient); // Safari 5.1+, Chrome 10+
+  }
+  @if $prefix-for-mozilla{
+    background-image: -moz-radial-gradient($gradient); // FF 3.6+
+  }
+  @if $prefix-for-opera{
+    background-image: -o-radial-gradient($gradient); // Opera 11.10
+  }
   background-image: radial-gradient($gradient); // Standard, IE1
   background-repeat: no-repeat;
 }
@@ -491,13 +522,21 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 //flex
 //-----------------------------------------------------
 @mixin display-flex {
-  
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -o-flex;
-  display: -ms-flex;
+  @if $prefix-for-webkit{
+    display: -webkit-flex;
+  }
+  @if $prefix-for-mozilla{
+    display: -moz-flex;
+  }
+  @if $prefix-for-microsoft{
+    display: -ms-flex;
+  }
+  @if $prefix-for-opera{
+    display: -o-flex;
+  }
   display: flex;
 }
+
 
 @mixin flex-direction($direction:row){
   //row | row-reverse | column | column-reverse
