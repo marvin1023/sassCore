@@ -1,10 +1,12 @@
-t#sassCore 3.0——Just for Better
+#sassCore 3.0——Just for Better
 
 sassCore参考了[compass](http://compass-style.org/)和[bourbon](http://bourbon.io/)等众多优秀的sass库，根据项目实践，归纳总结而成，一直以来为了更好而不断完善。
 
+sassCore提供了一些基础和常用的东西，基于它你可以扩展出很多组件等，如果你对这个有兴趣，可以参考下基于sassCore的[tobe](http://tobe.w3cplus.com)。
+
 ##sassCore特点：
 
-* 涵盖范围广，核心文件有setting，css3，media-queries，mixin，grid，reset；扩展文件有animate，font-face，btn，message，form，table，helps，typography；除此之外还有两个集合文件function和base。
+*sassCore涵盖范围广，核心文件有setting，css3，media-queries，mixin，grid，reset；扩展文件有animate，font-face，btn，message，form，table，helps，typography；除此之外还有两个集合文件function和base。
 * sassCore采用开关机制，让样式更可控。如对是否支持ie6/7等众多条件可以通过设置为true或false来搞定。
 * sassCore采用了sass 3.2.0版本以后的重大更新技术，让开发者更加方便，同时解析的css文件更加优越。如sass默认变量机制（默认变量!default，在应用的时候只需在你引入sassCore文件之前，重新申明变量就ok，而不需要去修改sassCore文件），placeholder选择器（有调用才会解析出相应的组合申明样式，避免了先前的class申明不管是否调用都会有样式解析出来）等。
 * sassCore借鉴优秀的作品，根据实战创造新的方法，紧跟前沿，每一个文件都是经过深思熟虑，几易其稿，在实用和卓越上狠下功夫。
@@ -67,3 +69,5 @@ sassCore包括两个集合文件（base，function）和两个文件夹（core�
 因为sass不能导入在线sass文件，而sassCore也没有提供安装版的使用，所以默认统一放在D盘进行调用，如导入base，`@import "D:/sassCore/base"`。
 
 一般来说单人模式可直接调用base，团队多人多文件可由设计公用样式的人导入base，其余人员则导入function，以免重复申明样式。
+
+如果需要用到扩展的文件模块，请单个导入ext文件夹中的对应扩展scss文件，如导入btn样式`@import "D:/sassCore/ext/btn"`。
