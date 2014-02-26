@@ -1,8 +1,7 @@
 @charset "UTF-8";
 //-----------------------------------------------------  
 // grid scss
-// 网格系统，根据blankwork的思想，进行扩展，既支持固定
-// 宽度也支持百分比宽度，还可以控制是否输出span的class
+// 支持固定宽度和百分比宽度，可以控制是否输出span的class
 //----------------------------------------------------- 
 
 // thanks:
@@ -13,8 +12,8 @@
 // http://bjorkoy.com/2010/05/css-grids-with-sass/
 
 // variables
-// 这里设计的是100px的布局，(65+20)*12-20 = 1000
-// 将gridColumnWidth设置为60px，就是盛名的960网格系统
+// 这里设计的是1000px的布局，每个栅格为65px，共12个，计算公式：(65+20)*12-20 = 1000
+// 如果将gridColumnWidth设置为60px，就是盛名的960网格系统
 //----------------------------------------------------- 
 $gridColumns:                     12 !default;      // Total number of columns
 $gridColumnWidth:                 65px !default;   // Width of a single column
@@ -25,8 +24,7 @@ $gridSystemWidth:                 $gridColumns * ($gridColumnWidth + $gridGutter
 // percent layout setting
 // 百分比布局的变量设置
 //----------------------------------------------------- 
-// Set $gridPercentSwitch true for a fluid layout
-$gridPercentSwitch:               false !default;
+$gridPercentSwitch:               false !default; // 默认为固定宽度布局，设置为true为百分比
 $gridRealWidth:                   $gridSystemWidth !default;
 $gridGutterPercent:               percentage($gridGutter / $gridSystemWidth) !default;
 
@@ -36,7 +34,7 @@ $gridGutterPercent:               percentage($gridGutter / $gridSystemWidth) !de
 
 // ie6/7 fluid layout bug: http://tylertate.com/blog/2012/01/05/subpixel-rounding.html
 // ie6/7  getWidth($i, true, $correction)
-$gridMinWidth:                    960 !default;
+$gridMinWidth:                    1000 !default;
 $gridCorrection:                  0.5 / $gridMinWidth * 100 * 1%;
 
 
@@ -75,8 +73,8 @@ $gridSpanSwitch:                  false !default;
 
 
 // A Function to calculate percent width:
-// Example usage:getPercent(3,6)
-@function getPercent($i, $container-columns:$gridColumns,$onlyInnerWidth:true, $subtract:0) {
+// Example:getPercent(3,6)
+@function getPercent($i, $container-columns:$gridColumns, $onlyInnerWidth:false, $subtract:0) {
   $percentage: percentage($i / $container-columns);
   
   @if $onlyInnerWidth == true {
@@ -90,13 +88,11 @@ $gridSpanSwitch:                  false !default;
 
 
 // span or column's gutter
-%margin-left-right{
-  margin-left: ($gridMarginValue / 2); 
-  margin-right: ($gridMarginValue / 2);
+%margin-gutter{
+  margin-right: $gridMarginValue;
 
   @if $gridPercentSwitch and $lte7{
-    *margin-left: ($gridMarginValue / 2) - $gridCorrection; 
-    *margin-right: ($gridMarginValue / 2) - $gridCorrection;
+    *margin-right: $gridMarginValue - $gridCorrection;
   }
 }
 
@@ -105,8 +101,8 @@ $gridSpanSwitch:                  false !default;
 // Default Column Count: Max Column Count
 // Padding (explained below): 0
 @mixin column($i: $gridColumns, $subtract:0){
-  @extend %float-left;
-  @extend %margin-left-right;
+  @extend %float;
+  @extend %margin-gutter;
 
   $getWidth: getWidth($i, true, $subtract); // Use the width calculation function to get the width 
   width: $getWidth;
@@ -165,7 +161,7 @@ $gridSpanSwitch:                  false !default;
   @for $i from 1 through $gridColumns {
     .span#{$i} { 
       @extend %float-left;
-      @extend %margin-left-right;
+      @extend %margin-gutter;
       
       width:getWidth($i);
       
