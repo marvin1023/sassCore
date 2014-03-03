@@ -18,10 +18,12 @@ $formUploadBgColor:        $primary !default; //upload按钮默认背景颜色
 $formRadius:               0 !default; //圆角大小，默认0将不会产生圆角
 
 $formBasicResetSwitch:     true !default; //是否开启表单元素基本重置，如果你已经有了重置或normalize，就不用开启了。
-$formMsgSwitch:            false !default; //是否开启报错等信息
+$formMsgSwitch:            false !default; //是否开启报错等信息，如设为true则需导入message.scss
+$formConditionSwitch:      false !default; //是否开启条件选项
+
+$formHorizontalSwitch:     false !default; //是否启用水平表单样式
 $formInlineSwitch:         false !default; //是否启用单行表单样式
 $formSimpleSwitch:         false !default; //是否启用简洁表单样式
-$formConditionSwitch:      false !default; //是否开启条件选项
 
 
 // 基本重置
@@ -333,21 +335,22 @@ p.form-des{
 // form-horizontal
 // label与input元素同行表单
 //---------------------------------
-.form-horizontal{
-	.form-label{
-		@include float;
-	    text-align: right;
-		width:$formLabelWidth;
-	}
-	.form-field, 
-	.action-left{
-		margin-left: $formLabelWidth + 10px;
-	}
-	.form-field-rc{
-	    margin-top:5px;
+@if $formHorizontalSwitch {
+	.form-horizontal{
+		.form-label{
+			@include float;
+		    text-align: right;
+			width:$formLabelWidth;
+		}
+		.form-field, 
+		.action-left{
+			margin-left: $formLabelWidth + 10px;
+		}
+		.form-field-rc{
+		    margin-top:5px;
+		}
 	}
 }
-
 
 // form-inline
 // 单行表单,所有的元素一行显示，用于单行登录表单

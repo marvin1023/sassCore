@@ -279,10 +279,6 @@
 
 // 垂直渐变，渐变背景是半透明到全透明，这样就可以通过设置背景色来表现渐变
 //-------------------------
-// Reset filters for IE
-%reset-filter{
-  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
-}
 // 白色，由半透明到全透明
 %gradient-linear-light {
   // IE9 SVG, needs conditional override of 'filter' to 'none' 
@@ -306,6 +302,10 @@
        @extend %reset-filter;
     }
   }
+}
+// Reset gradient filters for IE
+%reset-filter{
+  filter: progid:DXImageTransform.Microsoft.gradient(enabled=false);
 }
 
 

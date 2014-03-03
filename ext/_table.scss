@@ -15,6 +15,7 @@ $tableBorderColor:               $gray !default; // table and cell border
 $tableThBgColor:                 #f4f4f4 !default;//默认th背景色
 $tableColThWidth:                80px !default;//默认左边第一栏为th表格的th宽度
 $tableCellPadding:               8px !default;//单元格的padding
+$tableRadius:                    $baseRadius !default;//圆角大小
 $tableResetSwitch:               true !default;//是否已经有了table的重置border-collapse: collapse;border-spacing: 0;
 
 //各个table开关设置
@@ -31,23 +32,23 @@ $tableStatusSwitch:              false !default;
 
 //table mixin
 //---------------------------------
-@mixin table-radius($tableRadius: $baseRadius){
+@mixin table-radius($radius: $tableRadius){
   border-collapse: separate; // Done so we can round those corners!
   @if $lte7 {
     *border-collapse: collapse; // IE7 can't round corners anyway
   }
-  border-radius: $tableRadius;
+  border-radius: $radius;
   // For first th/td in the first row in the first thead or tbody
   thead:first-child tr:first-child > th:first-child,
   tbody:first-child tr:first-child > td:first-child,
   tbody:first-child tr:first-child > th:first-child {
-    border-top-left-radius: $tableRadius;
+    border-top-left-radius: $radius;
   }
   // For last th/td in the first row in the first thead or tbody
   thead:first-child tr:first-child > th:last-child,
   tbody:first-child tr:first-child > td:last-child,
   tbody:first-child tr:first-child > th:last-child {
-    border-top-right-radius: $tableRadius;
+    border-top-right-radius: $radius;
   }
   // For first th/td (can be either) in the last row in the last thead, tbody, and tfoot
   thead:last-child tr:last-child > th:first-child,
@@ -55,7 +56,7 @@ $tableStatusSwitch:              false !default;
   tbody:last-child tr:last-child > th:first-child,
   tfoot:last-child tr:last-child > td:first-child,
   tfoot:last-child tr:last-child > th:first-child {
-    border-bottom-left-radius: $tableRadius;
+    border-bottom-left-radius: $radius;
   }
   // For last th/td (can be either) in the last row in the last thead, tbody, and tfoot
   thead:last-child tr:last-child > th:last-child,
@@ -63,15 +64,15 @@ $tableStatusSwitch:              false !default;
   tbody:last-child tr:last-child > th:last-child,
   tfoot:last-child tr:last-child > td:last-child,
   tfoot:last-child tr:last-child > th:last-child {
-    border-bottom-right-radius: $tableRadius;
+    border-bottom-right-radius: $radius;
   }
 
   // Clear border-radius for first and last td in the last row in the last tbody for table with tfoot
   tfoot + tbody:last-child tr:last-child td:first-child {
-    border-bottom-left-radius: $tableRadius;
+    border-bottom-left-radius: $radius;
   }
   tfoot + tbody:last-child tr:last-child td:last-child {
-    border-bottom-right-radius: $tableRadius;
+    border-bottom-right-radius: $radius;
   }
 
   // Special fixes to round the left border on the first td/th
@@ -79,13 +80,13 @@ $tableStatusSwitch:              false !default;
   caption + tbody tr:first-child td:first-child,
   colgroup + thead tr:first-child th:first-child,
   colgroup + tbody tr:first-child td:first-child {
-    border-top-left-radius: $tableRadius;
+    border-top-left-radius: $radius;
   }
   caption + thead tr:first-child th:last-child,
   caption + tbody tr:first-child td:last-child,
   colgroup + thead tr:first-child th:last-child,
   colgroup + tbody tr:first-child td:last-child {
-    border-top-right-radius: $tableRadius;
+    border-top-right-radius: $radius;
   }
 }
 
@@ -96,15 +97,15 @@ $tableStatusSwitch:              false !default;
   }
 }
 
-@mixin zebra-stripe($odd: $tableBgColorEven){
+@mixin zebra-stripe($even: $tableBgColorEven){
   tbody {
     > tr:nth-child(even) > td{
-      background-color: $odd;
+      background-color: $even;
     } 
   }
   @if $zebraLte8 {
     tr.even td{
-      background-color: $odd;
+      background-color: $even;
     }
   }
 }
@@ -197,7 +198,7 @@ $tableStatusSwitch:              false !default;
       border-right:1px solid $tableBorderColor;
       border-bottom:1px solid $tableBorderColor;
     }
-    @include table-radius($baseRadius);
+    @include table-radius($tableRadius);
   }  
 }
 

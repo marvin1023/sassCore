@@ -35,17 +35,6 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-// icon mixin
-@mixin font-icon($name,$content){
-	.#{$fontClassPrefix}-#{$name}{
-		@extend %font-basic;
-
-		&:before{
-			content: $content;
-			@extend %box-sizing-border;
-		}
-	}
-}
 
 // 传入单个名字，以在所有的$ClassAll变量中查询到其对应的内容
 // 如glass，查询到的就是"\f000"，music对应的就是"\f001"
@@ -63,6 +52,19 @@
 }
 
 
+// icon mixin
+@mixin font-icon($class){
+	.#{$fontClassPrefix}-#{$class}{
+		@extend %font-basic;
+
+		&:before{
+			content: fontSearch($class);
+			@extend %box-sizing-border;
+		}
+	}
+}
+
+
 // 全部输出
 @if $fontClassAllSwitch {
 	@each $class in $fontClassAll {
@@ -75,7 +77,7 @@
 	// 部分输出的class 
 	@if length($fontClassoutput) >= 2{
 		@each $class in $fontClassoutput{
-			@include font-icon($class,fontSearch($class));
+			@include font-icon($class);
 		}
 	}
 }

@@ -27,6 +27,7 @@ $btnBgGradientSwitch:    false !default;//是否启用渐变背景
   @include inline-block;
   cursor: pointer;
   text-align:center;
+  border:0 none;
 }
 
 // btn-gradient
@@ -58,8 +59,6 @@ $btnBgGradientSwitch:    false !default;//是否启用渐变背景
   @if $btnBgGradientSwitch {
     border:1px solid darken($bgColor, 5%);
     border-color:lighten($bgColor, 2%) darken($bgColor, 5%) darken($bgColor, 5%) lighten($bgColor, 2%);
-  }@else{
-    border:0 none;
   }
 
   &:hover{
@@ -99,8 +98,8 @@ $btnBgGradientSwitch:    false !default;//是否启用渐变背景
 // 最后一个$formbtn参数，如果是普通按钮可以忽略（默认为false），如果是form表单元素按钮则传入true
 
 // 如果输出多个大小按钮，则直接调用下面的mixin
-// @include multi-size-btn();
-@mixin multi-size-btn($sizeLists: $btnSizeClass){
+// @include btn-size-multi();
+@mixin btn-size-multi($sizeLists: $btnSizeClass){
   @each $size in $sizeLists{
     $class:     nth($size, 1);
     $padding:   nth($size, 2);
@@ -128,8 +127,8 @@ $btnBgGradientSwitch:    false !default;//是否启用渐变背景
 }
 
 //如果输出至少两个不同颜色按钮，则调用下面的mixin
-// @include multi-color-btn();
-@mixin multi-color-btn($colorLists: $btnColorClass){
+// @include btn-color-multi();
+@mixin btn-color-multi($colorLists: $btnColorClass){
   @each $color in $colorLists{
     $class:      nth($color,1);
     $bgColor:    nth($color,2);
