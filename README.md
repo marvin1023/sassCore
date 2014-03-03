@@ -4,15 +4,36 @@ sassCore参考了[compass](http://compass-style.org/)和[bourbon](http://bourbon
 
 sassCore提供了一些基础和常用的东西，基于它你可以扩展出很多组件等，如果你对这个有兴趣，可以参考下基于sassCore的[tobe](http://tobe.w3cplus.com)。
 
-##sassCore特点：
+##如何使用？
 
-*sassCore涵盖范围广，核心文件有setting，css3，media-queries，mixin，grid，reset；扩展文件有animate，font-face，btn，message，form，table，helps，typography；除此之外还有两个集合文件function和base。
-* sassCore采用开关机制，让样式更可控。如对是否支持ie6/7等众多条件可以通过设置为true或false来搞定。
-* sassCore采用了sass 3.2.0版本以后的重大更新技术，让开发者更加方便，同时解析的css文件更加优越。如sass默认变量机制（默认变量!default，在应用的时候只需在你引入sassCore文件之前，重新申明变量就ok，而不需要去修改sassCore文件），placeholder选择器（有调用才会解析出相应的组合申明样式，避免了先前的class申明不管是否调用都会有样式解析出来）等。
+sassCore分核心文件和扩展文件两种。其中核心文件提供一些基础的样式和`@mixin`，`%`等方便调用；而扩展文件则提供一些模块的样式，如`form`，`table`等。
+
+###核心文件调用
+第一种除提供基础功能外，会产生一份reset样式：
+
+	@import "d:/sassCore/base";
+
+第二种不产生任何样式，只提供功能的调用：
+
+	@import "d:/sassCore/function";
+
+###扩展文件调用
+
+根据需要调用，以table为例：
+
+	@import "d:/sassCore/ext/table";
+
+注：因为sass不能导入在线sass文件，而sassCore也没有提供安装版的使用，所以默认统一放在D盘进行调用。
+
+##五大特点：
+
+* sassCore涵盖范围广。核心文件有setting，css3，media-queries，mixin，grid，reset；扩展文件有animate，font-face，btn，message，form，table，helps，typography；除此之外还有两个集合文件function和base。
+* sassCore对兼容采用了开关控制机制。如对是否支持ie6/7可以通过设置为true或false以生成对应的代码。
+* sassCore严格控制样式冗余累赘。使用开关变量做到需要什么样式就加载什么样式，按需开启，避免样式冗余累赘。
+* sassCore设计了两种调用方式，一种是只调用功能，不产生任何多余的css代码；另一种是包含了些重置样式。为团队的合作开发提供了良好的解决方案。
 * sassCore借鉴优秀的作品，根据实战创造新的方法，紧跟前沿，每一个文件都是经过深思熟虑，几易其稿，在实用和卓越上狠下功夫。
-* sassCore设计了两种调用方式，一种是只调用功能，不产生任何多余的css代码；另一种是包含了些重置样式，为团队的合作开发提供了良好的解决方案。
 
-##sassCore文件简略说明
+##文件简述
 
 sassCore包括两个集合文件（base，function）和两个文件夹（core，ext）。其中core文件夹中为核心基础文件，包括setting，css3，media-queries，mixin，grid，reset；而ext文件夹中是一些扩展文件，包括animate，font-face，btn，message，form，table，typography，helper。
 
@@ -63,11 +84,3 @@ sassCore包括两个集合文件（base，function）和两个文件夹（core�
 
 ####typography
 负责文字排版的文件。这里主要考虑到文章详细页和其他页面的一些不同情况而给详细页加入了article这个class，里面的一些元素如ul，li，p给予一定的样式，而不是清零。
-
-##使用说明
-
-因为sass不能导入在线sass文件，而sassCore也没有提供安装版的使用，所以默认统一放在D盘进行调用，如导入base，`@import "D:/sassCore/base"`。
-
-一般来说单人模式可直接调用base，团队多人多文件可由设计公用样式的人导入base，其余人员则导入function，以免重复申明样式。
-
-如果需要用到扩展的文件模块，请单个导入ext文件夹中的对应扩展scss文件，如导入btn样式`@import "D:/sassCore/ext/btn"`。
