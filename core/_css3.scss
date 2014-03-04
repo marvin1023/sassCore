@@ -162,12 +162,6 @@ $prefixNo:                    true !default;
   @include prefixer(user-select, $arg);
 }
 
-// Resize anything
-@mixin resizable($direction) {
-  resize: $direction; // Options: horizontal, vertical, both
-  overflow: auto; // Safari fix
-}
-
 // http://www.css3files.com/font/
 // 1 The eot fontfile. Can be omitted if you don`t want to support Internet Explorer prior to version 9 (including semicolon).
 // 2 Can also be omitted for Internet Explorer < 9. ?iefix prevents IE6 from interpreting all of the following. If the whole IE family (6 to 9) should be supported, 1 and 2 are needed.
@@ -185,6 +179,88 @@ $prefixNo:                    true !default;
          url('#{$file-path}.woff')                     format('woff'), // 4
          url('#{$file-path}.ttf')                      format('truetype'); //5
   }
+}
+
+
+// Background-image
+//-----------------------------------------------------
+@mixin background-clip($clip: padding-box) {
+  // border-box | padding-box | content-box
+  @include prefixer(background-clip, $clip, webkit);
+}
+
+@mixin background-origin($origin...) {
+  // border-box | padding-box | content-box
+  @if length($origin) >= 1 {
+    @include prefixer(background-origin, $origin, webkit);
+  } @else {
+    @include prefixer(background-origin, border-box, webkit);
+  }
+}
+
+@mixin background-size($size...) {
+  // <length> | auto | cover | contain
+  @if length($origin) >= 1 {
+    @include prefixer(background-size, $size, webkit);
+  } @else {
+    @include prefixer(background-size, cover, webkit);
+  }
+}
+
+
+// Gradients
+// Firefox 10+, Opera 11.6+, Chrome 26+ and IE10 also support the new "to (side)" syntax.
+//-----------------------------------------------------
+// 水平渐变，从左往右
+// @include gradient-horizontal(#333, #ccc);
+@mixin gradient-horizontal($gradient...){
+  background-image: -webkit-linear-gradient(left, $gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient(left, $gradient); // Opera 11.10
+  background-image: linear-gradient(to right, $gradient); // Standard, IE10
+}
+// 水平渐变，从左往右，平铺
+// @include gradient-horizontal-repeating(#333 5%, #ccc 10%);
+@mixin gradient-horizontal-repeating($gradient...){
+  background-image: -webkit-repeating-linear-gradient(left, $gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-repeating-linear-gradient(left, $gradient); // Opera 11.10
+  background-image: repeating-linear-gradient(to right, $gradient); // Standard, IE10
+}
+// 垂直渐变，从上往下
+// @include gradient-vertical(#333 30%, #ccc);
+@mixin gradient-vertical($gradient...) {
+  background-image: -webkit-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient(top, $gradient); // Opera 11.10
+  background-image: linear-gradient(to bottom, $gradient); // Standard, IE10
+}
+// 垂直渐变，从上往下，平铺
+// @include gradient-vertical-repeating(#333 30%, #ccc 50%);
+@mixin gradient-vertical($gradient...) {
+  background-image: -webkit-repeating-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-repeating-linear-gradient(top, $gradient); // Opera 11.10
+  background-image: repeating-linear-gradient(to bottom, $gradient); // Standard, IE10
+}
+// 角度渐变
+// @include gradient-angle(45deg, #333 30%, #ccc);
+@mixin gradient-angle($gradient...) {
+  background-image: -webkit-linear-gradient($gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-linear-gradient($gradient); // Opera 11.10
+  background-image: linear-gradient($gradient); // Standard, IE1
+}
+// 角度渐变
+// @include gradient-angle(45deg, #333 30%, #ccc 50%);
+@mixin gradient-angle-repeating($gradient...) {
+  background-image: -webkit-repeating-linear-gradient($gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-repeating-linear-gradient($gradient); // Opera 11.10
+  background-image: repeating-linear-gradient($gradient); // Standard, IE1
+}
+// 径向渐变，可以写点简单的
+// 如：@include gradient-radial(#00F,#FFF);
+// 而@include gradient-radial(farthest-side circle at right,#00F,#FFF);这种的将不会兼容，所以不要调用这个，可以去找工具生成
+@mixin gradient-radial($gradient...){
+  background-image: -webkit-radial-gradient($gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-radial-gradient($gradient); // Opera 11.10
+  background-image: radial-gradient($gradient); // Standard, IE1
+  background-repeat: no-repeat;
 }
 
 
@@ -283,6 +359,26 @@ $prefixNo:                    true !default;
   @include prefixer(transform, matrix3D($args));
 }
 
+
+// perspective
+//-----------------------------------------------------
+@mixin perspective($depth: none) {
+  // none | <length>
+  @include prefixer(perspective, $depth);
+}
+
+@mixin perspective-origin($value: 50% 50%) {
+  // x-axis - left | center | right  | length | %
+  // y-axis - top  | center | bottom | length | %
+  @include prefixer(perspective-origin, $value);
+}
+
+@mixin backface-visibility($visibility:hidden){
+  // visible | hidden
+  @include prefixer(backface-visibility, $visibility);
+}
+
+
 // transition
 //-----------------------------------------------------
 @mixin transition($properties...) {
@@ -317,25 +413,6 @@ $prefixNo:                    true !default;
 
 @mixin transition-delay($times...) {
   @include prefixer(transition-delay, $times);
-}
-
-
-// perspective
-//-----------------------------------------------------
-@mixin perspective($depth: none) {
-  // none | <length>
-  @include prefixer(perspective, $depth);
-}
-
-@mixin perspective-origin($value: 50% 50%) {
-  // x-axis - left | center | right  | length | %
-  // y-axis - top  | center | bottom | length | %
-  @include prefixer(perspective-origin, $value);
-}
-
-@mixin backface-visibility($visibility:hidden){
-  // visible | hidden
-  @include prefixer(backface-visibility, $visibility);
 }
 
 
@@ -455,139 +532,6 @@ $prefixNo:                    true !default;
 }
 
 
-// Background-image
-//-----------------------------------------------------
-@mixin background-clip($clip: padding-box) {
-  // border-box | padding-box | content-box
-  @include prefixer(background-clip, $clip, webkit);
-}
-
-@mixin background-origin($origin...) {
-  // border-box | padding-box | content-box
-  @if length($origin) >= 1 {
-    @include prefixer(background-origin, $origin, webkit);
-  } @else {
-    @include prefixer(background-origin, border-box, webkit);
-  }
-}
-
-@mixin background-size($size...) {
-  // <length> | auto | cover | contain
-  @if length($origin) >= 1 {
-    @include prefixer(background-size, $size, webkit);
-  } @else {
-    @include prefixer(background-size, cover, webkit);
-  }
-}
-
-
-// Gradients
-// Firefox 10+, Opera 11.6+, Chrome 26+ and IE10 also support the new "to (side)" syntax.
-//-----------------------------------------------------
-// 水平渐变，从左往右
-// @include gradient-horizontal(#333, #ccc);
-@mixin gradient-horizontal($gradient...){
-  background-image: -webkit-linear-gradient(left, $gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-linear-gradient(left, $gradient); // Opera 11.10
-  background-image: linear-gradient(to right, $gradient); // Standard, IE10
-}
-// 水平渐变，从左往右，平铺
-// @include gradient-horizontal-repeating(#333 5%, #ccc 10%);
-@mixin gradient-horizontal-repeating($gradient...){
-  background-image: -webkit-repeating-linear-gradient(left, $gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-repeating-linear-gradient(left, $gradient); // Opera 11.10
-  background-image: repeating-linear-gradient(to right, $gradient); // Standard, IE10
-}
-// 垂直渐变，从上往下
-// @include gradient-vertical(#333 30%, #ccc);
-@mixin gradient-vertical($gradient...) {
-  background-image: -webkit-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-linear-gradient(top, $gradient); // Opera 11.10
-  background-image: linear-gradient(to bottom, $gradient); // Standard, IE10
-}
-// 垂直渐变，从上往下，平铺
-// @include gradient-vertical-repeating(#333 30%, #ccc 50%);
-@mixin gradient-vertical($gradient...) {
-  background-image: -webkit-repeating-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-repeating-linear-gradient(top, $gradient); // Opera 11.10
-  background-image: linear-repeating-gradient(to bottom, $gradient); // Standard, IE10
-}
-// 角度渐变
-// @include gradient-angle(45deg, #333 30%, #ccc);
-@mixin gradient-angle($gradient...) {
-  background-image: -webkit-linear-gradient($gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-linear-gradient($gradient); // Opera 11.10
-  background-image: linear-gradient($gradient); // Standard, IE1
-}
-// 角度渐变
-// @include gradient-angle(45deg, #333 30%, #ccc 50%);
-@mixin gradient-angle-repeating($gradient...) {
-  background-image: -webkit-repeating-linear-gradient($gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-repeating-linear-gradient($gradient); // Opera 11.10
-  background-image: linear-repeating-gradient($gradient); // Standard, IE1
-}
-// 径向渐变，可以写点简单的
-// 如：@include gradient-radial(#00F,#FFF);
-// 而@include gradient-radial(farthest-side circle at right,#00F,#FFF);这种的将不会兼容，所以不要调用这个，可以去找工具生成
-@mixin gradient-radial($gradient...){
-  background-image: -webkit-radial-gradient($gradient); // Safari 5.1+, Chrome 10+
-  background-image: -o-radial-gradient($gradient); // Opera 11.10
-  background-image: radial-gradient($gradient); // Standard, IE1
-  background-repeat: no-repeat;
-}
-
-
-//columns
-//-----------------------------------------------------
-@mixin columns($arg) {
-  // <column-count> || <column-width> || <column-count> && <column-width>
-  @include prefixer(columns, $arg, webkit moz);
-}
-
-@mixin column-count($int: auto) {
-  // auto | integer
-  @include prefixer(column-count, $int, webkit moz);
-}
-
-@mixin column-width($length: auto) {
-  // auto | length
-  @include prefixer(column-width, $length, webkit moz);
-}
-
-@mixin column-gap($length: normal) {
-  // normal | length
-  @include prefixer(column-gap, $length, webkit moz);
-}
-
-@mixin column-fill($arg: balance) {
-  // auto | balance
-  @include prefixer(columns-fill, $arg, webkit moz);
-}
-
-@mixin column-rule($arg: 1px solid $gray) {
-  // <border-width> || <border-style> || <color>
-  @include prefixer(column-rule, $arg, webkit moz);
-}
-
-@mixin column-rule-color($color) {
-  @include prefixer(column-rule-color, $color, webkit moz);
-}
-
-@mixin column-rule-style($style: none) {
-  // none | hidden | dashed | dotted | double | groove | inset | inset | outset | ridge | solid
-  @include prefixer(column-rule-style, $style, webkit moz);
-}
-
-@mixin column-rule-width ($width: none) {
-  @include prefixer(column-rule-width, $width, webkit moz);
-}
-
-@mixin column-span($arg: none) {
-  // none || all
-  @include prefixer(column-span, $arg, webkit moz);
-}
-
-
 //flex
 //-----------------------------------------------------
 @mixin display-flex($flex: flex) {
@@ -643,15 +587,16 @@ $prefixNo:                    true !default;
 
 
 // mask
+// http://www.w3.org/TR/css-masking-1/
 // http://ued.ctrip.com/blog/wp-content/webkitcss/index.html
 // https://www.webkit.org/blog/181/css-masks/
 // mask (background)
-// mask-attachment (background-attachment)
+// mask-image (background-image)
+// mask-position (background-position)
+// mask-size (background-size)
+// mask-repeat (background-repeat)
 // mask-clip (background-clip)
 // mask-origin (background-origin)
-// mask-image (background-image)
-// mask-repeat (background-repeat)
-// mask-composite (background-composite)
 // mask-box-image (border-image)
 //-----------------------------------------------------
 @mixin mask($mask...){
@@ -660,6 +605,10 @@ $prefixNo:                    true !default;
 
 @mixin mask-image($image...){
   @include prefixer(mask-image, $image, webkit moz);
+}
+
+@mixin mask-position($position...){
+  @include prefixer(mask-position, $position, webkit moz);
 }
 
 @mixin mask-repeat($repeat...){
@@ -674,12 +623,8 @@ $prefixNo:                    true !default;
   @include prefixer(mask-clip, $clip, webkit moz);
 }
 
-@mixin mask-attachment($attachment...){
-  @include prefixer(mask-image, $attachment, webkit moz);
-}
-
-@mixin mask-composite($composite...){
-  @include prefixer(mask-composite, $composite, webkit moz);
+@mixin mask-type($type: luminance){
+  @include prefixer(mask-type, $type, webkit moz);
 }
 
 @mixin mask-box-image($box){
@@ -737,6 +682,57 @@ $prefixNo:                    true !default;
 
 @mixin sepia($value: 100%){
   @include prefixer(filter, sepia($value), webkit moz);
+}
+
+
+//columns
+//-----------------------------------------------------
+@mixin columns($arg) {
+  // <column-count> || <column-width> || <column-count> && <column-width>
+  @include prefixer(columns, $arg, webkit moz);
+}
+
+@mixin column-count($int: auto) {
+  // auto | integer
+  @include prefixer(column-count, $int, webkit moz);
+}
+
+@mixin column-width($length: auto) {
+  // auto | length
+  @include prefixer(column-width, $length, webkit moz);
+}
+
+@mixin column-gap($length: normal) {
+  // normal | length
+  @include prefixer(column-gap, $length, webkit moz);
+}
+
+@mixin column-fill($arg: balance) {
+  // auto | balance
+  @include prefixer(columns-fill, $arg, webkit moz);
+}
+
+@mixin column-rule($arg: 1px solid $gray) {
+  // <border-width> || <border-style> || <color>
+  @include prefixer(column-rule, $arg, webkit moz);
+}
+
+@mixin column-rule-color($color) {
+  @include prefixer(column-rule-color, $color, webkit moz);
+}
+
+@mixin column-rule-style($style: none) {
+  // none | hidden | dashed | dotted | double | groove | inset | inset | outset | ridge | solid
+  @include prefixer(column-rule-style, $style, webkit moz);
+}
+
+@mixin column-rule-width ($width: none) {
+  @include prefixer(column-rule-width, $width, webkit moz);
+}
+
+@mixin column-span($arg: none) {
+  // none || all
+  @include prefixer(column-span, $arg, webkit moz);
 }
 
 
