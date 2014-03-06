@@ -326,3 +326,130 @@
 @function shade($color, $percent){
   @return mix(black, $color, $percent);
 }
+
+
+// 定义一些常见元素的简单样式(btn,table,form)
+// 这里只是满足简单的使用，更全更好的请参考各自的组件
+//-----------------------------------------------------
+
+// btn
+// @include simple-btn;
+// @include simple-btn(true);
+// @include simple-btn($bgColor:$green);
+@mixin simple-btn($formbtn:false, $bgColor: $primary, $textColor:$white){
+  @include inline-block;
+  vertical-align: middle;
+  cursor: pointer;
+  text-align: center;
+
+  font-size: 12px;
+  padding:0  15px;
+  @if $formbtn {
+    height: 28px;
+  }@else{
+    line-height: 28px;
+  }
+  color: $textColor;
+  background-color: $bgColor;
+  border:0 none;
+
+  &:hover{
+    color: $textColor;
+    background-color: darken($bgColor,5%);
+  }
+}
+
+// table
+// @include simple-table;
+// @include simple-table(false);
+// @include simple-table(true, $thBgColor: $orange);
+@mixin simple-table($th:true, $borderColor: $gray, $thBgColor: $primary, $thTextColor:$white){
+  width: 100%;
+  border-collapse: collapse;
+  border-spacing: 0;
+  margin-bottom: $baseGap;
+
+  & th,
+  & td{
+    border:1px solid $borderColor;
+  }
+
+  th,td{
+    padding: 8px;
+    text-align: left;
+  }
+  // 如果
+  @if $th{
+    th{
+      color: $thTextColor;
+      background-color: $thBgColor;
+      border-color:$thBgColor;
+      border-bottom:0 none;
+    }
+  }
+}
+
+// input, select, textarea的基础样式
+// 边框，padding
+%simple-form-basic{
+  border: 1px solid $gray;
+  padding: 4px;
+  vertical-align: middle;
+  &:focus{
+    outline: 0 none;
+  }
+}
+
+// 输入框
+@mixin simple-text($borderColorFocus: #52a8ec){
+  @extend %simple-form-basic;
+  height: 18px;
+  
+  @include transition(border linear 0.2s, box-shadow linear 0.2s);
+  @include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.1));
+
+  &:focus{
+    border-color: rgba($borderColorFocus, 0.8);
+    @include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba($borderColorFocus, 0.6));
+  }  
+}
+%simple-text{
+  @include simple-text;
+}
+
+// textarea
+@mixin simple-textarea($borderColorFocus:#52a8ec, $width:500px, $height:80px){
+  @include simple-text($borderColorFocus);
+  height: $height;
+  width: $width;
+  vertical-align: top;
+}
+%simple-textarea{
+  @include simple-textarea;
+}
+
+// select
+%simple-select{
+  @extend %simple-form-basic;
+
+  // select lte ie7
+  // ie6,7 不支持select的padding
+  @if $lte7 {
+      *margin-top:5px;
+      *margin-bottom:5px;
+      *vertical-align:top;
+  }
+}
+
+// radio & checkbox 的重置
+%reset-radio-checkbox{
+  margin:0 5px 0 0;
+  padding:0;
+  font-size: 13px;
+  //ie6,7得设置宽度和高度才能表现和其他浏览器一样的重置
+  //radio和checkbox的大小为13px
+  @if $lte7 {
+    *width:13px;
+    *height:13px;
+  }
+}

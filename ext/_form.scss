@@ -47,7 +47,7 @@ $formSimpleSwitch:         false !default; //是否启用简洁表单样式
 // mixin
 //---------------------------------
 // radio & checkbox 的重置
-@mixin resetRadioCheckbox{
+@mixin reset-radio-checkbox{
 	margin:0 5px 0 0;
 	padding:0;
 	font-size:13px;	
@@ -60,7 +60,7 @@ $formSimpleSwitch:         false !default; //是否启用简洁表单样式
 }
 // 默认的样式mixin定义
 // 定义了border，padding及圆角
-@mixin eleBorder($borderColor:$gray, $radius:$baseRadius){
+@mixin ele-border($borderColor:$gray, $radius:$baseRadius){
 	border: 1px solid $borderColor;
 	padding:4px;
 	@if not(unitless($formRadius)) {
@@ -68,8 +68,8 @@ $formSimpleSwitch:         false !default; //是否启用简洁表单样式
 	}
 }
 // 边框及阴影的动画效果
-@mixin eleborderTransition(){
-	@include eleBorder;
+@mixin ele-border-transition(){
+	@include ele-border;
 	@include transition(border linear 0.2s, box-shadow linear 0.2s);
 	@include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.1));
 
@@ -99,10 +99,10 @@ $formSimpleSwitch:         false !default; //是否启用简洁表单样式
 	height:nth($formTextarea,2);
 }
 .form-text, .form-textarea{
-	@include eleborderTransition;
+	@include ele-border-transition;
 }
 .form-select{
-	@include eleBorder;
+	@include ele-border;
 	// select lte ie7
 	// ie6,7 不支持select的padding
 	@if $lte7 {
@@ -117,7 +117,7 @@ $formSimpleSwitch:         false !default; //是否启用简洁表单样式
 // checkbox & radio
 // rc中的r表示radio，c表示checkbox
 .form-radio, .form-checkbox{
-	@include resetRadioCheckbox;	
+	@include reset-radio-checkbox;	
 }
 // rc's wrap
 .form-field-rc{
