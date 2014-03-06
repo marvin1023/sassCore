@@ -43,6 +43,53 @@ $prefix-for-spec: true !default; // required for keyframe mixin
   }
 }
 
+//prefixer-value
+@mixin prefixer-value ($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+
+    @if $prefix == webkit and $prefix-for-webkit == true {
+      $property: -webkit-#{$value};
+    }
+    @else if $prefix == moz and $prefix-for-mozilla == true {
+      $property: -moz-#{$value};
+    }
+    @else if $prefix == o and $prefix-for-mozilla == true {
+      $property: -o-#{$value};
+    }
+    @else if $prefix == ms and $prefix-for-microsoft == true {
+      $property: -ms-#{$value};
+    }
+    @else if $prefix == spec and $prefix-for-spec == true {
+      $property: $value;
+    }
+    @else {
+      @warn "Unrecognized prefix: #{$prefix}";
+    }
+  }
+} ($property, $value, $prefixes) {
+  @each $prefix in $prefixes {
+
+    @if $prefix == webkit and $prefix-for-webkit == true {
+      -webkit-#{$property}: $value;
+    }
+    @else if $prefix == moz and $prefix-for-mozilla == true {
+      -moz-#{$property}: $value;
+    }
+    @else if $prefix == ms and $prefix-for-microsoft == true {
+      -ms-#{$property}: $value;
+    }
+    @else if $prefix == o and $prefix-for-opera == true {
+      -o-#{$property}: $value;
+    }
+    @else if $prefix == spec and $prefix-for-spec == true {
+      #{$property}: $value;
+    }
+    @else {
+      @warn "Unrecognized prefix: #{$prefix}";
+    }
+  }
+}
+
 // disable prefix
 @mixin disable-prefix-for-all() {
   $prefix-for-webkit: false;
@@ -75,24 +122,29 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 // Border Radius
 //-----------------------------------------------------
 @mixin border-radius($radius:$baseRadius) {
-  @include prefixer(border-radius, $radius, webkit spec);
+  //@include prefixer(border-radius, $radius, webkit spec);
+  border-radius:$radius;
 }
 
 // Single Corner Border Radius
 @mixin border-top-left-radius($radius:$baseRadius) {
-  @include prefixer(border-top-left-radius, $radius, webkit spec);
+  //@include prefixer(border-top-left-radius, $radius, webkit spec);
+  border-top-left-radius:$radius;
 }
 
 @mixin border-top-right-radius($radius:$baseRadius) {
-  @include prefixer(border-top-right-radius, $radius, webkit spec);
+  //@include prefixer(border-top-right-radius, $radius, webkit spec);
+  border-top-right-radius:$radius;
 }
 
 @mixin border-bottom-right-radius($radius:$baseRadius) {
-  @include prefixer(border-bottom-right-radius, $radius, webkit spec);
+  //@include prefixer(border-bottom-right-radius, $radius, webkit spec);
+  border-bottom-right-radius:$radius;
 }
 
 @mixin border-bottom-left-radius($radius:$baseRadius) {
-  @include prefixer(border-bottom-left-radius, $radius, webkit spec);
+  //@include prefixer(border-bottom-left-radius, $radius, webkit spec);
+  border-bottom-left-radius:$radius;
 }
 
 
@@ -269,6 +321,10 @@ $prefix-for-spec: true !default; // required for keyframe mixin
   @include prefixer(animation-timing-function, $motions, webkit moz spec);
 }
 
+@mixin animation-delay ($times...) {
+  @include prefixer(animation-delay, $times, webkit moz spec);
+}
+
 @mixin animation-iteration-count ($values...) {
 // infinite | <number>
   @include prefixer(animation-iteration-count, $values, webkit moz spec);
@@ -279,22 +335,18 @@ $prefix-for-spec: true !default; // required for keyframe mixin
   @include prefixer(animation-direction, $directions, webkit moz spec);
 }
 
-@mixin animation-play-state ($states...) {
-// running | paused
-  @include prefixer(animation-play-state, $states, webkit moz spec);
-}
-
-@mixin animation-delay ($times...) {
-  @include prefixer(animation-delay, $times, webkit moz spec);
-}
-
 @mixin animation-fill-mode ($modes...) {
 // none | forwards | backwards | both
   @include prefixer(animation-fill-mode, $modes, webkit moz spec);
 }
 
+@mixin animation-play-state ($states...) {
+// running | paused
+  @include prefixer(animation-play-state, $states, webkit moz spec);
+}
+
 // Adds keyframes blocks for supported prefixes, removing redundant prefixes in the block's content
-@mixin keyframes($name, $prefixes) {
+@mixin keyframes($name, $prefixes:"wekit") {
   $original-prefix-for-webkit: $prefix-for-webkit;
   $original-prefix-for-mozilla: $prefix-for-mozilla;
   $original-prefix-for-microsoft: $prefix-for-microsoft;
@@ -305,13 +357,6 @@ $prefix-for-spec: true !default; // required for keyframe mixin
       @include disable-prefix-for-all();
       $prefix-for-webkit: true;
       @-webkit-keyframes #{$name} {
-        @content;
-      }
-    }
-    @if $prefix == moz and $original-prefix-for-mozilla == true {
-      @include disable-prefix-for-all();
-      $prefix-for-mozilla: true;
-      @-moz-keyframes #{$name} {
         @content;
       }
     }
@@ -352,34 +397,54 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 
 
 // Gradients
+//Firefox 10+, Opera 11.6+, Chrome 26+ and IE10 also support the new "to (side)" syntax.
 //-----------------------------------------------------
 // 水平渐变，从左往右
 // @include gradient-horizontal(#333, #ccc);
 @mixin gradient-horizontal($gradient...){
-  background-image: -moz-linear-gradient(left, $gradient); // FF 3.6+
   background-image: -webkit-linear-gradient(left, $gradient); // Safari 5.1+, Chrome 10+
   background-image: -o-linear-gradient(left, $gradient); // Opera 11.10
   background-image: linear-gradient(to right, $gradient); // Standard, IE10
 }
+// 水平渐变，从左往右，平铺
+// @include gradient-horizontal-repeating(#333 5%, #ccc 10%);
+@mixin gradient-horizontal-repeating($gradient...){
+  background-image: -webkit-repeating-linear-gradient(left, $gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-repeating-linear-gradient(left, $gradient); // Opera 11.10
+  background-image: repeating-linear-gradient(to right, $gradient); // Standard, IE10
+}
 // 垂直渐变，从上往下
 // @include gradient-vertical(#333 30%, #ccc);
 @mixin gradient-vertical($gradient...) {
-  background-image: -moz-linear-gradient(top, $gradient); // FF 3.6+
   background-image: -webkit-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
   background-image: -o-linear-gradient(top, $gradient); // Opera 11.10
   background-image: linear-gradient(to bottom, $gradient); // Standard, IE10
 }
+// 垂直渐变，从上往下，平铺
+// @include gradient-vertical-repeating(#333 30%, #ccc 50%);
+@mixin gradient-vertical($gradient...) {
+  background-image: -webkit-repeating-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-repeating-linear-gradient(top, $gradient); // Opera 11.10
+  background-image: linear-repeating-gradient(to bottom, $gradient); // Standard, IE10
+}
 // 角度渐变
-// @include gradient-directional(45deg, #333 30%, #ccc);
-@mixin gradient-directional($gradient...) {
-  background-image: -moz-linear-gradient($gradient); // FF 3.6+
+// @include gradient-angle(45deg, #333 30%, #ccc);
+@mixin gradient-angle($gradient...) {
   background-image: -webkit-linear-gradient($gradient); // Safari 5.1+, Chrome 10+
   background-image: -o-linear-gradient($gradient); // Opera 11.10
   background-image: linear-gradient($gradient); // Standard, IE1
 }
-// 径向渐变
+// 角度渐变
+// @include gradient-angle(45deg, #333 30%, #ccc 50%);
+@mixin gradient-angle-repeating($gradient...) {
+  background-image: -webkit-repeating-linear-gradient($gradient); // Safari 5.1+, Chrome 10+
+  background-image: -o-repeating-linear-gradient($gradient); // Opera 11.10
+  background-image: linear-repeating-gradient($gradient); // Standard, IE1
+}
+// 径向渐变，可以写点简单的
+// 如：@include gradient-radial(#00F,#FFF);
+// 而@include gradient-radial(farthest-side circle at right,#00F,#FFF);这种的将不会兼容，所以不要调用这个，可以去找工具生成
 @mixin gradient-radial($gradient...){
-  background-image: -moz-radial-gradient($gradient); // FF 3.6+
   background-image: -webkit-radial-gradient($gradient); // Safari 5.1+, Chrome 10+
   background-image: -o-radial-gradient($gradient); // Opera 11.10
   background-image: radial-gradient($gradient); // Standard, IE1
@@ -491,12 +556,7 @@ $prefix-for-spec: true !default; // required for keyframe mixin
 //flex
 //-----------------------------------------------------
 @mixin display-flex {
-  
-  display: -webkit-flex;
-  display: -moz-flex;
-  display: -o-flex;
-  display: -ms-flex;
-  display: flex;
+  @include prefixer-value(display,flex);
 }
 
 @mixin flex-direction($direction:row){
