@@ -184,9 +184,13 @@ $prefixNo:                    true !default;
 
 // Background-image
 //-----------------------------------------------------
-@mixin background-clip($clip: padding-box) {
+@mixin background-clip($clip) {
   // border-box | padding-box | content-box
-  @include prefixer(background-clip, $clip, webkit);
+  @if length($clip) >= 1 {
+    @include prefixer(background-clip, $clip, webkit);
+  } @else {
+    @include prefixer(background-clip, padding-box, webkit);
+  }
 }
 
 @mixin background-origin($origin...) {
@@ -386,7 +390,7 @@ $prefixNo:                    true !default;
     @include prefixer(transition, $properties);
   }
   @else {
-    $properties: all 0.15s ease-out;
+    $properties: all 0.3s ease;
     @include prefixer(transition, $properties);
   }
 }
@@ -639,48 +643,48 @@ $prefixNo:                    true !default;
   @include prefixer(filter, $function, webkit moz);
 }
 
-@mixin blur($px){
+@mixin filter-blur($px){
   @include prefixer(filter, blur($px), webkit moz);
 }
 
-@mixin grayscale($percent: 100%){
+@mixin filter-grayscale($percent: 100%){
   @include prefixer(filter, grayscale($percent), webkit moz);
 }
 
-@mixin drop-shadow($shadow...){
+@mixin filter-drop-shadow($shadow...){
   @include prefixer(filter, drop-shadow($shadow), webkit moz);
 }
 
 // @include url("filepath");
-@mixin url($url){
+@mixin filter-url($url){
   @include prefixer(filter, url(#{$url}), webkit moz);
 }
 
-@mixin brightness($value: 0.5){
+@mixin filter-brightness($value: 0.5){
   @include prefixer(filter, brightness($value), webkit moz);
 }
 
-@mixin contrast($value){
+@mixin filter-contrast($value){
   @include prefixer(filter, contrast($value), webkit moz);
 }
 
-@mixin hue-rotate($value: 90deg){
+@mixin filter-hue-rotate($value: 90deg){
   @include prefixer(filter, hue-rotate($value), webkit moz);
 }
 
-@mixin invert($value: 100%){
+@mixin filter-invert($value: 100%){
   @include prefixer(filter, invert($value), webkit moz);
 }
 
-@mixin opacity($value){
+@mixin filter-opacity($value){
   @include prefixer(filter, opacity($value), webkit moz);
 }
 
-@mixin saturate($value){
+@mixin filter-saturate($value){
   @include prefixer(filter, saturate($value), webkit moz);
 }
 
-@mixin sepia($value: 100%){
+@mixin filter-sepia($value: 100%){
   @include prefixer(filter, sepia($value), webkit moz);
 }
 
