@@ -4,6 +4,7 @@
 // thanks:
 // http://bourbon.io/
 // https://github.com/thomas-mcdonald/bootstrap-sass/blob/master/vendor/assets/stylesheets/bootstrap/_mixins.scss
+// 关于css3的flex详细介绍可参考：https://github.com/marvin1023/flex-scss
 //-----------------------------------------------------
 
 
@@ -14,6 +15,10 @@ $prefixForMozilla:            true !default;
 $prefixForMicrosoft:          true !default;
 $prefixForOpera:              false !default; //opera从版本15开始转向webkit，所以默认为false，不输出o前缀
 $prefixNo:                    true !default;
+
+// 用于flex的兼容变量
+$flexOld:                     true !default; //09版本 用于兼容移动端，-webkit前缀
+$flexMid:                     true !default; //用于ie10 -ms前缀
 
 
 // prefixer
@@ -535,21 +540,73 @@ $prefixNo:                    true !default;
   @include animation-fill-mode(both);
 }
 
-
 //flex
 //-----------------------------------------------------
+// flex-old和flex-mid分别应用与old版本和mid版本
+//----------------------------
+@mixin flex-old($property,$value,$propertyPrefix:true){
+  @if $flexOld {
+    @if $propertyPrefix {
+      -wekit-#{$property} : $value;
+    } @else {
+      #{$property} : -webkit-#{$value};
+    }
+  }
+}
+
+@mixin flex-mid($property,$value,$propertyPrefix:true){
+  @if $flexMid {
+    @if $propertyPrefix {
+      -ms-#{$property} : $value;
+    } @else {
+      #{$property} : -ms-#{$value};
+    }
+  }
+}
+
 @mixin display-flex($flex: flex) {
   // flex | inline-flex
+  @if $flex == flex  {
+    @include flex-old(display,box,false);
+    @include flex-mid(display,flexbox,false);
+  }
+  @if $flex == inline-flex {
+    @include flex-old(display,inline-box,false);
+    @include flex-mid(display,inline-flexbox,false);
+  }
   @include prefixer-value(display,$flex);
 }
 
 @mixin flex-direction($direction: column){
   // row | row-reverse | column | column-reverse
+  @if $direction == row {
+    @include flex-old(box-orient,horizontal);
+  }
+  @if $direction == column {
+    @include flex-old(box-orient,vertical);
+  }
+  @if $direction == row-reverse {
+    @include flex-old(box-orient,horizontal);
+    @include flex-old(box-direction,reverse);
+  }
+  @if $direction == column-reverse {
+    @include flex-old(box-orient,vertical);
+    @include flex-old(box-direction,reverse);
+  }
+  @include flex-mid(flex-direction, $direction);
   @include prefixer(flex-direction, $direction, webkit moz);
 }
 
 @mixin flex-wrap($wrap: wrap){
   // nowrap | wrap | wrap-reverse
+  // old版本不支持wrap-reverse
+  @if $wrap == wrap {
+    @include flex-old(box-lines, multiple);
+  }
+  @if $wrap == nowrap {
+    @include flex-old(box-lines, single);
+  }
+  @include flex-mid(flex-wrap, $wrap);
   @include prefixer(flex-wrap, $wrap, webkit moz);
 }
 
@@ -560,33 +617,84 @@ $prefixNo:                    true !default;
 }
 
 @mixin order($num: -1){
+  @include flex-old(box-ordinal-group,$num);
+  @include flex-mid(flex-order,$num);
   @include prefixer(order, $num, webkit moz);
 }
 
 @mixin justify-content($align: space-between){
   // flex-start | flex-end | center | space-between | space-around
+  @if $align == flex-start {
+    @include flex-old(box-pack,start);
+    @include flex-mid(flex-pack,start);
+  } @else if $align == flex-end {
+    @include flex-old(box-pack,end);
+    @include flex-mid(flex-pack,end);
+  } @else if $align == space-between {
+    @include flex-old(box-pack,justify);
+    @include flex-mid(flex-pack,justify);
+  } @else if $align == space-around {
+    @include flex-mid(flex-pack,distribute);
+  } @else {
+    @include flex-old(box-pack,$align);
+    @include flex-mid(flex-pack,$align);
+  }
   @include prefixer(justify-content, $align, webkit moz);
 }
 
 @mixin align-items($align: center){
   // flex-start | flex-end | center | baseline | stretch
+  @if $align == flex-start {
+    @include flex-old(box-align,start);
+    @include flex-mid(flex-align,start);
+  } @else if $align == flex-end {
+    @include flex-old(box-align,end);
+    @include flex-mid(flex-align,end);
+  } @else {
+    @include flex-old(box-align,$align);
+    @include flex-mid(flex-align,$align);
+  }
   @include prefixer(align-items, $align, webkit moz);
 }
 
 @mixin align-content($align: flex-start){
   // stretch | flex-start | flex-end | center | space-between | space-around
+  // old不支持
+  @if $align == flex-start {
+    @include flex-mid(flex-line-pack,start);
+  } @else if $align == flex-end {
+    @include flex-mid(flex-line-pack,end);
+  } @else if $align == space-between {
+    @include flex-mid(flex-line-pack,justify);
+  } @else if $align == space-around {
+    @include flex-mid(flex-line-pack,distribute);
+  } @else {
+    @include flex-mid(flex-line-pack,$align);
+  }
   @include prefixer(align-content, $align, webkit moz);
 }
 
 @mixin align-self($align: flex-start){
   // auto | flex-start | flex-end | center | baseline | stretch
+  // old不支持
+  @if $align == flex-start {
+    @include flex-mid(flex-item-align,start);
+  } @else if $align == flex-end {
+    @include flex-mid(flex-item-align,end);
+  } @else {
+    @include flex-mid(flex-item-align,$align);
+  }
   @include prefixer(align-self, $align, webkit moz);
 }
 
 // https://developer.mozilla.org/en-US/docs/Web/CSS/flex
 @mixin flex($arg){
   //initial | auto | none | number
-  @include prefixer(flex, $arg, webkit moz);
+  // 只传入数字则三大版本都支持
+  @if type-of($arg) == number {
+    @include flex-old(box-flex,$arg);
+  }
+  @include prefixer(flex, $arg, ms webkit moz);
 }
 
 

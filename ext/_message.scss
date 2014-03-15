@@ -7,7 +7,7 @@
 // 变量
 //----------------------------------------------------- 
 $msgIconSwitch:              true !default;// 是否启用icon背景，背景图片使用base64，ie8+支持
-$msgRadius:                  0 !default; // 样式圆角大小，设置为false将不产生圆角。
+$msgRadius:                  0 !default; // 样式圆角大小，设置为0将不产生圆角。
 $msgClassSwitch:             true false false false !default; //错误 成功 警告 提示
 
 
