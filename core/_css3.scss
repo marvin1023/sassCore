@@ -209,7 +209,7 @@ $flexMid:                     true !default; //用于ie10 -ms前缀
 
 @mixin background-size($size...) {
   // <length> | auto | cover | contain
-  @if length($origin) >= 1 {
+  @if length($size) >= 1 {
     @include prefixer(background-size, $size, webkit);
   } @else {
     @include prefixer(background-size, cover, webkit);
