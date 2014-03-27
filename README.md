@@ -6,9 +6,10 @@ sassCore提供了一些基础和常用的东西，基于它你可以扩展出很
 
 ##如何使用？
 
-[使用文档](http://w3cplus.com/sasscore/index.html)
 
 sassCore分核心文件和扩展文件两种。其中核心文件提供一些基础的样式和`@mixin`，`%`等方便调用；而扩展文件则提供一些模块的样式，如`form`，`table`等。
+
+详细使用文档请移步：[w3cplus sassCore](http://w3cplus.com/sasscore/index.html)
 
 ###核心文件调用
 第一种除提供基础功能外，会产生一份reset样式：
