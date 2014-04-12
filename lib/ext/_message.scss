@@ -1,0 +1,88 @@
+@charset "UTF-8";
+//-----------------------------------------------------	
+// message scss
+// 交互提示信息：包括警告，错误，成功，提示四种状态
+//-----------------------------------------------------
+
+// 变量
+//----------------------------------------------------- 
+$msgIconSwitch:              true !default;// 是否启用icon背景，背景图片使用base64，ie8+支持
+$msgRadius:                  0 !default; // 样式圆角大小，设置为0将不产生圆角。
+$msgClassSwitch:             true false false false !default; //错误 成功 警告 提示
+
+
+// mixin
+//-----------------------------------------------------
+// 基本样式
+@mixin message-basic{
+    padding:8px;
+    a{
+      text-decoration:underline;
+    }
+
+    @if $msgIconSwitch {
+      padding-left:25px;
+      background-position: 5px center;
+      background-repeat: no-repeat;
+    }
+    @if not(unitless($msgRadius)) {
+      border-radius: $msgRadius;
+    }
+} 
+%message-basic{
+  @include message-basic;
+}
+
+// 配色方案，包括文本色，背景色，边框颜色
+@mixin message-skin($textColor, $bgColor, $borderColor ){
+    background-color:$bgColor;
+    border:2px solid $borderColor;
+    color: $textColor;
+
+    a{
+      color: $textColor;
+    }
+}
+
+
+// 样式
+//-----------------------------------------------------
+@if nth($msgClassSwitch, 1){
+  .error{
+    @extend %message-basic;
+    @include message-skin(nth($errorColor,1), nth($errorColor,2), nth($errorColor,3));
+    @if $msgIconSwitch {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAw1BMVEX////////uVVXuVFTkSEjVb1HsUlLnS0vvW1vmS0vuWVnvXV3dPj7rUFDkyLz2o6P1mZndQD3rUVHVbU/dPz3kR0fUclLdQTzbUDvaWj/69fP60dHeQjvTg2btVFTcTzvmSkrdTTr//f3lzL/UgWTvYWH++fniwbLvX1/zhYXVbEzygYH0k5P709P95ub+8fHwZ2fjxbj1nZ3839/6z8/xcXHdSzrdTDreQzv83d32n5/eQjz3q6v+9fXwa2v96+v84eGH3JX9AAAAAXRSTlMAQObYZgAAALlJREFUeF49jlWSxDAMBSXZDjLDMDPPMt7/VCsnU9t/3VV+FmhmRRXHVTGDB4P+2BfCH/cHrTZ1nlBLktcNh1S6nxtWJ9yTVACrTISIEVl3xO9hdoHUpKcl4jv7zSFbwQsP7LiwL3hmArEgos0U8Yedhq9tsHrIXHX4gGeDrAPiccmlfbI1KUJ8W/PO9Exmyt/S7qu35uXTryuyFcBW0j8y7U43OjX06Zp5aSe8Z5dzeBCokeeNVKDlD2nuD2i4ItR8AAAAAElFTkSuQmCC);
+    }
+  }
+}
+
+@if nth($msgClassSwitch, 2){
+  .success{
+    @extend %message-basic;
+    @include message-skin(nth($successColor,1), nth($successColor,2), nth($successColor,3));
+    @if $msgIconSwitch {
+      background-image: url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAwFBMVEX///////+TzSPD44WSzCOUziaSyyOXzyuZ0DCNxCKn1kyEuCDs9tjt99uOxiKDtx+MwyGx22HP6Z2l1UfC44ORyiOQySKp10/K5ZePxyLv9uDt9d2RyiWZwUuHvCONuTaRyyPI3KCnyGXk7s+Yzy233G3P5Kbx9ueQyCL8/fq81YuTzCOg0UHN36mOvDfu9938/vrg78Gd0TqIviDh78b1+u3C34ms1VuNwSmGuyCh0z+PyCL6/PeXzS+KwCHj7c4XsX5IAAAAAXRSTlMAQObYZgAAAKZJREFUeF5lj9XKQ0EQg3dm5bhr1d1dfn3/t+r0dCmFfncJCSTswYYXUhZ8wzSxgRVGXMlthC+iLRkc3+CMeVILMdrtUXqvwOIyg7OiSKKN5QkG1wwTZpL4QvxtwGQdKjTJECWUzSP8tP4yxCFV8jFAHaB/yBGpkuK03QOA+e0biZS5UlnBCv4dX5CWLqOIspxOYIkq8JyuaqHf1dM/zun7NqL9vH8HBjcL2lWtIocAAAAASUVORK5CYII=);
+    }
+  }  
+}
+
+@if nth($msgClassSwitch, 3){
+  .warning{
+    @extend %message-basic;
+    @include message-skin(nth($warningColor,1), nth($warningColor,2), nth($warningColor,3));
+    @if $msgIconSwitch {
+      background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAZlBMVEX/////sCfvmQL3oxHLq2XLrGj5phb/rybj3czMtoPm4dL9rCHYnCn/6cL8qx/xmQD/68f8rCDLqmLXnC33ohDrmQf6+vj////Rnz/9rSHdmh/qmQr+ryXtmQXbmyTomQ3k38/cmiEJVN6mAAAAAXRSTlMAQObYZgAAAH9JREFUeF5lj+cKAzEMg2Vn3t6ru+//ksVNwqVUPwz+QJYFUWkm5smUiCoW2xK1dikgWvf5oK+OeV8BaCVL38tUBvDsBGybTMcvaEsnIGvwrnJQPXB3Obg9E2iaAK64xExKlvH3qIZnymM9MKrTofTf66ncQDSEcrF+3XV1qP8Bl2gGuNYIt7kAAAAASUVORK5CYII=);
+    }
+  }  
+}
+
+@if nth($msgClassSwitch, 4){
+  .info{
+    @extend %message-basic;
+    @include message-skin(nth($infoColor,1), nth($infoColor,2), nth($infoColor,3));
+    @if $msgIconSwitch{
+      background-image:url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAaVBMVEX///9PktVWouyawedRmN9Sm+Lg7Pedwuf///9Wou1VoOlSmuJTldZUn+hVn+mYwOZWoexvptzu9v1NkdTf7fxxp937/P5/sOCvzuzk7vhRmN5Xl9dmodpVoexqo9tRlNVVltbi7fhootuUx1cjAAAAAXRSTlMAQObYZgAAAH5JREFUeF5lj1cOA0EIQ83Usr239PsfMgKtlFHWH2CehMBgbX4imvyGU2tZVDFWRbkKmJc9RVHalxmANjyEnqvxgCPFtg9cW3pD25ip8PjU4sZRWv3AU4kLQdr9+APtC7eUAV5pbA6shqMMKHJAY35Xjb68fg13xu+GoZP4+AI3MwnTKJ+ruwAAAABJRU5ErkJggg==);
+    }
+  }  
+}

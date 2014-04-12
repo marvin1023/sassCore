@@ -1,0 +1,63 @@
+@charset "UTF-8";
+//-----------------------------------------------------  
+// helpers scss
+//-----------------------------------------------------
+
+// ul/ol has list style
+ul.has-style{
+  @extend %ul-has-style;
+}
+// li float
+ul.inline-float{
+  @extend %clearfix;
+  li{
+    @include float;
+  }
+}
+// li inline-block
+ul.inline-block{
+  li{
+    @extend %inline-block; 
+    margin-right: 8px;
+    &:last-child{
+      margin-right: 0;
+    }
+  }
+}
+
+// 浮动及闭合浮动
+.fl{
+  @extend %float;
+}
+.fr{
+  @include float(right);
+}
+.clearfix{
+  @extend %clearfix;
+}
+
+// 不同形式的隐藏
+.hidden{
+  @extend %hidden;
+}
+.visually-hidden {
+  @extend %visually-hidden;
+}
+
+// text-align:left/right/center
+.tar{
+	text-align: right;
+}
+.tac{
+	text-align: center;
+}
+
+// 图片替换文字
+.ir{
+	@extend %ir;
+}
+
+// 灰色
+.gray{
+  color:$gray;
+}

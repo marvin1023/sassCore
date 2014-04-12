@@ -1,0 +1,23 @@
+@charset "UTF-8";
+//-----------------------------------------------------	
+// base scss
+// 提供所有的基础功能包括：变量设置，css3前缀填充，@media，基础mixin，栅格化grid，reset样式
+// 默认会输出reset样式一份
+//-----------------------------------------------------
+
+//-----------------------------------------------------
+// author:      结一 (http://weibo.com/marvin1023)
+// version:     3.0
+// time:        2014-02-08
+// url:         https://github.com/marvin1023/sassCore/    http://tobe.w3cplus.com/
+//-----------------------------------------------------
+
+
+// 导入core中的基础文件
+//-----------------------------------------------------
+@import "core/setting";
+@import "core/css3";
+@import "core/media-queries";
+@import "core/mixin";
+@import "core/grid";
+@import "core/reset";
