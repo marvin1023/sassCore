@@ -13,24 +13,32 @@
 
 // inline-block
 // ie6-7 *display: inline;*zoom:1;
-@mixin inline-block {
-  display: inline-block;
-  @if $lte7 {
-    *display: inline;*zoom:1;
+@mixin inline-block ($extend:true) {
+  @if $extend {
+    @extend %inline-block;
+  } @else {
+    display: inline-block;
+    @if $lte7 {
+      *display: inline;*zoom:1;
+    }
   }
 }
 %inline-block{
-  @include inline-block;
+  @include inline-block(false);
 }
 
 // Center-align a block level element
 // block得有宽度margin左右为auto才能居中
-@mixin center-block {
-  margin-left: auto;
-  margin-right: auto;
+@mixin center-block ($extend:true) {
+  @if $extend {
+    @extend %center-block;
+  } @else {
+    margin-left: auto;
+    margin-right: auto;
+  }
 }
 %center-block{
-  @include center-block;
+  @include center-block(false);
 }
 
 // float left & right
@@ -46,44 +54,56 @@
 
 // clearfix
 // 闭合子元素的浮动
-@mixin clearfix {
-  @if $lte7 {
-    *zoom: 1;
-  }
-  &:before,
-  &:after {
-    content: "";
-    display: table;
-  }
-  &:after {
-    clear: both;
+@mixin clearfix ($extend:true) {
+  @if $extend {
+    @extend %clearfix;
+  } @else {
+    @if $lte7 {
+      *zoom: 1;
+    }
+    &:before,
+    &:after {
+      content: "";
+      display: table;
+    }
+    &:after {
+      clear: both;
+    }
   }
 }
 %clearfix{
-  @include clearfix;
+  @include clearfix(false);
 }
 
 // Hide from both screenreaders and browsers: h5bp.com/u
 // 既隐藏于视觉也隐藏于屏幕浏览器
-@mixin hidden {
-  display: none !important;
-  visibility: hidden;
+@mixin hidden ($extend:true) {
+  @if $extend {
+    @extend %hidden;
+  } @else {
+    display: none !important;
+    visibility: hidden;    
+  }
 }
 %hidden{
-  @include hidden;
+  @include hidden(false);
 }
 
 // Hide only visually, but have it available for screenreaders
 // 只隐藏于视觉，屏幕浏览器可以阅读
-@mixin visually-hidden {
-  position: absolute;
-  @if $lte7 {
-    clip:rect(1px 1px 1px 1px);//ie6/7
+@mixin visually-hidden ($extend:true) {
+  @if $extend {
+    @extend %visually-hidden;
+  } @else {
+    position: absolute;
+    @if $lte7 {
+      clip:rect(1px 1px 1px 1px);//ie6/7
+    }
+    clip:rect(1px, 1px, 1px, 1px);//standard
   }
-  clip:rect(1px, 1px, 1px, 1px);//standard
 }
 %visually-hidden{
-  @include visually-hidden;
+  @include visually-hidden(false);
 }
 
 // ul has list style
