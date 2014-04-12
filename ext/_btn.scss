@@ -1,0 +1,141 @@
+@charset "utf-8";
+/* -------------------------------------------------
+ * btn scss
+ * -------------------------------------------------
+*/
+
+
+// 变量
+//----------------------------------
+$btnBaseClass:           btn !default; //按钮的基本class
+$btnFormBaseClass:       formbtn !default; //form中input和button元素按钮的class
+$btnNormalSize:          16px 28px 14px !default; //默认按钮的左右padding，高度，字体大小，圆角
+$btnSizeClass:           () !default; //(small 5px 21px 12px) 每个括号为一组，里面四个参数分别为：class 左右padding，高度，字体大小
+$btnColorClass:          () !default; //(primary $primary #fff) 每个括号为一组，里面三个参数分别为：class 背景色 文本色
+
+// 开关按钮
+$btnBgGradientSwitch:    false !default;//是否启用渐变背景
+
+
+
+// btn placeholder selectors and mixin
+//----------------------------------
+
+// btn common style
+// 按钮基本样式，联合申明
+%btn-basic{
+  @include inline-block;
+  cursor: pointer;
+  text-align:center;
+  border:0 none;
+}
+
+// btn-gradient
+// 半透明到全透明的白色渐变，通过设置不同的背景色来表示不同的渐变
+%btn-gradient {
+  box-shadow: 0 1px 1px rgba(255, 255, 255, 0.5) inset, 0 0 1px rgba(255, 255, 255, 0.5) inset;
+  @extend %gradient-linear-light;
+}
+
+// btn-size
+@mixin btn-size($padding:nth($btnNormalSize,1), $height:nth($btnNormalSize,2), $fontSize:nth($btnNormalSize,3), $formbtn: false){
+  padding:0 $padding;
+  font-size:$fontSize;
+
+  @if $formbtn{
+    // form元素按钮（如button,input:submit），设置height来反应其高度
+    height: $height;
+  } @else {
+    // 普通按钮，通过设置line-height来反应其高度
+    line-height: $height;
+  }
+}
+
+// btn-color
+// 包括按钮背景，文本色，是否有边框
+@mixin btn-color($bgColor:#e6e6e6, $textColor:#333){
+  color:$textColor;
+  background-color: $bgColor;
+  @if $btnBgGradientSwitch {
+    border:1px solid darken($bgColor, 5%);
+    border-color:lighten($bgColor, 2%) darken($bgColor, 5%) darken($bgColor, 5%) lighten($bgColor, 2%);
+  }
+
+  &:hover{
+    background-color: darken($bgColor,5%);
+    color:$textColor;
+  }
+}
+
+
+// 两种类别按钮，普通的和form表单元素的
+//----------------------------------
+
+.#{$btnBaseClass}{
+  @extend %btn-basic;
+  @include btn-size;
+  @include btn-color;
+}
+.#{$btnFormBaseClass}{
+  @extend %btn-basic;
+  @include btn-size($formbtn: true);
+  @include btn-color;
+}
+
+// 如果启用渐变背景，引入%btn-gradient；
+@if $btnBgGradientSwitch {
+  .#{$btnBaseClass}, .#{$btnFormBaseClass}{
+    @extend %btn-gradient;
+  }
+}
+
+
+// 不同大小的btn class
+//----------------------------------
+
+// 如果输出单个大小按钮，直接调用btn-size
+// @include btn-size($padding, $height, $fontSize, $formbtn)
+// 最后一个$formbtn参数，如果是普通按钮可以忽略（默认为false），如果是form表单元素按钮则传入true
+
+// 如果输出多个大小按钮，则直接调用下面的mixin
+// @include btn-size-multi();
+@mixin btn-size-multi($sizeLists: $btnSizeClass){
+  @each $size in $sizeLists{
+    $class:     nth($size, 1);
+    $padding:   nth($size, 2);
+    $height:    nth($size, 3);
+    $fontSize:  nth($size, 4);
+
+    .#{$btnBaseClass}-#{$class}{
+      @include btn-size($padding, $height, $fontSize);
+    }
+    .#{$btnFormBaseClass}-#{$class}{
+      @include btn-size($padding, $height, $fontSize, true);
+    }
+  }
+}
+
+
+
+// 不同颜色的btn class
+//----------------------------------
+
+// 如果输出单个颜色按钮，直接调用btn-color
+// @include btn-color($bgColor,$textColor);
+.#{$btnBaseClass}-primary {
+  @include btn-color($primary, #fff);
+}
+
+//如果输出至少两个不同颜色按钮，则调用下面的mixin
+// @include btn-color-multi();
+@mixin btn-color-multi($colorLists: $btnColorClass){
+  @each $color in $colorLists{
+    $class:      nth($color,1);
+    $bgColor:    nth($color,2);
+    $textColor:  nth($color,3);
+
+    .#{$btnBaseClass}-#{$class}{
+      @include btn-color($bgColor,$textColor);
+    }
+  }
+}
