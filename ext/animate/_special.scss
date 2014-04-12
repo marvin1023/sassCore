@@ -1,0 +1,71 @@
+@charset "UTF-8";
+//-----------------------------------------------------	
+// special scss
+//-----------------------------------------------------
+
+
+// hinge
+@mixin animate-hinge () {
+  @include keyframes(hinge){
+    0% {
+      @include rotate(0);
+    }
+    20%,60% {
+      @include rotate(80deg);
+    }
+    40% {
+      @include rotate(60deg);
+    }
+    80% {
+      opacity: 1;
+      @include transform(rotate(60deg) translateY(0));
+    }
+    100% {
+      opacity: 0;
+      @include translateY(700px);
+    }
+  }
+  .hinge {
+    @include transform-origin(top left);
+    @include animation-timing-function(ease-in-out);
+    @include animation-name(hinge);
+    @extend %animated;
+    @include animation-duration(2s);
+  }
+}
+
+// rollIn
+@mixin animate-rollIn () {
+  @include keyframes(rollIn){
+    0% {
+      opacity: 0;
+      @include transform(translateX(-100%) rotate(-120deg));
+    }
+    100% {
+      opacity: 1;
+      @include transform(translateX(0px) rotate(0deg));
+    }
+  }
+  .rollIn {
+    @include animation-name(rollIn);
+    @extend %animated;
+  }
+}
+
+// rollOut
+@mixin animate-rollOut () {
+  @include keyframes(rollOut){
+    0% {
+      opacity: 1;
+      @include transform(translateX(0) rotate(0));
+    }
+    100% {
+      opacity: 0;
+      @include transform(translateX(100%) rotate(120deg));
+    }
+  }
+  .rollOut {
+    @include animation-name(rollOut);
+    @extend %animated;
+  }
+}

@@ -1,0 +1,50 @@
+@charset "UTF-8";
+//-----------------------------------------------------	
+// lightspeed scss
+//-----------------------------------------------------
+
+
+// lightSpeedIn
+@mixin animate-lightSpeedIn () {
+  @include keyframes(lightSpeedIn){
+    0% {
+      opacity: 0;
+      @include transform(translateX(100%) skewX(-30deg));
+    }
+    60% {
+      opacity: 1;
+      @include transform(translateX(-20%) skewX(30deg));
+    }
+    80% {
+      @include transform(translateX(0%) skewX(-15deg));
+    }
+    100% {
+      @include transform(translateX(0%) skewX(0));
+    }
+  }
+  .lightSpeedIn {
+    @include animation-name(lightSpeedIn);
+    @include animation-timing-function(ease-out);
+    @include backface-visibility;
+    @extend %animated;
+  }
+}
+
+// lightSpeedOut
+@mixin animate-lightSpeedOut () {
+  @include keyframes(lightSpeedOut){
+    0% {
+      opacity: 1;
+      @include transform(translateX(0%) skewX(0deg));
+    }
+    100% {
+      opacity: 0;
+      @include transform(translateX(100%) skewX(-30deg));
+    }
+  }
+  .lightSpeedOut {
+    @include animation-name(lightSpeedOut);
+    @include animation-timing-function(ease-in);
+    @extend %animated;
+  }
+}
