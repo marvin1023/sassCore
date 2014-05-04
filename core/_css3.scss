@@ -243,7 +243,7 @@ $flexMid:                     true !default; //用于ie10 -ms前缀
 }
 // 垂直渐变，从上往下，平铺
 // @include gradient-vertical-repeating(#333 30%, #ccc 50%);
-@mixin gradient-vertical($gradient...) {
+@mixin gradient-vertical-repeating($gradient...) {
   background-image: -webkit-repeating-linear-gradient(top, $gradient); // Safari 5.1+, Chrome 10+
   background-image: -o-repeating-linear-gradient(top, $gradient); // Opera 11.10
   background-image: repeating-linear-gradient(to bottom, $gradient); // Standard, IE10
