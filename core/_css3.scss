@@ -860,7 +860,7 @@ $flexMid:                     true !default; //用于ie10 -ms前缀
   @include prefixer(text-stroke-color, $color, webkit);
 }
 @mixin text-stroke-width($width){
-  @include prefixer(text-stroke-color, $width, webkit);
+  @include prefixer(text-stroke-width, $width, webkit);
 }
 
 @mixin margin-collapse($value: collapse){
