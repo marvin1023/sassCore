@@ -547,7 +547,7 @@ $flexMid:                     true !default; //用于ie10 -ms前缀
 @mixin flex-old($property,$value,$propertyPrefix:true){
   @if $flexOld {
     @if $propertyPrefix {
-      -wekit-#{$property} : $value;
+      -webkit-#{$property} : $value;
     } @else {
       #{$property} : -webkit-#{$value};
     }
