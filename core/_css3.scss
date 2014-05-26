@@ -71,11 +71,11 @@ $flexMid:                     true !default; //用于ie10 -ms前缀
 // disable prefix
 // 设置所有前缀和标准为false，用于@keyframes
 @mixin disable-prefix-for-all() {
-  $prefixForWebkit:      false;
-  $prefixForMozilla:     false;
-  $prefixForMicrosoft:   false;
-  $prefixForOpera:       false;
-  $prefixNo:             false;
+  $prefixForWebkit:      false !global;
+  $prefixForMozilla:     false !global;
+  $prefixForMicrosoft:   false !global;
+  $prefixForOpera:       false !global;
+  $prefixNo:             false !global;
 }
 
 // Return vendor-prefixed property names if appropriate
@@ -493,28 +493,28 @@ $flexMid:                     true !default; //用于ie10 -ms前缀
   @each $prefix in $prefixes {
     @if $prefix == webkit and $originalPrefixForWebkit == true {
       @include disable-prefix-for-all();
-      $prefixForWebkit: true;
+      $prefixForWebkit: true !global;
       @-webkit-keyframes #{$name} {
         @content;
       }
     }
     @if $prefix == moz and $originalPrefixForMozilla == true {
       @include disable-prefix-for-all();
-      $prefixForMozilla: true;
+      $prefixForMozilla: true !global;
       @-moz-keyframes #{$name} {
         @content;
       }
     }
     @if $prefix == ms and $originalPrefixForMicrosoft == true {
       @include disable-prefix-for-all();
-      $prefixForMicrosoft: true;
+      $prefixForMicrosoft: true !global;
       @-ms-keyframes #{$name} {
         @content;
       }
     }
     @if $prefix == o and $originalPrefixForOpera == true {
       @include disable-prefix-for-all();
-      $prefixForOpera: true;
+      $prefixForOpera: true !global;
       @-o-keyframes #{$name} {
         @content;
       }
@@ -522,16 +522,16 @@ $flexMid:                     true !default; //用于ie10 -ms前缀
   }
 
   @include disable-prefix-for-all();
-  $prefixNo: true;
+  $prefixNo: true !global;
   @keyframes #{$name} {
     @content;
   }
 
-  $prefixForWebkit:       $originalPrefixForWebkit;
-  $prefixForMozilla:      $originalPrefixForMozilla;
-  $prefixForMicrosoft:    $originalPrefixForMicrosoft;
-  $prefixForOpera:        $originalPrefixForOpera;
-  $prefixNo:              $originalPrefixNo;
+  $prefixForWebkit:       $originalPrefixForWebkit !global;
+  $prefixForMozilla:      $originalPrefixForMozilla !global;
+  $prefixForMicrosoft:    $originalPrefixForMicrosoft !global;
+  $prefixForOpera:        $originalPrefixForOpera !global;
+  $prefixNo:              $originalPrefixNo !global;
 }
 
 // 为animate模块设计
