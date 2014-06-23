@@ -101,7 +101,10 @@ $gridSpanSwitch:                  false !default;
 // Default Column Count: Max Column Count
 // Padding (explained below): 0
 @mixin column($i: $gridColumns, $subtract:0){
-  @extend %float;
+  // 解决当$i 小于等于$gridColumns的时候需要float
+  @if $i <= $gridColumns {
+    @extend %float-left;
+  }
   @extend %margin-gutter;
 
   $getWidth: getWidth($i, true, $subtract); // Use the width calculation function to get the width 
