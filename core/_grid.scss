@@ -163,7 +163,7 @@ $gridSpanSwitch:                  false !default;
 @if $gridSpanSwitch {
   @for $i from 1 through $gridColumns {
     .span#{$i} { 
-      @extend %float-left;
+      @extend %float;
       @extend %margin-gutter;
       
       width:getWidth($i);
