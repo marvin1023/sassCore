@@ -103,7 +103,7 @@ $gridSpanSwitch:                  false !default;
 @mixin column($i: $gridColumns, $subtract:0){
   // 解决当$i 小于$gridColumns的时候需要float
   @if $i < $gridColumns {
-    @extend %float-left;
+    @extend %float;
   }
   @extend %margin-gutter;
 
