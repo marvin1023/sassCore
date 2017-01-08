@@ -1,0 +1,421 @@
+@charset "utf-8";
+//-----------------------------------------------------
+// form scss
+// 提交按钮样式基于_btn.scss
+// 交互提示报错信息样式基于_message.scss
+//-----------------------------------------------------
+
+
+//变量
+//---------------------------------
+$formItemMargin:           10px !default; //上下元素的间距
+$formLabelWidth:           100px !default; //当label和元素同行时，label的宽度
+$formTextWidth:            200px !default; //输入框的宽度
+$formTextarea:             500px 80px !default; //文本域宽度和高度
+$formEleHeight:            28px !default; //输入框的高度，label的高度，选择框的高度...
+$formInlineMargin:         10px !default; //相邻同行元素的间距
+$formUploadBgColor:        $primary !default; //upload按钮默认背景颜色
+$formRadius:               0 !default; //圆角大小，默认0将不会产生圆角
+
+$formBasicResetSwitch:     true !default; //是否开启表单元素基本重置，如果你已经有了重置或normalize，就不用开启了。
+$formMsgSwitch:            false !default; //是否开启报错等信息，如设为true则需导入message.scss
+$formConditionSwitch:      false !default; //是否开启条件选项
+
+$formHorizontalSwitch:     false !default; //是否启用水平表单样式
+$formInlineSwitch:         false !default; //是否启用单行表单样式
+$formSimpleSwitch:         false !default; //是否启用简洁表单样式
+
+
+// 基本重置
+//---------------------------------
+@if $formBasicResetSwitch {
+	.form-text,
+	.form-select,
+	.form-raido,
+	.form-checkbox,
+	.form-textarea,
+	.form-file,
+	.formbtn {
+	    font-family: inherit;
+	    font-size: 100%;
+	    margin: 0;
+	    vertical-align: middle;
+	}
+}
+
+
+// mixin
+//---------------------------------
+// radio & checkbox 的重置
+@mixin reset-radio-checkbox{
+	margin:0 5px 0 0;
+	padding:0;
+	font-size:13px;	
+	//ie6,7得设置宽度和高度才能表现和其他浏览器一样的重置
+	//radio和checkbox的大小为13px
+	@if $lte7 {
+		width:13px;
+		height:13px;
+	}
+}
+// 默认的样式mixin定义
+// 定义了border，padding及圆角
+@mixin ele-border($borderColor:$gray, $radius:$baseRadius){
+	border: 1px solid $borderColor;
+	padding:4px;
+	@if not(unitless($formRadius)) {
+		border-radius: $formRadius;
+	}
+}
+// 边框及阴影的动画效果
+@mixin ele-border-transition(){
+	@include ele-border;
+	@include transition(border linear 0.2s, box-shadow linear 0.2s);
+	@include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.1));
+
+	&:focus{
+		border-color: rgba(82, 168, 236, 0.8);
+		@include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6));
+	}
+}
+
+
+// 基本元素
+//---------------------------------
+.form-label{
+	font-size:14px;
+	line-height:$formEleHeight;
+}
+.form-text{
+	vertical-align:middle;
+	width:$formTextWidth;
+	height:$formEleHeight - 10px;//padding:4px;border-width:1px;
+}
+.form-textarea{
+	resize:none;
+	vertical-align:top;
+	overflow:auto;
+	width:nth($formTextarea,1);
+	height:nth($formTextarea,2);
+}
+.form-text, .form-textarea{
+	@include ele-border-transition;
+}
+.form-select{
+	@include ele-border;
+	// select lte ie7
+	// ie6,7 不支持select的padding
+	@if $lte7 {
+	    *margin-top:($formEleHeight - 18px) / 2;
+	    *margin-bottom:($formEleHeight - 18px) / 2;
+	    *vertical-align:top;
+	}
+}
+.form-text:focus, .form-textarea:focus, .form-select:focus{
+	outline: 0 none;
+}
+// checkbox & radio
+// rc中的r表示radio，c表示checkbox
+.form-radio, .form-checkbox{
+	@include reset-radio-checkbox;	
+}
+// rc's wrap
+.form-field-rc{
+	@extend %clearfix;
+}
+// rc inline
+.form-label-rc{
+    display: inline;
+    float: left;
+    font-size: 12px;
+    margin-right:$formInlineMargin;
+	line-height:$formEleHeight - 10px;// input height
+
+	.form-radio,
+	.form-checkbox,
+	span{
+		@include float;
+	}
+	.form-radio,
+	.form-checkbox{
+		margin-top:($formEleHeight - 10px - 13px) / 2;
+	}
+}
+// rc block
+.field-rc-block .form-label-rc{
+    display: block;
+    float: none;
+    margin: 0 0 5px;
+    overflow: auto;
+    padding-left: 20px;
+
+    @if $lte7 {
+    	*zoom:1;
+    	_padding-left: 17px;
+    }
+
+    .form-radio,
+	.form-checkbox{
+		margin-left: -20px;
+		@if $lte7 {
+	    	*margin-left: -17px;
+	    }
+	}
+}
+// 验证码
+.text-captcha{
+	width: 130px;
+}
+.form-captcha{
+	@extend %inline-block;
+	border: 1px solid $gray;
+	cursor: pointer;
+	margin-left: $formInlineMargin;
+	img{
+		height:$formEleHeight - 2px;
+		vertical-align:middle;
+	}
+}
+// 将upload简化为一个点击按钮，大小为70px/28px，各浏览器表现良好
+// 得使用js来配合显示其上传的路径
+.form-file-wrap{
+	@include inline-block;
+	padding: 0px;
+	width: 70px;
+	height: 28px;
+	background-color: $formUploadBgColor;
+	position: relative;
+	overflow: hidden;
+	@if not(unitless($formRadius)) {
+		border-radius: $formRadius;
+	}
+
+	.form-file-replace-text{
+		display: block;
+		line-height: 28px;
+		cursor: pointer;
+		color: #fff;
+		text-align: center;
+	}
+	.form-file{
+		opacity: 0;
+		filter: alpha(opacity=0);
+		width: 70px;
+		height: 28px;
+		left: 0;
+		top: 0;
+		display: block;
+		cursor: pointer;
+		position: absolute;
+		z-index: 1;
+	}
+	&:hover{
+		background-color: darken($formUploadBgColor,10%);
+	}
+}
+
+
+// 附加class
+//---------------------------------
+// form element description
+// span inline
+.form-des{
+	color: $grayDark;
+	margin-left:$formInlineMargin;
+}
+// p block
+p.form-des{
+	margin:0;
+	line-height: $formEleHeight;
+}
+// form disabled
+.form-disabled{
+	@include disabled;
+	&.form-text,
+	&.form-textarea{
+		border-color: #bbb !important;
+	}
+}
+// form required
+.form-required{
+	color: $red;
+	margin-right: 5px;
+}
+// 前缀，后缀，连接
+.form-prefix{
+	margin-right: 5px;
+}
+.form-suffix{
+	margin-left: 5px;
+}
+.form-join{
+	margin: 0 5px;
+}
+// 提交按钮右侧的链接或按钮
+.btn-right{
+	@extend %inline-block;
+	vertical-align: middle;
+	line-height: $formEleHeight;
+	margin-left: $formInlineMargin;
+}
+
+// 条件选项
+@if ($formConditionSwitch) {
+	.form-field-condition{
+		$conditionWidth: 100px;
+
+		margin-top: 3.5px;
+
+		.form-label-rc{
+			margin-top: 2px;
+		}
+		.form-text,
+		.form-select{
+			padding: 2px;
+		}
+		.condition-ele{
+			@extend %clearfix;
+			margin-bottom: 5px;
+		}
+		.condition-content{
+			margin-left: $conditionWidth;
+		}
+	}
+}
+
+
+// 默认表单
+// label独立一行
+//---------------------------------
+.form{
+	font-size: 12px;
+	margin-bottom: $formItemMargin;
+	fieldset {
+	  padding: 0;
+	  margin: 0;
+	  border: 0;
+	}
+	legend {
+	  display: block;
+	  width: 100%;
+	  padding: 0;
+	  margin-bottom: $formItemMargin;
+	  font-size: $baseFontSize * 1.5;
+	  line-height: $baseLineHeight * 2;
+	  color: $grayDark;
+	  border: 0;
+	  border-bottom: 1px solid #e5e5e5;
+	}
+	.form-item{
+		margin-bottom:$formItemMargin;
+		clear: both;
+		@extend %clearfix;
+	}
+	
+	//提交操作按钮
+	.form-action{
+		clear:both;
+		text-align: center;
+	}
+	.action-left{
+		text-align: left;
+	}
+
+	// inline
+	.inline-ele{
+	    margin-right:$formInlineMargin;
+	}
+	.inline-item{
+		@include float;
+		clear:none;
+	}
+}
+
+
+// form-horizontal
+// label与input元素同行表单
+//---------------------------------
+@if $formHorizontalSwitch {
+	.form-horizontal{
+		.form-label{
+			@include float;
+		    text-align: right;
+			width:$formLabelWidth;
+		}
+		.form-field, 
+		.action-left{
+			margin-left: $formLabelWidth + 10px;
+		}
+		.form-field-rc{
+		    margin-top:5px;
+		}
+	}
+}
+
+// form-inline
+// 单行表单,所有的元素一行显示，用于单行登录表单
+//---------------------------------
+@if $formInlineSwitch {
+	.form-inline{
+		.form-label{
+			@extend %inline-block;
+			vertical-align: middle;
+		}
+		.form-label-rc{
+			float: none;
+			@extend %inline-block;
+			vertical-align: middle;
+		}
+		.form-text,.form-label-rc{
+			margin-right: $formInlineMargin;
+		}
+	} 
+}
+
+
+// form-simple
+// 应用于直接写表单元素，尽可能无嵌套，垂直格式
+//---------------------------------
+@if $formSimpleSwitch {
+	.form-simple{
+		.form-label{
+			display: block;
+		}
+		.form-text,.form-textarea,.form-select,.form-field-rc,.form-captcha{
+			margin-bottom: $formItemMargin;
+		}
+	}	
+}
+
+
+// form messages
+//---------------------------------
+@if $formMsgSwitch {
+	.form{
+		// block status tips
+		.error, .warning, .success, .info {
+		    margin-bottom: $formItemMargin;
+		}
+		// span inline status tips
+		span.error, span.warning, span.success, span.info {
+		    @include inline-block;
+		    border-width:1px;
+			line-height:$formEleHeight - 2px;
+			vertical-align:middle;
+			padding:0 5px 0 25px;
+			@if $lte7{
+				*padding-left: 5px;
+			}
+			margin:0 0 0 $formInlineMargin;
+		}
+
+		.text-error{
+			border-color: nth($errorColor,3);
+			@include box-shadow(inset 0 1px 1px rgba(0,0,0,.075));
+			&:focus {
+				border-color: rgba(82, 168, 236, 0.8);
+				@include box-shadow(inset 0 1px 3px rgba(0, 0, 0, 0.1), 0 0 8px rgba(82, 168, 236, 0.6));
+			}	
+		}
+	}
+}
